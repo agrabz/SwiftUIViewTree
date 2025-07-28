@@ -21,28 +21,28 @@ struct ContentView: View {
                 Text("Hello, 2!")
             } else {
                 Text("Hello, 3!")
-                TreeView(
-                    tree: Tree(
-                        value: "Parent",
-                        children: [
-                            Tree(
-                                value: "Child1",
-                            ),
-                            Tree(
-                                value: "Child2",
-                                children: [
-                                    Tree(
-                                        value: "Grandchild"
-                                    )
-                                ]
-                            ),
-                        ]
-                    ),
-                    id: \.self) { value in
-                        Text(value)
-                            .background()
-                            .padding()
-                    }
+//                TreeView(
+//                    tree: Tree(
+//                        value: "Parent",
+//                        children: [
+//                            Tree(
+//                                value: "Child1",
+//                            ),
+//                            Tree(
+//                                value: "Child2",
+//                                children: [
+//                                    Tree(
+//                                        value: "Grandchild"
+//                                    )
+//                                ]
+//                            ),
+//                        ]
+//                    ),
+//                    id: \.self) { value in
+//                        Text(value)
+//                            .background()
+//                            .padding()
+//                    }
             }
         }
                 .debug()
@@ -85,8 +85,26 @@ public extension View {
     func debug() -> some View {
         print("Ákos")
         //        print(body)
-        Mirror(reflecting: self).printRecursively()
-        return self
+        let mirror = Mirror(reflecting: self)
+        var tree = Tree(value: mirror.description)
+        tree.children = mirror.children.map { child in
+            Tree(value: "\(type(of: child.value))")
+        }
+//        Mirror(reflecting: self).printRecursively()
+        return HStack {
+            self
+
+            Spacer()
+
+            TreeView(
+                tree: tree,
+                id: \.self) { value in
+                    Text(value)
+                        .background()
+                        .padding()
+                }
+                .background(Color.yellow)
+        }
     }
 }
 
