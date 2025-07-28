@@ -12,14 +12,16 @@ struct LinesView: View {
     let id: KeyPath<TreeNode, UUID>
     let centers: [UUID: Anchor<CGPoint>]
 
-    private func point(for value: TreeNode, in proxy: GeometryProxy) -> CGPoint? {
-        guard let anchor = centers[id(value)] else { return nil }
+    private func pointFor(nodeID: UUID, in proxy: GeometryProxy) -> CGPoint? {
+        guard let anchor = centers[nodeID] else { return nil }
         return proxy[anchor]
     }
     
     private func line(to child: Tree, in proxy: GeometryProxy) -> Line? {
-        guard let start = point(for: tree.node, in: proxy) else { return nil }
-        guard let end = point(for: child.node, in: proxy) else { return nil }
+        guard
+            let start = pointFor(nodeID: tree.node.id, in: proxy),
+            let end = pointFor(nodeID: child.node.id, in: proxy)
+        else { return nil }
         return Line(start: start, end: end)
     }
     

@@ -26,7 +26,7 @@ public extension View {
         )
         tree.children = convertChildrenToTreesRecursively(
             mirror: mirror,
-            //            maxDepth: 2
+            maxDepth: 3
         )
 
         return GeometryReader { geometry in
