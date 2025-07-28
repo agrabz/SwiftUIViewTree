@@ -122,7 +122,14 @@ public extension View {
                                 .background()
                                 .padding()
                         }
-                        .background(Color.yellow)
+                        .background(LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color(red: 0.2, green: 0.6, blue: 1.0),  // Swift blue
+                                Color(red: 0.0, green: 0.8, blue: 0.8)   // Teal
+                            ]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ))
                 }
                 .frame(width: geometry.size.width * 3/4)
             }
