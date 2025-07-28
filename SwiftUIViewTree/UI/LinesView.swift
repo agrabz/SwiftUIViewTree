@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LinesView: View {
-    let tree: Tree
+    let parent: Tree
     let id: KeyPath<TreeNode, UUID>
     let centers: [UUID: Anchor<CGPoint>]
 
@@ -17,25 +17,39 @@ struct LinesView: View {
         return proxy[anchor]
     }
     
-    private func line(to child: Tree, in proxy: GeometryProxy) -> Line? {
+    private func lineFromParent(to child: Tree, in proxy: GeometryProxy) -> Line? {
         guard
-            let start = pointFor(nodeID: tree.node.id, in: proxy),
-            let end = pointFor(nodeID: child.node.id, in: proxy)
-        else { return nil }
-        return Line(start: start, end: end)
+            let startPoint = pointFor(
+                nodeID: self.parent.node.id,
+                in: proxy
+            ),
+            let endPoint = pointFor(
+                nodeID: child.node.id,
+                in: proxy
+            )
+        else {
+            return nil
+        }
+
+        let lineBetweenStartAndEndPoints = Line(
+            startPoint: startPoint,
+            endPoint: endPoint
+        )
+
+        return lineBetweenStartAndEndPoints
     }
     
     var body: some View {
         GeometryReader { proxy in
-            ForEach(self.tree.children, id: \.node.id) { child in
+            ForEach(self.parent.children, id: \.node.id) { child in
                 Group {
-                    self.line(
+                    self.lineFromParent(
                         to: child,
                         in: proxy
                     )?.stroke()
 
                     LinesView(
-                        tree: child,
+                        parent: child,
                         id: self.id,
                         centers: self.centers
                     )
