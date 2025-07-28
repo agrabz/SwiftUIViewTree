@@ -98,7 +98,11 @@ public extension View {
         tree.children = mirror.children.map { child in
             var a = Tree(value: "\(type(of: child.value))")
             a.children = Mirror(reflecting: child.value).children.map { grandChild in
-                    Tree(value: "\(type(of: grandChild.value))")
+                    var aa = Tree(value: "\(type(of: grandChild.value))")
+                aa.children = Mirror(reflecting: grandChild.value).children.map { greatGrandChild in
+                    Tree(value: "\(type(of: greatGrandChild.value))")
+                }
+                return aa
             }
 
             return a
