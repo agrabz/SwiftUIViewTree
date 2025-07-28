@@ -152,7 +152,8 @@ struct TreeView<ID: Hashable, Content: View>: View {
     fileprivate let tree: Tree
     fileprivate let id: KeyPath<String, ID>
     fileprivate let content: (String) -> Content
-    @GestureState private var zoom = 1.0
+    @State private var currentZoom: CGFloat = 0.0
+    @State private var totalZoom: CGFloat = 1.0
 
 
     public init(tree: Tree,
@@ -169,12 +170,16 @@ struct TreeView<ID: Hashable, Content: View>: View {
                 .backgroundPreferenceValue(CenterKey.self) {
                     LinesView(tree: self.tree, id: self.id, centers: $0)
                 }
-                .scaleEffect(zoom)
+                .scaleEffect(totalZoom + currentZoom)
         }
         .simultaneousGesture(
             MagnifyGesture()
-                .updating($zoom) { value, gestureState, transaction in
-                    gestureState = value.magnification
+                .onChanged { value in
+                    currentZoom = value.magnification - 1
+                }
+                .onEnded { value in
+                    totalZoom += currentZoom
+                    currentZoom = 0
                 }
         )
     }
