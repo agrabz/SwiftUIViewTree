@@ -25,8 +25,8 @@ struct ContentView: View {
 //        }
         Text("Reset")
             .background(Color.blue)
-//                .printViewTree()
-                .renderViewTree()
+                .printViewTree()
+//                .renderViewTree()
 //            .bold()
 //        }
 //        .padding()
@@ -115,7 +115,9 @@ public extension View {
             Spacer()
 
             NavigationStack {
-                TreeView(tree: tree) { value in
+                TreeView(
+                    tree: tree,
+                    id: \.self) { value in
                         Text(value)
                             .background()
                             .padding()
@@ -127,7 +129,6 @@ public extension View {
 }
 
 struct TreeNode {
-    let id: UUID = UUID()
     let type: String
     let label: String
     let value: String
@@ -146,69 +147,52 @@ struct Tree {
     }
 }
 
-struct TreeView<Content: View>: View {
+struct TreeView<ID: Hashable, Content: View>: View {
 
     fileprivate let tree: Tree
-//    fileprivate let id: KeyPath<String, ID>
+    fileprivate let id: KeyPath<String, ID>
     fileprivate let content: (String) -> Content
 
-    public init(
-        tree: Tree,
-//        id: KeyPath<String, ID>,
-        content: @escaping (String) -> Content
-    ) {
+    public init(tree: Tree,
+                id: KeyPath<String, ID>,
+                content: @escaping (String) -> Content) {
         self.tree = tree
-//        self.id = id
+        self.id = id
         self.content = content
     }
 
     public var body: some View {
-        ItemsView(
-            tree: tree,
-            content: content
-        )
+        ItemsView(tree: tree, id: id, content: content)
             .backgroundPreferenceValue(CenterKey.self) {
-                LinesView(
-                    tree: self.tree,
-                    centers: $0
-                )
+                LinesView(tree: self.tree, id: self.id, centers: $0)
             }
     }
 }
 
-fileprivate struct LinesView: View {
+fileprivate struct LinesView<ID: Hashable>: View {
 
     let tree: Tree
-//    let id: KeyPath<String, ID>
-    let centers: [UUID: Anchor<CGPoint>]
+    let id: KeyPath<String, ID>
+    let centers: [ID: Anchor<CGPoint>]
 
-    private func point(for value: UUID, in proxy: GeometryProxy) -> CGPoint? {
-        guard let anchor = centers[tree.node.id] else {
-            print("problem here", #line)
-            return nil
-        }
+    private func point(for value: String, in proxy: GeometryProxy) -> CGPoint? {
+        guard let anchor = centers[id(value)] else { return nil }
         return proxy[anchor]
     }
 
     private func line(to child: Tree, in proxy: GeometryProxy) -> Line? {
-        guard let start = point(for: tree.node.id, in: proxy) else {
-            print("problem here", #line)
-            return nil
-        }
-        guard let end = point(for: child.node.id, in: proxy) else {
-            print("problem here", #line)
-            return nil
-        }
+        guard let start = point(for: tree.node.type, in: proxy) else { return nil }
+        guard let end = point(for: child.node.type, in: proxy) else { return nil }
         return Line(start: start, end: end)
     }
 
     var body: some View {
         GeometryReader { proxy in
-            ForEach(self.tree.children, id: \.node.id) { child in
+            ForEach(self.tree.children, id: \Tree.node.type + self.id) { child in
                 Group {
                     self.line(to: child, in: proxy)?
                         .stroke()
-                    LinesView(tree: child, centers: self.centers)
+                    LinesView(tree: child, id: self.id, centers: self.centers)
                 }
             }
         }
@@ -233,11 +217,10 @@ fileprivate struct Line: Shape {
     }
 }
 
-fileprivate struct ItemsView<Content: View>: View {
+fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
 
     let tree: Tree
-//    let id: KeyPath<String, ID>
-//    let id: UUID
+    let id: KeyPath<String, ID>
     let content: (String) -> Content
     @State private var isPopoverPresented = false
 
@@ -249,7 +232,7 @@ fileprivate struct ItemsView<Content: View>: View {
                 } label: {
                     content(tree.node.type)
                         .anchorPreference(key: CenterKey.self, value: .center) { anchor in
-                            [tree.node.id: anchor]
+                            [self.tree.node.type[keyPath: self.id]: anchor]
                         }
                 }
                 .popover(isPresented: $isPopoverPresented) {
@@ -264,11 +247,8 @@ fileprivate struct ItemsView<Content: View>: View {
                     .presentationCompactAdaptation(.popover)
                 }
                 HStack(alignment: .top) {
-                    ForEach(tree.children, id: \Tree.node.id) { child in
-                        ItemsView(
-                            tree: child,
-                            content: self.content
-                        )
+                    ForEach(tree.children, id: \Tree.node.type + self.id) { child in
+                        ItemsView(tree: child, id: self.id, content: self.content)
                     }
                 }
             }
@@ -276,16 +256,16 @@ fileprivate struct ItemsView<Content: View>: View {
     }
 }
 
-//extension KeyPath {
-//    func callAsFunction(_ root: Root) -> Value { root[keyPath: self] }
-//}
-//
-//fileprivate func +<A, B, C>(
-//    lhs: KeyPath<A, B>,
-//    rhs: KeyPath<B, C>
-//) -> KeyPath<A, C> {
-//    lhs.appending(path: rhs)
-//}
+extension KeyPath {
+    func callAsFunction(_ root: Root) -> Value { root[keyPath: self] }
+}
+
+fileprivate func +<A, B, C>(
+    lhs: KeyPath<A, B>,
+    rhs: KeyPath<B, C>
+) -> KeyPath<A, C> {
+    lhs.appending(path: rhs)
+}
 
 fileprivate struct CenterKey<ID: Hashable>: PreferenceKey {
     static var defaultValue: [ID: Anchor<CGPoint>] { [:] }
