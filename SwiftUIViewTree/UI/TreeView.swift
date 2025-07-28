@@ -15,9 +15,11 @@ struct TreeView<Content: View>: View {
     @State private var totalZoom: CGFloat = 1.0
 
 
-    public init(tree: Tree,
-                id: KeyPath<TreeNode, UUID>,
-                content: @escaping (String) -> Content) {
+    public init(
+        tree: Tree,
+        id: KeyPath<TreeNode, UUID>,
+        content: @escaping (String) -> Content
+    ) {
         self.tree = tree
         self.id = id
         print("Ákos", id)
