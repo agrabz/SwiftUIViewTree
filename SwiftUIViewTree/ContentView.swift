@@ -21,28 +21,6 @@ struct ContentView: View {
                 Text("Hello, 2!")
             } else {
                 Text("Hello, 4!")
-//                TreeView(
-//                    tree: Tree(
-//                        value: "Parent",
-//                        children: [
-//                            Tree(
-//                                value: "Child1",
-//                            ),
-//                            Tree(
-//                                value: "Child2",
-//                                children: [
-//                                    Tree(
-//                                        value: "Grandchild"
-//                                    )
-//                                ]
-//                            ),
-//                        ]
-//                    ),
-//                    id: \.self) { value in
-//                        Text(value)
-//                            .background()
-//                            .padding()
-//                    }
             }
         }
 //                .printViewTree()
@@ -71,8 +49,8 @@ extension Mirror {
                 "|_ Ákos",
                 idx,
                 "\(type(of: value))",
-//                label,
-//                value,
+                label ?? "<unknown>",
+                value,
                 separator: " | "
             )
 
@@ -101,15 +79,12 @@ func convertChildrenToTreesRecursively(mirror: Mirror) -> [Tree] {
 public extension View {
     func printViewTree() -> some View {
         print("Ákos")
-        //        print(body)
         Mirror(reflecting: self).printRecursively()
         return self
     }
 
 
     func renderViewTree() -> some View {
-        print("Ákos")
-        //        print(body)
         let mirror = Mirror(reflecting: self)
         var tree = Tree(
             node: TreeNode(
@@ -119,7 +94,7 @@ public extension View {
             )
         )
         tree.children = convertChildrenToTreesRecursively(mirror: mirror)
-//        Mirror(reflecting: self).printRecursively()
+
         return HStack {
             self
 
@@ -280,7 +255,7 @@ fileprivate func +<A, B, C>(
 
 fileprivate struct CenterKey<ID: Hashable>: PreferenceKey {
     static var defaultValue: [ID: Anchor<CGPoint>] { [:] }
-    static func reduce(value: inout [ID: Anchor<CGPoint>], nextValue: () -> [ID: Anchor<CGPoint>]) { //swiftlint:disable:this just_return
+    static func reduce(value: inout [ID: Anchor<CGPoint>], nextValue: () -> [ID: Anchor<CGPoint>]) {
         value = value.merging(nextValue(), uniquingKeysWith: { $1 })
     }
 }
