@@ -85,7 +85,7 @@ extension Mirror {
 
 func convertChildrenToTreesRecursively(mirror: Mirror) -> [Tree] {
     let result = mirror.children.map { child in
-        var childTree = Tree(value: "\(type(of: child.value))")
+        var childTree = Tree(value: "\(type(of: child.value))") // as Any? see type(of:) docs
         childTree.children = convertChildrenToTreesRecursively(mirror: Mirror(reflecting: child.value))
         return childTree
     }
