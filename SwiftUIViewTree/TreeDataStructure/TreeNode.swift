@@ -12,4 +12,11 @@ struct TreeNode {
     let type: String
     let label: String
     let value: String
+
+    var description: String {
+        """
+        \(type)
+        \(label)
+        """
+    }
 }

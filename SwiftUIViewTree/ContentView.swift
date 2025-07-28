@@ -16,9 +16,9 @@ struct ContentView: View {
             Text("Hello, world!")
                 .font(.largeTitle)
                 .bold()
-                .printViewTree()
-                .renderViewTree()
         }
+        .printViewTree()
+        .renderViewTree()
     }
 }
 
