@@ -85,7 +85,11 @@ extension Mirror {
 
 func convertChildrenToTreesRecursively(mirror: Mirror) -> [Tree] {
     let result = mirror.children.map { child in
-        var childTree = Tree(value: "\(type(of: child.value))") // as Any? see type(of:) docs
+        var childTree = Tree(
+            value: "\(type(of: child.value))",
+            label: child.label ?? "<unknown>",
+            realValue: "\(child.value)"
+        ) // as Any? see type(of:) docs
         childTree.children = convertChildrenToTreesRecursively(mirror: Mirror(reflecting: child.value))
         return childTree
     }
@@ -105,7 +109,11 @@ public extension View {
         print("Ákos")
         //        print(body)
         let mirror = Mirror(reflecting: self)
-        var tree = Tree(value: mirror.description)
+        var tree = Tree(
+            value: "Parent View",
+            label:  "Parent View",
+            realValue: "Parent View"
+        )
         tree.children = convertChildrenToTreesRecursively(mirror: mirror)
 //        Mirror(reflecting: self).printRecursively()
         return HStack {
@@ -113,14 +121,16 @@ public extension View {
 
             Spacer()
 
-            TreeView(
-                tree: tree,
-                id: \.self) { value in
-                    Text(value)
-                        .background()
-                        .padding()
-                }
-                .background(Color.yellow)
+            NavigationStack {
+                TreeView(
+                    tree: tree,
+                    id: \.self) { value in
+                        Text(value)
+                            .background()
+                            .padding()
+                    }
+                    .background(Color.yellow)
+            }
         }
     }
 }
@@ -128,10 +138,19 @@ public extension View {
 
 public struct Tree {
     public let value: String
+    public let label: String
+    public let realValue: String
     public var children: [Tree]
 
-    public init(value: String, children: [Tree] = []) {
+    public init(
+        value: String,
+        label: String,
+        realValue: String,
+        children: [Tree] = []
+    ) {
         self.value = value
+        self.label = label
+        self.realValue = realValue
         self.children = children
     }
 }
@@ -211,14 +230,31 @@ fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
     let tree: Tree
     let id: KeyPath<String, ID>
     let content: (String) -> Content
+    @State private var isPopoverPresented = false
 
     var body: some View {
         ScrollView([.vertical, .horizontal]) {
             VStack {
-                content(tree.value)
-                    .anchorPreference(key: CenterKey.self, value: .center) { anchor in
-                        [self.tree.value[keyPath: self.id]: anchor]
+                Button {
+                    print("Tapped on: \(tree.value)")
+                    isPopoverPresented.toggle()
+                } label: {
+                    content(tree.value)
+                        .anchorPreference(key: CenterKey.self, value: .center) { anchor in
+                            [self.tree.value[keyPath: self.id]: anchor]
+                        }
+                }
+                .popover(isPresented: $isPopoverPresented) {
+                    ScrollView([.vertical, .horizontal]) {
+                        VStack {
+                            Text("Popover for \(tree.value)")
+                            Text("Details:")
+                            Text("\(tree.label)")
+                            Text("\(tree.realValue)")
+                        }
                     }
+                    .presentationCompactAdaptation(.popover)
+                }
                 HStack(alignment: .top) {
                     ForEach(tree.children, id: \Tree.value + self.id) { child in
                         ItemsView(tree: child, id: self.id, content: self.content)
