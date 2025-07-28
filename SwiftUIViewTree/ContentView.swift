@@ -17,10 +17,32 @@ struct ContentView: View {
 //            .font(.largeTitle)
 //            .bold()
         VStack {
-            if true {
+            if false {
                 Text("Hello, 2!")
             } else {
                 Text("Hello, 3!")
+                TreeView(
+                    tree: Tree(
+                        value: "Parent",
+                        children: [
+                            Tree(
+                                value: "Child1",
+                            ),
+                            Tree(
+                                value: "Child2",
+                                children: [
+                                    Tree(
+                                        value: "Grandchild"
+                                    )
+                                ]
+                            ),
+                        ]
+                    ),
+                    id: \.self) { value in
+                        Text(value)
+                            .background()
+                            .padding()
+                    }
             }
         }
                 .debug()
