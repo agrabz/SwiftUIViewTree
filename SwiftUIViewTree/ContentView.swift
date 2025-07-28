@@ -20,7 +20,7 @@ struct ContentView: View {
             if false {
                 Text("Hello, 2!")
             } else {
-                Text("Hello, 3!")
+                Text("Hello, 4!")
 //                TreeView(
 //                    tree: Tree(
 //                        value: "Parent",
@@ -96,7 +96,12 @@ public extension View {
         let mirror = Mirror(reflecting: self)
         var tree = Tree(value: mirror.description)
         tree.children = mirror.children.map { child in
-            Tree(value: "\(type(of: child.value))")
+            var a = Tree(value: "\(type(of: child.value))")
+            a.children = Mirror(reflecting: child.value).children.map { grandChild in
+                    Tree(value: "\(type(of: grandChild.value))")
+            }
+
+            return a
         }
 //        Mirror(reflecting: self).printRecursively()
         return HStack {
