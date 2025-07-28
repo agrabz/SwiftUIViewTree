@@ -117,7 +117,8 @@ public extension View {
                 NavigationStack {
                     TreeView(
                         tree: tree,
-                        id: \.id) { value in
+                        id: \.id
+                    ) { value in
                             Text(value)
                                 .background()
                                 .padding()
@@ -138,14 +139,13 @@ public extension View {
 }
 
 struct TreeNode {
-    let id: UUID = UUID()  //BOTH?
+    let id: UUID = UUID()
     let type: String
     let label: String
     let value: String
 }
 
 struct Tree {
-    let id: UUID = UUID() //BOTH?
     let node: TreeNode
     var children: [Tree]
     
@@ -216,7 +216,7 @@ fileprivate struct LinesView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            ForEach(self.tree.children, id: \.id) { child in
+            ForEach(self.tree.children, id: \.node.id) { child in
                 Group {
                     self.line(to: child, in: proxy)?
                         .stroke()
@@ -274,7 +274,7 @@ fileprivate struct ItemsView<Content: View>: View {
                 .presentationCompactAdaptation(.popover)
             }
             HStack(alignment: .top) {
-                ForEach(tree.children, id: \.id) { child in
+                ForEach(tree.children, id: \.node.id) { child in
                     ItemsView(tree: child, id: self.id, content: self.content)
                 }
             }
