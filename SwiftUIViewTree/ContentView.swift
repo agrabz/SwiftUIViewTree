@@ -152,7 +152,9 @@ struct TreeView<ID: Hashable, Content: View>: View {
     fileprivate let tree: Tree
     fileprivate let id: KeyPath<String, ID>
     fileprivate let content: (String) -> Content
-    
+    @GestureState private var zoom = 1.0
+
+
     public init(tree: Tree,
                 id: KeyPath<String, ID>,
                 content: @escaping (String) -> Content) {
@@ -168,6 +170,13 @@ struct TreeView<ID: Hashable, Content: View>: View {
                     LinesView(tree: self.tree, id: self.id, centers: $0)
                 }
         }
+        .scaleEffect(zoom)
+        .gesture(
+            MagnifyGesture()
+                .updating($zoom) { value, gestureState, transaction in
+                    gestureState = value.magnification
+                }
+        )
     }
 }
 
