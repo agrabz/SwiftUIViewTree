@@ -61,7 +61,11 @@ extension Mirror {
 }
 
 
-func convertChildrenToTreesRecursively(mirror: Mirror) -> [Tree] {
+func convertChildrenToTreesRecursively(mirror: Mirror, maxDepth: Int, currentDepth: Int = 0) -> [Tree] {
+    guard currentDepth < maxDepth else {
+        return []
+    }
+
     let result = mirror.children.map { child in
         var childTree = Tree(
             node: TreeNode(
@@ -70,7 +74,11 @@ func convertChildrenToTreesRecursively(mirror: Mirror) -> [Tree] {
                 value: "\(child.value)"
             )
         ) // as Any? see type(of:) docs
-        childTree.children = convertChildrenToTreesRecursively(mirror: Mirror(reflecting: child.value))
+        childTree.children = convertChildrenToTreesRecursively(
+            mirror: Mirror(reflecting: child.value),
+            maxDepth: maxDepth,
+            currentDepth: currentDepth + 1
+        )
         return childTree
     }
     return result
@@ -93,7 +101,10 @@ public extension View {
                 value: "Root node"
             )
         )
-        tree.children = convertChildrenToTreesRecursively(mirror: mirror)
+        tree.children = convertChildrenToTreesRecursively(
+            mirror: mirror,
+            maxDepth: 2
+        )
 
         return HStack {
             self
