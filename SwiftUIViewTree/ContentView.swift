@@ -169,9 +169,9 @@ struct TreeView<ID: Hashable, Content: View>: View {
                 .backgroundPreferenceValue(CenterKey.self) {
                     LinesView(tree: self.tree, id: self.id, centers: $0)
                 }
+                .scaleEffect(zoom)
         }
-        .scaleEffect(zoom)
-        .gesture(
+        .simultaneousGesture(
             MagnifyGesture()
                 .updating($zoom) { value, gestureState, transaction in
                     gestureState = value.magnification
