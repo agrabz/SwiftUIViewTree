@@ -69,25 +69,25 @@ public extension View {
 }
 
 
-public struct Tree<Value> {
-    public let value: Value
-    public var children: [Tree<Value>]
+public struct Tree {
+    public let value: String
+    public var children: [Tree]
 
-    public init(value: Value, children: [Tree<Value>] = []) {
+    public init(value: String, children: [Tree] = []) {
         self.value = value
         self.children = children
     }
 }
 
-public struct TreeView<Value, ID: Hashable, Content: View>: View {
+public struct TreeView<ID: Hashable, Content: View>: View {
 
-    fileprivate let tree: Tree<Value>
-    fileprivate let id: KeyPath<Value, ID>
-    fileprivate let content: (Value) -> Content
+    fileprivate let tree: Tree
+    fileprivate let id: KeyPath<String, ID>
+    fileprivate let content: (String) -> Content
 
-    public init(tree: Tree<Value>,
-                id: KeyPath<Value, ID>,
-                content: @escaping (Value) -> Content) {
+    public init(tree: Tree,
+                id: KeyPath<String, ID>,
+                content: @escaping (String) -> Content) {
         self.tree = tree
         self.id = id
         self.content = content
@@ -101,18 +101,18 @@ public struct TreeView<Value, ID: Hashable, Content: View>: View {
     }
 }
 
-fileprivate struct LinesView<Value, ID: Hashable>: View {
+fileprivate struct LinesView<ID: Hashable>: View {
 
-    let tree: Tree<Value>
-    let id: KeyPath<Value, ID>
+    let tree: Tree
+    let id: KeyPath<String, ID>
     let centers: [ID: Anchor<CGPoint>]
 
-    private func point(for value: Value, in proxy: GeometryProxy) -> CGPoint? {
+    private func point(for value: String, in proxy: GeometryProxy) -> CGPoint? {
         guard let anchor = centers[id(value)] else { return nil }
         return proxy[anchor]
     }
 
-    private func line(to child: Tree<Value>, in proxy: GeometryProxy) -> Line? {
+    private func line(to child: Tree, in proxy: GeometryProxy) -> Line? {
         guard let start = point(for: tree.value, in: proxy) else { return nil }
         guard let end = point(for: child.value, in: proxy) else { return nil }
         return Line(start: start, end: end)
@@ -149,11 +149,11 @@ fileprivate struct Line: Shape {
     }
 }
 
-fileprivate struct ItemsView<Value, ID: Hashable, Content: View>: View {
+fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
 
-    let tree: Tree<Value>
-    let id: KeyPath<Value, ID>
-    let content: (Value) -> Content
+    let tree: Tree
+    let id: KeyPath<String, ID>
+    let content: (String) -> Content
 
     var body: some View {
         VStack {
