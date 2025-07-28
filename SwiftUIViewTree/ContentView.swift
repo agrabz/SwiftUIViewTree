@@ -45,6 +45,7 @@ struct ContentView: View {
 //                    }
             }
         }
+//                .printViewTree()
                 .renderViewTree()
 //            .bold()
 //        }
@@ -82,6 +83,13 @@ extension Mirror {
 }
 
 public extension View {
+    func printViewTree() -> some View {
+            print("Ákos")
+            //        print(body)
+            Mirror(reflecting: self).printRecursively()
+            return self
+    }
+
     func renderViewTree() -> some View {
         print("Ákos")
         //        print(body)
