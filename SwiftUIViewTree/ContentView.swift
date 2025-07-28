@@ -9,22 +9,22 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        //        VStack {
-        //            Image(systemName: "globe")
-        //                .imageScale(.large)
-        //                .foregroundStyle(.tint)
-        //            Text("Hello, world!")
-        //            .font(.largeTitle)
-        //            .bold()
-        //        VStack {
-        //            if false {
-        //                Text("Hello, 2!")
-        //            } else {
-        //                Text("Hello, 4!")
-        //            }
-        //        }
-        Text("Reset")
-            .background(Color.blue)
+                VStack {
+                    Image(systemName: "globe")
+                        .imageScale(.large)
+                        .foregroundStyle(.tint)
+                    Text("Hello, world!")
+                    .font(.largeTitle)
+                    .bold()
+//                VStack {
+//                    if false {
+//                        Text("Hello, 2!")
+//                    } else {
+//                        Text("Hello, 4!")
+//                    }
+                }
+//        Text("Reset")
+//            .background(Color.blue)
         //                .printViewTree()
             .renderViewTree()
         //            .bold()
@@ -117,7 +117,7 @@ public extension View {
                 NavigationStack {
                     TreeView(
                         tree: tree,
-                        id: \.self) { value in
+                        id: \.id) { value in
                             Text(value)
                                 .background()
                                 .padding()
@@ -138,12 +138,14 @@ public extension View {
 }
 
 struct TreeNode {
+    let id: UUID = UUID()  //BOTH?
     let type: String
     let label: String
     let value: String
 }
 
 struct Tree {
+    let id: UUID = UUID() //BOTH?
     let node: TreeNode
     var children: [Tree]
     
@@ -156,20 +158,21 @@ struct Tree {
     }
 }
 
-struct TreeView<ID: Hashable, Content: View>: View {
+struct TreeView<Content: View>: View {
     
     fileprivate let tree: Tree
-    fileprivate let id: KeyPath<String, ID>
+    fileprivate let id: KeyPath<TreeNode, UUID>
     fileprivate let content: (String) -> Content
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
 
 
     public init(tree: Tree,
-                id: KeyPath<String, ID>,
+                id: KeyPath<TreeNode, UUID>,
                 content: @escaping (String) -> Content) {
         self.tree = tree
         self.id = id
+        print("Ákos", id)
         self.content = content
     }
     
@@ -194,26 +197,26 @@ struct TreeView<ID: Hashable, Content: View>: View {
     }
 }
 
-fileprivate struct LinesView<ID: Hashable>: View {
+fileprivate struct LinesView: View {
     
     let tree: Tree
-    let id: KeyPath<String, ID>
-    let centers: [ID: Anchor<CGPoint>]
-    
-    private func point(for value: String, in proxy: GeometryProxy) -> CGPoint? {
+    let id: KeyPath<TreeNode, UUID>
+    let centers: [UUID: Anchor<CGPoint>]
+
+    private func point(for value: TreeNode, in proxy: GeometryProxy) -> CGPoint? {
         guard let anchor = centers[id(value)] else { return nil }
         return proxy[anchor]
     }
     
     private func line(to child: Tree, in proxy: GeometryProxy) -> Line? {
-        guard let start = point(for: tree.node.type, in: proxy) else { return nil }
-        guard let end = point(for: child.node.type, in: proxy) else { return nil }
+        guard let start = point(for: tree.node, in: proxy) else { return nil }
+        guard let end = point(for: child.node, in: proxy) else { return nil }
         return Line(start: start, end: end)
     }
     
     var body: some View {
         GeometryReader { proxy in
-            ForEach(self.tree.children, id: \Tree.node.type + self.id) { child in
+            ForEach(self.tree.children, id: \.id) { child in
                 Group {
                     self.line(to: child, in: proxy)?
                         .stroke()
@@ -242,10 +245,10 @@ fileprivate struct Line: Shape {
     }
 }
 
-fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
+fileprivate struct ItemsView<Content: View>: View {
     
     let tree: Tree
-    let id: KeyPath<String, ID>
+    let id: KeyPath<TreeNode, UUID>
     let content: (String) -> Content
     @State private var isPopoverPresented = false
     
@@ -256,7 +259,7 @@ fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
             } label: {
                 content(tree.node.type)
                     .anchorPreference(key: CenterKey.self, value: .center) { anchor in
-                        [self.tree.node.type[keyPath: self.id]: anchor]
+                        [self.tree.node[keyPath: self.id]: anchor]
                     }
             }
             .popover(isPresented: $isPopoverPresented) {
@@ -271,7 +274,7 @@ fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
                 .presentationCompactAdaptation(.popover)
             }
             HStack(alignment: .top) {
-                ForEach(tree.children, id: \Tree.node.type + self.id) { child in
+                ForEach(tree.children, id: \.id) { child in
                     ItemsView(tree: child, id: self.id, content: self.content)
                 }
             }
