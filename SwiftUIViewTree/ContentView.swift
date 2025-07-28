@@ -27,7 +27,11 @@ struct ContentView: View {
 }
 
 
-func convertChildrenToTreesRecursively(mirror: Mirror, maxDepth: Int = .max, currentDepth: Int = 0) -> [Tree] {
+func convertChildrenToTreesRecursively(
+    mirror: Mirror,
+    maxDepth: Int = .max,
+    currentDepth: Int = 0
+) -> [Tree] {
     guard currentDepth < maxDepth else {
         return []
     }
