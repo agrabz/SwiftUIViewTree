@@ -45,7 +45,7 @@ struct ContentView: View {
 //                    }
             }
         }
-                .debug()
+                .renderViewTree()
 //            .bold()
 //        }
 //        .padding()
@@ -82,7 +82,7 @@ extension Mirror {
 }
 
 public extension View {
-    func debug() -> some View {
+    func renderViewTree() -> some View {
         print("Ákos")
         //        print(body)
         let mirror = Mirror(reflecting: self)
