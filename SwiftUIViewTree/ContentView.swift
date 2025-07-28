@@ -25,8 +25,8 @@ struct ContentView: View {
 //        }
         Text("Reset")
             .background(Color.blue)
-                .printViewTree()
-//                .renderViewTree()
+//                .printViewTree()
+                .renderViewTree()
 //            .bold()
 //        }
 //        .padding()
