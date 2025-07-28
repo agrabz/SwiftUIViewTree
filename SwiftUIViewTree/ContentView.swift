@@ -127,13 +127,13 @@ public extension View {
 }
 
 struct TreeNode {
-    let id: UUID = UUID()
     let type: String
     let label: String
     let value: String
 }
 
 struct Tree {
+    let id: UUID = UUID()
     let node: TreeNode
     var children: [Tree]
 
@@ -183,7 +183,7 @@ fileprivate struct LinesView: View {
     let centers: [UUID: Anchor<CGPoint>]
 
     private func point(for value: UUID, in proxy: GeometryProxy) -> CGPoint? {
-        guard let anchor = centers[tree.node.id] else {
+        guard let anchor = centers[tree.id] else {
             print("problem here", #line)
             return nil
         }
@@ -191,11 +191,11 @@ fileprivate struct LinesView: View {
     }
 
     private func line(to child: Tree, in proxy: GeometryProxy) -> Line? {
-        guard let start = point(for: tree.node.id, in: proxy) else {
+        guard let start = point(for: tree.id, in: proxy) else {
             print("problem here", #line)
             return nil
         }
-        guard let end = point(for: child.node.id, in: proxy) else {
+        guard let end = point(for: child.id, in: proxy) else {
             print("problem here", #line)
             return nil
         }
@@ -204,7 +204,7 @@ fileprivate struct LinesView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            ForEach(self.tree.children, id: \.node.id) { child in
+            ForEach(self.tree.children, id: \.id) { child in
                 Group {
                     self.line(to: child, in: proxy)?
                         .stroke()
@@ -249,7 +249,7 @@ fileprivate struct ItemsView<Content: View>: View {
                 } label: {
                     content(tree.node.type)
                         .anchorPreference(key: CenterKey.self, value: .center) { anchor in
-                            [tree.node.id: anchor]
+                            [tree.id: anchor]
                         }
                 }
                 .popover(isPresented: $isPopoverPresented) {
@@ -264,7 +264,7 @@ fileprivate struct ItemsView<Content: View>: View {
                     .presentationCompactAdaptation(.popover)
                 }
                 HStack(alignment: .top) {
-                    ForEach(tree.children, id: \Tree.node.id) { child in
+                    ForEach(tree.children, id: \Tree.id) { child in
                         ItemsView(
                             tree: child,
                             content: self.content
