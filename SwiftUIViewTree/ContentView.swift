@@ -16,15 +16,17 @@ struct ContentView: View {
 //            Text("Hello, world!")
 //            .font(.largeTitle)
 //            .bold()
-        VStack {
-            if false {
-                Text("Hello, 2!")
-            } else {
-                Text("Hello, 4!")
-            }
-        }
-//                .printViewTree()
-                .renderViewTree()
+//        VStack {
+//            if false {
+//                Text("Hello, 2!")
+//            } else {
+//                Text("Hello, 4!")
+//            }
+//        }
+        Text("Reset")
+            .background(Color.blue)
+                .printViewTree()
+//                .renderViewTree()
 //            .bold()
 //        }
 //        .padding()
@@ -54,6 +56,7 @@ extension Mirror {
                 separator: " | "
             )
 
+            print("Checking children of \(Mirror(reflecting: value))")
             Mirror(reflecting: value)
                 .printRecursively()
         }
@@ -61,7 +64,7 @@ extension Mirror {
 }
 
 
-func convertChildrenToTreesRecursively(mirror: Mirror, maxDepth: Int, currentDepth: Int = 0) -> [Tree] {
+func convertChildrenToTreesRecursively(mirror: Mirror, maxDepth: Int = .max, currentDepth: Int = 0) -> [Tree] {
     guard currentDepth < maxDepth else {
         return []
     }
@@ -103,7 +106,7 @@ public extension View {
         )
         tree.children = convertChildrenToTreesRecursively(
             mirror: mirror,
-            maxDepth: 2
+//            maxDepth: 2
         )
 
         return HStack {
