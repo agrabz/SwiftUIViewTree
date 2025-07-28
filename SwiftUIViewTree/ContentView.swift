@@ -109,20 +109,22 @@ public extension View {
             //            maxDepth: 2
         )
         
-        return HStack {
-            self
-            
-            Spacer()
-            
-            NavigationStack {
-                TreeView(
-                    tree: tree,
-                    id: \.self) { value in
-                        Text(value)
-                            .background()
-                            .padding()
-                    }
-                    .background(Color.yellow)
+        return GeometryReader { geometry in
+            HStack {
+                self
+                    .frame(width: geometry.size.width * 1/4)
+
+                NavigationStack {
+                    TreeView(
+                        tree: tree,
+                        id: \.self) { value in
+                            Text(value)
+                                .background()
+                                .padding()
+                        }
+                        .background(Color.yellow)
+                }
+                .frame(width: geometry.size.width * 3/4)
             }
         }
     }
