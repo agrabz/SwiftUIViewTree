@@ -9,27 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-//            Text("Hello, world!")
-//            .font(.largeTitle)
-//            .bold()
-//        VStack {
-//            if false {
-//                Text("Hello, 2!")
-//            } else {
-//                Text("Hello, 4!")
-//            }
-//        }
+        //        VStack {
+        //            Image(systemName: "globe")
+        //                .imageScale(.large)
+        //                .foregroundStyle(.tint)
+        //            Text("Hello, world!")
+        //            .font(.largeTitle)
+        //            .bold()
+        //        VStack {
+        //            if false {
+        //                Text("Hello, 2!")
+        //            } else {
+        //                Text("Hello, 4!")
+        //            }
+        //        }
         Text("Reset")
             .background(Color.blue)
-//                .printViewTree()
-                .renderViewTree()
-//            .bold()
-//        }
-//        .padding()
+        //                .printViewTree()
+            .renderViewTree()
+        //            .bold()
+        //        }
+        //        .padding()
     }
 }
 
@@ -55,7 +55,7 @@ extension Mirror {
                 value,
                 separator: " | "
             )
-
+            
             print("Checking children of \(Mirror(reflecting: value))")
             Mirror(reflecting: value)
                 .printRecursively()
@@ -68,7 +68,7 @@ func convertChildrenToTreesRecursively(mirror: Mirror, maxDepth: Int = .max, cur
     guard currentDepth < maxDepth else {
         return []
     }
-
+    
     let result = mirror.children.map { child in
         var childTree = Tree(
             node: TreeNode(
@@ -93,8 +93,8 @@ public extension View {
         Mirror(reflecting: self).printRecursively()
         return self
     }
-
-
+    
+    
     func renderViewTree() -> some View {
         let mirror = Mirror(reflecting: self)
         var tree = Tree(
@@ -106,14 +106,14 @@ public extension View {
         )
         tree.children = convertChildrenToTreesRecursively(
             mirror: mirror,
-//            maxDepth: 2
+            //            maxDepth: 2
         )
-
+        
         return HStack {
             self
-
+            
             Spacer()
-
+            
             NavigationStack {
                 TreeView(
                     tree: tree,
@@ -137,7 +137,7 @@ struct TreeNode {
 struct Tree {
     let node: TreeNode
     var children: [Tree]
-
+    
     init(
         node: TreeNode,
         children: [Tree] = []
@@ -148,11 +148,11 @@ struct Tree {
 }
 
 struct TreeView<ID: Hashable, Content: View>: View {
-
+    
     fileprivate let tree: Tree
     fileprivate let id: KeyPath<String, ID>
     fileprivate let content: (String) -> Content
-
+    
     public init(tree: Tree,
                 id: KeyPath<String, ID>,
                 content: @escaping (String) -> Content) {
@@ -160,32 +160,34 @@ struct TreeView<ID: Hashable, Content: View>: View {
         self.id = id
         self.content = content
     }
-
+    
     public var body: some View {
-        ItemsView(tree: tree, id: id, content: content)
-            .backgroundPreferenceValue(CenterKey.self) {
-                LinesView(tree: self.tree, id: self.id, centers: $0)
-            }
+        ScrollView([.vertical, .horizontal]) {
+            ItemsView(tree: tree, id: id, content: content)
+                .backgroundPreferenceValue(CenterKey.self) {
+                    LinesView(tree: self.tree, id: self.id, centers: $0)
+                }
+        }
     }
 }
 
 fileprivate struct LinesView<ID: Hashable>: View {
-
+    
     let tree: Tree
     let id: KeyPath<String, ID>
     let centers: [ID: Anchor<CGPoint>]
-
+    
     private func point(for value: String, in proxy: GeometryProxy) -> CGPoint? {
         guard let anchor = centers[id(value)] else { return nil }
         return proxy[anchor]
     }
-
+    
     private func line(to child: Tree, in proxy: GeometryProxy) -> Line? {
         guard let start = point(for: tree.node.type, in: proxy) else { return nil }
         guard let end = point(for: child.node.type, in: proxy) else { return nil }
         return Line(start: start, end: end)
     }
-
+    
     var body: some View {
         GeometryReader { proxy in
             ForEach(self.tree.children, id: \Tree.node.type + self.id) { child in
@@ -200,15 +202,15 @@ fileprivate struct LinesView<ID: Hashable>: View {
 }
 
 fileprivate struct Line: Shape {
-
+    
     init(start: CGPoint, end: CGPoint) {
         animatableData = AnimatablePair(AnimatablePair(start.x, start.y), AnimatablePair(end.x, end.y))
     }
-
+    
     var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, AnimatablePair<CGFloat, CGFloat>>
     var start: CGPoint { CGPoint(x: animatableData.first.first, y: animatableData.first.second) }
     var end: CGPoint { CGPoint(x: animatableData.second.first, y: animatableData.second.second) }
-
+    
     func path(in rect: CGRect) -> Path {
         Path { path in
             path.move(to: start)
@@ -218,38 +220,36 @@ fileprivate struct Line: Shape {
 }
 
 fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
-
+    
     let tree: Tree
     let id: KeyPath<String, ID>
     let content: (String) -> Content
     @State private var isPopoverPresented = false
-
+    
     var body: some View {
-        ScrollView([.vertical, .horizontal]) {
-            VStack {
-                Button {
-                    isPopoverPresented.toggle()
-                } label: {
-                    content(tree.node.type)
-                        .anchorPreference(key: CenterKey.self, value: .center) { anchor in
-                            [self.tree.node.type[keyPath: self.id]: anchor]
-                        }
-                }
-                .popover(isPresented: $isPopoverPresented) {
-                    ScrollView([.vertical, .horizontal]) {
-                        VStack(alignment: .leading) {
-                            Text("Type: \(tree.node.type)")
-                            Text("Label: \(tree.node.label)")
-                            Text("Value: \(tree.node.value)")
-                        }
-                        .padding(.horizontal)
+        VStack {
+            Button {
+                isPopoverPresented.toggle()
+            } label: {
+                content(tree.node.type)
+                    .anchorPreference(key: CenterKey.self, value: .center) { anchor in
+                        [self.tree.node.type[keyPath: self.id]: anchor]
                     }
-                    .presentationCompactAdaptation(.popover)
-                }
-                HStack(alignment: .top) {
-                    ForEach(tree.children, id: \Tree.node.type + self.id) { child in
-                        ItemsView(tree: child, id: self.id, content: self.content)
+            }
+            .popover(isPresented: $isPopoverPresented) {
+                ScrollView([.vertical, .horizontal]) {
+                    VStack(alignment: .leading) {
+                        Text("Type: \(tree.node.type)")
+                        Text("Label: \(tree.node.label)")
+                        Text("Value: \(tree.node.value)")
                     }
+                    .padding(.horizontal)
+                }
+                .presentationCompactAdaptation(.popover)
+            }
+            HStack(alignment: .top) {
+                ForEach(tree.children, id: \Tree.node.type + self.id) { child in
+                    ItemsView(tree: child, id: self.id, content: self.content)
                 }
             }
         }
