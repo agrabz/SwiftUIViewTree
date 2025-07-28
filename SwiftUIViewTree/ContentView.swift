@@ -82,31 +82,31 @@ extension Mirror {
     }
 }
 
+
+func convertChildrenToTreesRecursively(mirror: Mirror) -> [Tree] {
+    let result = mirror.children.map { child in
+        var childTree = Tree(value: "\(type(of: child.value))")
+        childTree.children = convertChildrenToTreesRecursively(mirror: Mirror(reflecting: child.value))
+        return childTree
+    }
+    return result
+}
+
 public extension View {
     func printViewTree() -> some View {
-            print("Ákos")
-            //        print(body)
-            Mirror(reflecting: self).printRecursively()
-            return self
+        print("Ákos")
+        //        print(body)
+        Mirror(reflecting: self).printRecursively()
+        return self
     }
+
 
     func renderViewTree() -> some View {
         print("Ákos")
         //        print(body)
         let mirror = Mirror(reflecting: self)
         var tree = Tree(value: mirror.description)
-        tree.children = mirror.children.map { child in
-            var a = Tree(value: "\(type(of: child.value))")
-            a.children = Mirror(reflecting: child.value).children.map { grandChild in
-                    var aa = Tree(value: "\(type(of: grandChild.value))")
-                aa.children = Mirror(reflecting: grandChild.value).children.map { greatGrandChild in
-                    Tree(value: "\(type(of: greatGrandChild.value))")
-                }
-                return aa
-            }
-
-            return a
-        }
+        tree.children = convertChildrenToTreesRecursively(mirror: mirror)
 //        Mirror(reflecting: self).printRecursively()
         return HStack {
             self
@@ -213,14 +213,16 @@ fileprivate struct ItemsView<ID: Hashable, Content: View>: View {
     let content: (String) -> Content
 
     var body: some View {
-        VStack {
-            content(tree.value)
-                .anchorPreference(key: CenterKey.self, value: .center) { anchor in
-                    [self.tree.value[keyPath: self.id]: anchor]
-                }
-            HStack(alignment: .top) {
-                ForEach(tree.children, id: \Tree.value + self.id) { child in
-                    ItemsView(tree: child, id: self.id, content: self.content)
+        ScrollView([.vertical, .horizontal]) {
+            VStack {
+                content(tree.value)
+                    .anchorPreference(key: CenterKey.self, value: .center) { anchor in
+                        [self.tree.value[keyPath: self.id]: anchor]
+                    }
+                HStack(alignment: .top) {
+                    ForEach(tree.children, id: \Tree.value + self.id) { child in
+                        ItemsView(tree: child, id: self.id, content: self.content)
+                    }
                 }
             }
         }
