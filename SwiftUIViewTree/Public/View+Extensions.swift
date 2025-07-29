@@ -8,7 +8,7 @@
 import SwiftUI
 
 public extension View {
-    func printViewTree(maxDepth: Int = .max) -> some View {
+    func printViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
         var tree = Tree(
             node: TreeNode(
                 type: "Root node",
@@ -26,7 +26,7 @@ public extension View {
     }
 
 
-    func renderViewTree(maxDepth: Int = .max) -> some View {
+    func renderViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
         var tree = Tree(
             node: TreeNode(
                 type: "Root node",

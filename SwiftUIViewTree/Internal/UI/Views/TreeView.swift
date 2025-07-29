@@ -13,7 +13,6 @@ struct TreeView<Content: View>: View {
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
 
-
     init(
         tree: Tree,
         content: @escaping (String) -> Content

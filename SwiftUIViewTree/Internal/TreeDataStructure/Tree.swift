@@ -9,7 +9,7 @@ struct Tree: CustomStringConvertible {
     let node: TreeNode
     var children: [Tree]
 
-    var description: String {
+    var description: String {  //TODO: to outsource to some mapper and test
         var description = node.printDescription
 
         description += children

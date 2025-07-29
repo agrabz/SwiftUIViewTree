@@ -13,14 +13,14 @@ struct TreeNode {
     let label: String
     let value: String
 
-    var description: String {
+    var description: String {   //TODO: to outsource to some mapper and test
         """
         \(type)
         \(label)
         """
     }
 
-    var printDescription: String {
+    var printDescription: String {   //TODO: to outsource to some mapper and test
         """
         
         Node

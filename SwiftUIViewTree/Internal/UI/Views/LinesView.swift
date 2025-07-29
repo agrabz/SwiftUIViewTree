@@ -11,12 +11,12 @@ struct LinesView: View {
     let parent: Tree
     let nodeCenters: [UUID: Anchor<CGPoint>]
 
-    private func pointFor(nodeID: UUID, in proxy: GeometryProxy) -> CGPoint? {
+    private func pointFor(nodeID: UUID, in proxy: GeometryProxy) -> CGPoint? { //TODO: to test?
         guard let anchor = nodeCenters[nodeID] else { return nil }
         return proxy[anchor]
     }
     
-    private func lineFromParent(to child: Tree, in proxy: GeometryProxy) -> Line? {
+    private func lineFromParent(to child: Tree, in proxy: GeometryProxy) -> Line? { //TODO: to test?
         guard
             let startPoint = pointFor(
                 nodeID: self.parent.node.id,

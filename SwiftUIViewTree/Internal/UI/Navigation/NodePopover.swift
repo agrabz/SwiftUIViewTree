@@ -13,7 +13,7 @@ struct NodePopover: View {
     var body: some View {
         ScrollView([.vertical, .horizontal]) {
             VStack(alignment: .leading) {
-                Text("Type: \(node.type)")
+                Text("Type: \(node.type)")   //TODO: to come from node object or from a separate UIModel whose mapper is testable
                 Text("Label: \(node.label)")
                 Text("Value: \(node.value)")
             }

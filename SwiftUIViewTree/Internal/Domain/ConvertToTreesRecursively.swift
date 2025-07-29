@@ -5,7 +5,7 @@
 //  Created by Grabecz, Akos on 2025. 07. 29..
 //
 
-func convertToTreesRecursively(
+func convertToTreesRecursively( //TODO: to test
     mirror: Mirror,
     maxDepth: Int = .max,
     currentDepth: Int = 0
