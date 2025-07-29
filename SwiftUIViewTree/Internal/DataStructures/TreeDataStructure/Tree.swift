@@ -7,7 +7,7 @@
 
 struct Tree: CustomStringConvertible {
     let node: TreeNode
-    var children: [Tree]
+    var children: [Tree] // TODO: parents with only one child should be merged with their children
 
     var description: String {  //TODO: to outsource to some mapper and test
         var description = node.printDescription

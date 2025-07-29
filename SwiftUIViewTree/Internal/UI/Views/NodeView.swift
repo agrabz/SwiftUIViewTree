@@ -13,21 +13,32 @@ struct NodeView: View {
     var body: some View {
         VStack {
             Text(node.label)
+                .font(.headline)
+                .fontWeight(.black)
 
             HStack {
                 Text(node.type.shortenedString)
                     .font(.caption)
+                    .bold()
                 Text(node.value.shortenedString)
                     .font(.caption)
+                    .italic()
             }
-        }
             .padding(.all, 8)
-            .background(.white)
+            .background(.gray.opacity(0.2))
             .cornerRadius(20)
             .overlay {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(.black, lineWidth: 0.5)
             }
-            .padding(.all, 8)
+        }
+        .padding(.all, 8)
+        .background(.white)
+        .cornerRadius(20)
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(.black, lineWidth: 0.5)
+        }
+        .padding(.all, 8)
     }
 }
