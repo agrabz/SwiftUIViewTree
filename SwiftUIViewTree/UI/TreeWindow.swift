@@ -18,10 +18,7 @@ struct TreeWindow<Content: View>: View {
                     .frame(width: geometry.size.width * 1/4)
 
                 NavigationStack {
-                    TreeView(
-                        tree: treeBreakDownOfOriginalContent,
-                        id: \.id
-                    ) { value in
+                    TreeView(tree: treeBreakDownOfOriginalContent) { value in
                         NodeView(value: value)
                     }
                 }

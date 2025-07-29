@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TreeView<Content: View>: View {
     let tree: Tree
-    let id: KeyPath<TreeNode, UUID>
     let content: (String) -> Content
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
@@ -17,11 +16,9 @@ struct TreeView<Content: View>: View {
 
     init(
         tree: Tree,
-        id: KeyPath<TreeNode, UUID>,
         content: @escaping (String) -> Content
     ) {
         self.tree = tree
-        self.id = id
         self.content = content
     }
     
@@ -29,7 +26,7 @@ struct TreeView<Content: View>: View {
         ScrollView([.vertical, .horizontal]) {
             ItemsView(tree: tree, content: content)
                 .backgroundPreferenceValue(CenterKey.self) {
-                    LinesView(parent: self.tree, id: self.id, centers: $0)
+                    LinesView(parent: self.tree, centers: $0)
                 }
                 .scaleEffect(totalZoom + currentZoom)
         }

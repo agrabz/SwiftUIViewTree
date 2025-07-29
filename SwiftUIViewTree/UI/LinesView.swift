@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LinesView: View {
     let parent: Tree
-    let id: KeyPath<TreeNode, UUID>
     let centers: [UUID: Anchor<CGPoint>]
 
     private func pointFor(nodeID: UUID, in proxy: GeometryProxy) -> CGPoint? {
@@ -50,7 +49,6 @@ struct LinesView: View {
 
                     LinesView(
                         parent: child,
-                        id: self.id,
                         centers: self.centers
                     )
                 }
