@@ -34,14 +34,10 @@ struct TreeView<Content: View>: View {
                 .scaleEffect(totalZoom + currentZoom)
         }
         .simultaneousGesture(
-            MagnifyGesture()
-                .onChanged { value in
-                    currentZoom = value.magnification - 1
-                }
-                .onEnded { value in
-                    totalZoom += currentZoom
-                    currentZoom = 0
-                }
+            StatefulMagnifyGesture(
+                currentZoom: $currentZoom,
+                totalZoom: $totalZoom
+            )
         )
         .background(
             LinearGradient(
