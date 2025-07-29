@@ -15,7 +15,7 @@ struct ItemsView<Content: View>: View {
     
     var body: some View {
         VStack {
-            Button {
+            Button { //TODO: there's a performance issue here, every time the button is tapped, the whole view is redrawn
                 isPopoverPresented.toggle()
             } label: {
                 content(tree.node.description)
