@@ -1,5 +1,5 @@
 //
-//  CenterKey.swift
+//  NodeCenterPreferenceKey.swift
 //  SwiftUIViewTree
 //
 //  Created by Grabecz, Akos on 2025. 07. 28..
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CenterKey<ID: Hashable>: PreferenceKey {
+struct NodeCenterPreferenceKey<ID: Hashable>: PreferenceKey {
     static var defaultValue: [ID: Anchor<CGPoint>] {
         [:]
     }
@@ -15,8 +15,7 @@ struct CenterKey<ID: Hashable>: PreferenceKey {
     static func reduce(value: inout [ID: Anchor<CGPoint>], nextValue: () -> [ID: Anchor<CGPoint>]) {
         value = value.merging(
             nextValue(),
-            uniquingKeysWith: { $1
-            }
+            uniquingKeysWith: { $1 }
         )
     }
 }

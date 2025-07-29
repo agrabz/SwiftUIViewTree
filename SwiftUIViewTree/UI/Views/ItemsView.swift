@@ -19,7 +19,7 @@ struct ItemsView<Content: View>: View {
                 isPopoverPresented.toggle()
             } label: {
                 content(tree.node.description)
-                    .anchorPreference(key: CenterKey.self, value: .center) { anchor in
+                    .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                         [self.tree.node.id: anchor]
                     }
             }
