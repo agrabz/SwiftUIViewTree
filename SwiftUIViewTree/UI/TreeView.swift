@@ -25,8 +25,11 @@ struct TreeView<Content: View>: View {
     var body: some View {
         ScrollView([.vertical, .horizontal]) {
             ItemsView(tree: tree, content: content)
-                .backgroundPreferenceValue(CenterKey.self) {
-                    LinesView(parent: self.tree, centers: $0)
+                .backgroundPreferenceValue(CenterKey.self) { nodeCenters in
+                    LinesView(
+                        parent: self.tree,
+                        nodeCenters: nodeCenters
+                    )
                 }
                 .scaleEffect(totalZoom + currentZoom)
         }
