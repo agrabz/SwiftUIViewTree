@@ -25,15 +25,7 @@ struct ItemsView<Content: View>: View {
                     }
             }
             .popover(isPresented: $isPopoverPresented) {
-                ScrollView([.vertical, .horizontal]) {
-                    VStack(alignment: .leading) {
-                        Text("Type: \(tree.node.type)")
-                        Text("Label: \(tree.node.label)")
-                        Text("Value: \(tree.node.value)")
-                    }
-                    .padding(.horizontal)
-                }
-                .presentationCompactAdaptation(.popover)
+                NodePopover(node: tree.node)
             }
             HStack(alignment: .top) {
                 ForEach(tree.children, id: \.node.id) { child in
