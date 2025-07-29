@@ -15,11 +15,20 @@ func convertToTreesRecursively( //TODO: to test
     }
 
     let result = mirror.children.map { child in
+        let childMirror = Mirror(reflecting: child.value)
+
+
+
+
         var childTree = Tree(
             node: TreeNode(
                 type: "\(type(of: child.value))",
                 label: child.label ?? "<unknown>",
-                value: "\(child.value)"
+                value: "\(child.value)",
+                displayStyle: String(describing: childMirror.displayStyle),
+                subjectType: "\(childMirror.subjectType)",
+                superclassMirror: String(describing: childMirror.superclassMirror),
+                mirrorDescription: childMirror.description
             )
         ) // as Any? see type(of:) docs
         childTree.children = convertToTreesRecursively(

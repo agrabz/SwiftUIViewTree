@@ -12,6 +12,10 @@ struct TreeNode {
     let type: String
     let label: String
     let value: String
+    let displayStyle: String
+    let subjectType: String
+    let superclassMirror: String
+    let mirrorDescription: String
 
     var description: String {   //TODO: to outsource to some mapper and test
         """

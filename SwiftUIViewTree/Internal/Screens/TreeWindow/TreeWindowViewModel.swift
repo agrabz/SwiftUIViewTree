@@ -42,7 +42,11 @@ private extension TreeWindowViewModel {
                 node: TreeNode(
                     type: "Root node",
                     label: "Root node",
-                    value: "Root node"
+                    value: "Root node",
+                    displayStyle: "Root node",
+                    subjectType: "Root node",
+                    superclassMirror: "Root node",
+                    mirrorDescription: "Root node"
                 )
             )
             tree.children = convertToTreesRecursively(
