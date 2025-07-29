@@ -16,7 +16,6 @@ public extension View {
 
 
     func renderViewTree() -> some View {
-        let mirror = Mirror(reflecting: self)
         var tree = Tree(
             node: TreeNode(
                 type: "Root node",
@@ -24,8 +23,8 @@ public extension View {
                 value: "Root node"
             )
         )
-        tree.children = convertChildrenToTreesRecursively(
-            mirror: mirror,
+        tree.children = convertToTreesRecursively(
+            mirror: Mirror(reflecting: self),
             maxDepth: 3
         )
 
