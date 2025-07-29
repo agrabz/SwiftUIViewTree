@@ -49,15 +49,7 @@ public extension View {
                         tree: tree,
                         id: \.id
                     ) { value in
-                        Text(value)
-                            .padding(.all, 8)
-                            .background(.white)
-                            .cornerRadius(20)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(.black, lineWidth: 0.5)
-                            }
-                            .padding(.all, 8)
+                        NodeView(value: value)
                     }
                 }
                 .frame(width: geometry.size.width * 3/4)
