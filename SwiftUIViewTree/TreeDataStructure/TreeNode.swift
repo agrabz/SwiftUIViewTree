@@ -19,4 +19,15 @@ struct TreeNode {
         \(label)
         """
     }
+
+    var printDescription: String {
+        """
+        
+        Node
+        type: \(type)
+        label: \(label)
+        value: \(value)
+        
+        """
+    }
 }
