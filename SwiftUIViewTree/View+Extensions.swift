@@ -39,21 +39,9 @@ public extension View {
             maxDepth: maxDepth
         )
 
-        return GeometryReader { geometry in
-            HStack {
-                self
-                    .frame(width: geometry.size.width * 1/4)
-
-                NavigationStack {
-                    TreeView(
-                        tree: tree,
-                        id: \.id
-                    ) { value in
-                        NodeView(value: value)
-                    }
-                }
-                .frame(width: geometry.size.width * 3/4)
-            }
-        }
+        return TreeWindow(
+            originalContent: self,
+            treeBreakDownOfOriginalContent: tree
+        )
     }
 }
