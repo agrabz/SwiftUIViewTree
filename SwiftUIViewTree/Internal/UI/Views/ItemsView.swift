@@ -11,14 +11,14 @@ struct ItemsView<Content: View>: View {
     @State private var isPopoverPresented = false
 
     let tree: Tree
-    let content: (String) -> Content
-    
+    let content: (TreeNode) -> Content
+
     var body: some View {
         VStack {
             Button { //TODO: there's a performance issue here, every time the button is tapped, the whole view is redrawn
                 isPopoverPresented.toggle()
             } label: {
-                content(tree.node.description)
+                content(tree.node)
                     .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                         [self.tree.node.id: anchor]
                     }

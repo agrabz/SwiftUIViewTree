@@ -9,13 +9,13 @@ import SwiftUI
 
 struct TreeView<Content: View>: View {
     let tree: Tree
-    let content: (String) -> Content
+    let content: (TreeNode) -> Content
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
 
     init(
         tree: Tree,
-        content: @escaping (String) -> Content
+        content: @escaping (TreeNode) -> Content
     ) {
         self.tree = tree
         self.content = content

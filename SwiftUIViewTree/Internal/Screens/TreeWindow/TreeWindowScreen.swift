@@ -22,8 +22,8 @@ struct TreeWindowScreen<Content: View>: View {
                         case .computingTree:
                             ViewTreeTraversalProgressView()
                         case .treeComputed(let computedUIState):
-                            TreeView(tree: computedUIState.treeBreakDownOfOriginalContent) { value in
-                                NodeView(value: value)
+                            TreeView(tree: computedUIState.treeBreakDownOfOriginalContent) { node in
+                                NodeView(node: node)
                             }
                     }
                 }

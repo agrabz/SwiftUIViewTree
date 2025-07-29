@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct NodeView: View {
-    let value: String
+    let node: TreeNode
 
     var body: some View {
-        Text(value)
+        Text(node.description)
             .padding(.all, 8)
             .background(.white)
             .cornerRadius(20)
