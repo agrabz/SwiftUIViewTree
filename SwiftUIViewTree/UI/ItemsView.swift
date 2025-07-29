@@ -11,7 +11,6 @@ struct ItemsView<Content: View>: View {
     @State private var isPopoverPresented = false
 
     let tree: Tree
-    let id: KeyPath<TreeNode, UUID>
     let content: (String) -> Content
     
     var body: some View {
@@ -21,7 +20,7 @@ struct ItemsView<Content: View>: View {
             } label: {
                 content(tree.node.description)
                     .anchorPreference(key: CenterKey.self, value: .center) { anchor in
-                        [self.tree.node[keyPath: self.id]: anchor]
+                        [self.tree.node.id: anchor]
                     }
             }
             .popover(isPresented: $isPopoverPresented) {
@@ -29,7 +28,10 @@ struct ItemsView<Content: View>: View {
             }
             HStack(alignment: .top) {
                 ForEach(tree.children, id: \.node.id) { child in
-                    ItemsView(tree: child, id: self.id, content: self.content)
+                    ItemsView(
+                        tree: child,
+                        content: self.content
+                    )
                 }
             }
         }
