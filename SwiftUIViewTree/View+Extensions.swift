@@ -8,14 +8,13 @@
 import SwiftUI
 
 public extension View {
-    func printViewTree() -> some View {
-        print("Ákos")
+    func printViewTree(maxDepth: Int = .max) -> some View {
         Mirror(reflecting: self).printRecursively()
         return self
     }
 
 
-    func renderViewTree() -> some View {
+    func renderViewTree(maxDepth: Int = .max) -> some View {
         var tree = Tree(
             node: TreeNode(
                 type: "Root node",
@@ -25,7 +24,7 @@ public extension View {
         )
         tree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: self),
-            maxDepth: 3
+            maxDepth: maxDepth
         )
 
         return GeometryReader { geometry in
