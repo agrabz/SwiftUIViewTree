@@ -27,21 +27,12 @@ public extension View {
 
 
     func renderViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
-        var tree = Tree(
-            node: TreeNode(
-                type: "Root node",
-                label: "Root node",
-                value: "Root node"
-            )
-        )
-        tree.children = convertToTreesRecursively(
-            mirror: Mirror(reflecting: self),
-            maxDepth: maxDepth
-        )
-
-        return TreeWindow(
-            originalContent: self,
-            treeBreakDownOfOriginalContent: tree
+        return TreeWindowScreen(
+            viewModel: TreeWindowViewModel(
+                source: self,
+                maxDepth: maxDepth
+            ),
+            originalContent: self
         )
     }
 }
