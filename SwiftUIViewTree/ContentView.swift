@@ -18,7 +18,7 @@ struct ContentView: View {
                 .bold()
         }
         .printViewTree()
-        .renderViewTree()
+        .renderViewTree(maxDepth: 3)
     }
 }
 
