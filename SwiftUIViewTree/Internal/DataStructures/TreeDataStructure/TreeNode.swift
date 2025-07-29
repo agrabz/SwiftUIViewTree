@@ -7,19 +7,6 @@
 
 import Foundation
 
-struct ShortenableString {
-    let fullString: String
-    var maxLength: Int = 30
-
-    var shortenedString: String {
-        if fullString.count <= maxLength {
-            fullString
-        } else {
-            String(fullString.prefix(maxLength)) + "..."
-        }
-    }
-}
-
 struct TreeNode {
     let id: UUID = UUID()
     let type: ShortenableString
