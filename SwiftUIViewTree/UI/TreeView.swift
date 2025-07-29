@@ -49,8 +49,8 @@ struct TreeView<Content: View>: View {
                 gradient:
                     Gradient(
                         colors: [
-                            Color(red: 0.2, green: 0.6, blue: 1.0),  // Swift blue
-                            Color(red: 0.0, green: 0.8, blue: 0.8)   // Teal
+                            .blue,
+                            .teal
                         ]
                     ),
                 startPoint: .topLeading,
