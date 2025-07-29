@@ -34,13 +34,15 @@ struct ContentView: View {
 
 ```
 
-<img width="928" height="522" alt="image" src="https://github.com/user-attachments/assets/3a738841-2695-47f5-91c5-d7e494392eb4" />
+<img width="928" height="520" alt="image" src="https://github.com/user-attachments/assets/5ddd7d00-3d5d-4b8d-af04-27a59d66d5d5" />
 
 You can tap on any node to see its full details.
 
 <Image 3>
 
 Or you can pitch to zoom and also scroll to any direction:
+
+<img width="922" height="521" alt="image" src="https://github.com/user-attachments/assets/12101d48-bcc4-4311-8dde-7bc8a51e6e6b" />
 
 <Gif 1>
 
