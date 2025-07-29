@@ -40,9 +40,9 @@ private extension TreeWindowViewModel {
         Task {
             var tree = Tree(
                 node: TreeNode(
-                    type: "Root node",
+                    type: ShortenableString(fullString: "Root node"),
                     label: "Root node",
-                    value: "Root node",
+                    value: ShortenableString(fullString: "Root node"),
                     displayStyle: "Root node",
                     subjectType: "Root node",
                     superclassMirror: "Root node",

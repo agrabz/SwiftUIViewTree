@@ -11,7 +11,16 @@ struct NodeView: View {
     let node: TreeNode
 
     var body: some View {
-        Text(node.description)
+        VStack {
+            Text(node.label)
+
+            HStack {
+                Text(node.type.shortenedString)
+                    .font(.caption)
+                Text(node.value.shortenedString)
+                    .font(.caption)
+            }
+        }
             .padding(.all, 8)
             .background(.white)
             .cornerRadius(20)

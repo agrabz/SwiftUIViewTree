@@ -12,7 +12,7 @@ struct ViewTreeTraversalProgressView: View {
         VStack {
             ProgressView()
             Text("Traversing the view tree.")
-                .font(.body)
+                .font(.callout)
                 .bold()
             Text("It might take a while. If this takes too long, consider using `maxDepth`.")
                 .font(.caption)

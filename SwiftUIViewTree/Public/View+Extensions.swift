@@ -11,9 +11,9 @@ public extension View {
     func printViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
         var tree = Tree(
             node: TreeNode( //TODO: root node thingy looks annoying
-                type: "Root node",
+                type: ShortenableString(fullString: "Root node"),
                 label: "Root node",
-                value: "Root node",
+                value: ShortenableString(fullString: "Root node"),
                 displayStyle: "Root node",
                 subjectType: "Root node",
                 superclassMirror: "Root node",

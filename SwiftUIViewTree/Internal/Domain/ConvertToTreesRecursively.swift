@@ -22,9 +22,9 @@ func convertToTreesRecursively( //TODO: to test
 
         var childTree = Tree(
             node: TreeNode(
-                type: "\(type(of: child.value))",
+                type: ShortenableString(fullString: "\(type(of: child.value))"),
                 label: child.label ?? "<unknown>",
-                value: "\(child.value)",
+                value: ShortenableString(fullString: "\(child.value)"),
                 displayStyle: String(describing: childMirror.displayStyle),
                 subjectType: "\(childMirror.subjectType)",
                 superclassMirror: String(describing: childMirror.superclassMirror),
