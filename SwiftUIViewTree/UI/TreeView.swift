@@ -15,7 +15,7 @@ struct TreeView<Content: View>: View {
     @State private var totalZoom: CGFloat = 1.0
 
 
-    public init(
+    init(
         tree: Tree,
         id: KeyPath<TreeNode, UUID>,
         content: @escaping (String) -> Content
@@ -25,7 +25,7 @@ struct TreeView<Content: View>: View {
         self.content = content
     }
     
-    public var body: some View {
+    var body: some View {
         ScrollView([.vertical, .horizontal]) {
             ItemsView(tree: tree, id: id, content: content)
                 .backgroundPreferenceValue(CenterKey.self) {
