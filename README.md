@@ -110,6 +110,8 @@ struct ContentView: View {
 
 - Dedicated documentation page
 
+- Merging only-childs with their parent
+
 ## Alternatives
 
 To figure out the exact type of a `SwiftUI.View` you can simply change the `some View` return type of the `body` computed variable to a definitely wrong type like `String`. 
