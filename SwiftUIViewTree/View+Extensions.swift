@@ -50,8 +50,14 @@ public extension View {
                         id: \.id
                     ) { value in
                         Text(value)
-                            .background()
-                            .padding()
+                            .padding(.all, 8)
+                            .background(.white)
+                            .cornerRadius(20)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(.black, lineWidth: 0.5)
+                            }
+                            .padding(.all, 8)
                     }
                 }
                 .frame(width: geometry.size.width * 3/4)
