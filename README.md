@@ -34,7 +34,7 @@ struct ContentView: View {
 
 ```
 
-<Image 2>
+<img width="928" height="522" alt="image" src="https://github.com/user-attachments/assets/3a738841-2695-47f5-91c5-d7e494392eb4" />
 
 You can tap on any node to see its full details.
 
