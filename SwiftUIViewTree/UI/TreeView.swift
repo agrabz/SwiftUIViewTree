@@ -22,7 +22,6 @@ struct TreeView<Content: View>: View {
     ) {
         self.tree = tree
         self.id = id
-        print("Ákos", id)
         self.content = content
     }
     

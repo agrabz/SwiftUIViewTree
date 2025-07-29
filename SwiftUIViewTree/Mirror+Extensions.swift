@@ -11,13 +11,11 @@ extension Mirror {
             print("end of branch of \(self)")
             return
         }
-        print("Ákos description", self.subjectType)
         for (idx, child) in children.enumerated() {
             let label = child.label
             let value = child.value
             print(
-                "|_ Ákos",
-                idx,
+                "|_ \(idx)",
                 "\(type(of: value))",
                 label ?? "<unknown>",
                 value,
