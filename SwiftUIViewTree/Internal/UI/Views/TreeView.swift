@@ -45,7 +45,7 @@ struct TreeView<Content: View>: View {
                                             self.scrollViewSize = scrollProxy.size
                                             self.updateInitialZoom()
                                         }
-                                        .onChange(of: itemsProxy.size) { _ in
+                                        .onChange(of: itemsProxy.size) { _, _ in
                                             self.itemsViewSize = itemsProxy.size
                                             self.updateInitialZoom()
                                         }
@@ -65,7 +65,7 @@ struct TreeView<Content: View>: View {
                         scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
                     }
                 }
-                .onChange(of: itemsViewSize) { _ in
+                .onChange(of: itemsViewSize) { _, _ in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
                     }
