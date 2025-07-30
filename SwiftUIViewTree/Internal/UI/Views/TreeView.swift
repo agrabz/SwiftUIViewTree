@@ -14,6 +14,7 @@ struct TreeView<Content: View>: View {
     @State private var totalZoom: CGFloat = 1.0
     @State private var itemsViewSize: CGSize = .zero
     @State private var scrollViewSize: CGSize = .zero
+    @State private var hasScrolledToCenter: Bool = false
 
     init(
         tree: Tree,
@@ -25,33 +26,50 @@ struct TreeView<Content: View>: View {
 
     var body: some View {
         GeometryReader { scrollProxy in
-            ScrollView([.vertical, .horizontal]) {
-                ItemsView(tree: tree, content: content)
-                    .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
-                        LinesView(
-                            parent: self.tree,
-                            nodeCenters: nodeCenters
-                        )
+            ScrollViewReader { scrollViewReader in
+                ScrollView([.vertical, .horizontal]) {
+                    ZStack {
+                        ItemsView(tree: tree, content: content)
+                            .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
+                                LinesView(
+                                    parent: self.tree,
+                                    nodeCenters: nodeCenters
+                                )
+                            }
+                            .scaleEffect(totalZoom + currentZoom)
+                            .background(
+                                GeometryReader { itemsProxy in
+                                    Color.clear
+                                        .onAppear {
+                                            self.itemsViewSize = itemsProxy.size
+                                            self.scrollViewSize = scrollProxy.size
+                                            self.updateInitialZoom()
+                                        }
+                                        .onChange(of: itemsProxy.size) { _ in
+                                            self.itemsViewSize = itemsProxy.size
+                                            self.updateInitialZoom()
+                                        }
+                                }
+                            )
+                        // Hidden anchor at center
+                        Color.clear
+                            .frame(width: 1, height: 1)
+                            .id("centerAnchor")
+                            .position(x: itemsViewSize.width / 2, y: itemsViewSize.height / 2)
                     }
-                    .scaleEffect(totalZoom + currentZoom)
-                    .background(
-                        GeometryReader { itemsProxy in
-                            Color.clear
-                                .onAppear {
-                                    self.itemsViewSize = itemsProxy.size
-                                    self.scrollViewSize = scrollProxy.size
-                                    self.updateInitialZoom()
-                                }
-                                .onChange(of: itemsProxy.size) { _ in
-                                    self.itemsViewSize = itemsProxy.size
-                                    self.updateInitialZoom()
-                                }
-                        }
-                    )
-            }
-            .onAppear {
-                self.scrollViewSize = scrollProxy.size
-                self.updateInitialZoom()
+                }
+                .onAppear {
+                    self.scrollViewSize = scrollProxy.size
+                    self.updateInitialZoom()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
+                    }
+                }
+                .onChange(of: itemsViewSize) { _ in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
+                    }
+                }
             }
         }
         .simultaneousGesture(
@@ -83,5 +101,11 @@ struct TreeView<Content: View>: View {
         if abs(totalZoom - minScale) > 0.01 {
             totalZoom = minScale
         }
+    }
+
+    private func scrollToCenterIfNeeded(scrollViewReader: ScrollViewProxy) {
+        guard !hasScrolledToCenter, itemsViewSize.width > 0, itemsViewSize.height > 0 else { return }
+        scrollViewReader.scrollTo("centerAnchor", anchor: .center)
+        hasScrolledToCenter = true
     }
 }
