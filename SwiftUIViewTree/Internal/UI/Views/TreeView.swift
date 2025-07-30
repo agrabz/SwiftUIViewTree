@@ -36,7 +36,7 @@ struct TreeView<Content: View>: View {
                                     nodeCenters: nodeCenters
                                 )
                             }
-                            .scaleEffect(totalZoom + currentZoom)
+                            .scaleEffect(max(totalZoom + currentZoom, 0.1)) // Prevent flipping by clamping scale
                             .background(
                                 GeometryReader { itemsProxy in
                                     Color.clear
