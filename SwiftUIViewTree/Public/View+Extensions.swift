@@ -18,7 +18,7 @@ public extension View {
                 subjectType: "Root node",
                 superclassMirror: "Root node",
                 mirrorDescription: "Root node"
-            )
+                          )
         )
         tree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: self),
@@ -31,12 +31,13 @@ public extension View {
 
 
     func renderViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
-        return TreeWindowScreen(
+        TreeWindowScreen(
             viewModel: TreeWindowViewModel(
                 source: self,
                 maxDepth: maxDepth
             ),
             originalContent: self
         )
+        .id(UUID()) // Force re-initialization on every state change
     }
 }
