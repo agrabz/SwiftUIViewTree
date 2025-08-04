@@ -22,7 +22,7 @@ struct ContentView: View {
                 .font(.largeTitle)
                 .bold(asd ? true : false)
         }
-        .printViewTree()
+//        .printViewTree()
 //        .renderViewTree(maxDepth: 3)
         .renderViewTree()
     }
