@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var isTapped = false
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
+//        VStack {
+//            Image(systemName: "globe")
+//                .imageScale(.large)
+//                .foregroundStyle(.tint)
+        Button {
+            isTapped.toggle()
+        } label: {
             Text("Hello, world!")
                 .font(.largeTitle)
-                .bold()
+                .bold(isTapped ? true : false)
         }
-        .printViewTree()
-        .renderViewTree(maxDepth: 3)
+//        .printViewTree()
+//        .renderViewTree(maxDepth: 3)
+        .renderViewTree()
     }
 }
 

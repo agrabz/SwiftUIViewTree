@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct NodeView: View {
+struct NodeView: View, Equatable {
     let value: String
 
     var body: some View {
         Text(value)
             .padding(.all, 8)
-            .background(.white)
+            .background(Bool.random() ? .cyan : .orange)
             .cornerRadius(20)
             .overlay {
                 RoundedRectangle(cornerRadius: 20)

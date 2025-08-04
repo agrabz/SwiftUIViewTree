@@ -7,23 +7,18 @@
 
 import SwiftUI
 
-struct TreeView<Content: View>: View {
+struct TreeView: View, Equatable {
+    static func == (lhs: TreeView, rhs: TreeView) -> Bool {
+        lhs.tree == rhs.tree //TODO: zooms?
+    }
+    
     let tree: Tree
-    let content: (String) -> Content
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
-
-    init(
-        tree: Tree,
-        content: @escaping (String) -> Content
-    ) {
-        self.tree = tree
-        self.content = content
-    }
     
     var body: some View {
         ScrollView([.vertical, .horizontal]) {
-            ItemsView(tree: tree, content: content)
+            ItemsView(tree: tree)
                 .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                     LinesView(
                         parent: self.tree,

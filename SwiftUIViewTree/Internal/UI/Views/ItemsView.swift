@@ -7,18 +7,21 @@
 
 import SwiftUI
 
-struct ItemsView<Content: View>: View {
+struct ItemsView: View, Equatable {
+    static func == (lhs: ItemsView, rhs: ItemsView) -> Bool {
+        lhs.tree == rhs.tree //TODO: logic here?
+    }
+
     @State private var isPopoverPresented = false
 
     let tree: Tree
-    let content: (String) -> Content
-    
+
     var body: some View {
         VStack {
             Button {
                 isPopoverPresented.toggle()
             } label: {
-                content(tree.node.description)
+                NodeView(value: tree.node.description)
                     .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                         [self.tree.node.id: anchor]
                     }
@@ -28,10 +31,7 @@ struct ItemsView<Content: View>: View {
             }
             HStack(alignment: .top) {
                 ForEach(tree.children, id: \.node.id) { child in
-                    ItemsView(
-                        tree: child,
-                        content: self.content
-                    )
+                    ItemsView(tree: child)
                 }
             }
         }

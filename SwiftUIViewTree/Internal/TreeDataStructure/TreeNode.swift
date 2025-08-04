@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TreeNode {
+struct TreeNode: Equatable {
     let id: UUID = UUID()
     let type: String
     let label: String
@@ -16,7 +16,7 @@ struct TreeNode {
     var description: String {   //TODO: to outsource to some mapper and test
         """
         \(type)
-        \(label)
+        \(label) \(value)
         """
     }
 
