@@ -22,9 +22,7 @@ struct TreeWindowScreen<Content: View>: View {
                         case .computingTree:
                             ViewTreeTraversalProgressView()
                         case .treeComputed(let computedUIState):
-                            TreeView(tree: computedUIState.treeBreakDownOfOriginalContent) { node in
-                                NodeView(node: node)
-                            }
+                            TreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
                     }
                 }
                 .frame(width: geometry.size.width * 3/4)
