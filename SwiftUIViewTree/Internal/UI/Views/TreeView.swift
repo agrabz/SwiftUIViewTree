@@ -7,29 +7,20 @@
 
 import SwiftUI
 
-struct TreeView<Content: View>: View {
-    let tree: Tree
-    let content: (TreeNode) -> Content
+struct TreeView: View {
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
     @State private var itemsViewSize: CGSize = .zero
     @State private var scrollViewSize: CGSize = .zero
     @State private var hasScrolledToCenter: Bool = false
-
-    init(
-        tree: Tree,
-        content: @escaping (TreeNode) -> Content
-    ) {
-        self.tree = tree
-        self.content = content
-    }
+    let tree: Tree
 
     var body: some View {
         GeometryReader { scrollProxy in
             ScrollViewReader { scrollViewReader in
                 ScrollView([.vertical, .horizontal]) {
                     ZStack {
-                        ItemsView(tree: tree, content: content)
+                        ItemsView(tree: tree)
                             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                                 LinesView(
                                     parent: self.tree,
