@@ -13,7 +13,7 @@ final class Tree: CustomStringConvertible/*, Equatable*/ {
     var children: [Tree]
 
     var description: String {  //TODO: to outsource to some mapper and test
-        var description = node.printDescription
+        var description = node.description
 
         description += children
             .map { $0.description }

@@ -70,8 +70,20 @@ final class TreeContainer {
             maxDepth: maxDepth
         )
 
-        if self.tree != nil {
-            self.tree?.children = tree.children //replace only what's needed
+        if let selfTree = self.tree {
+//            self.tree?.children = tree.children //replace only what's needed
+            let diff = tree.children.difference(from: selfTree.children) { lhs, rhs in
+                lhs.node.id == rhs.node.id &&
+                lhs.node.type == rhs.node.type &&
+                lhs.node.label == rhs.node.label &&
+                lhs.node.value == rhs.node.value
+            }
+//            if let diff {
+                let a = selfTree.children.applying(diff)
+            if let a {
+                self.tree?.children = a
+            }
+//            }
         } else {
             self.tree = tree
         }

@@ -27,14 +27,14 @@ final class TreeNode/*: Equatable*/ {
         """
     }
 
-    var printDescription: String {   //TODO: to outsource to some mapper and test
-        """
-        
-        Node
-        type: \(type)
-        label: \(label)
-        value: \(value)
-        
-        """
-    }
+//    var printDescription: String {   //TODO: to outsource to some mapper and test
+//        """
+//        
+//        Node
+//        type: \(type)
+//        label: \(label)
+//        value: \(value)
+//        
+//        """
+//    }
 }
