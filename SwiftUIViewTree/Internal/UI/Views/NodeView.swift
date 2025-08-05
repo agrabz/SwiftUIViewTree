@@ -11,6 +11,7 @@ struct NodeView: View, Equatable {
     let value: String
 
     var body: some View {
+        let _ = Self._printChanges()
         Text(value)
             .padding(.all, 8)
             .background(Bool.random() ? .cyan : .orange)

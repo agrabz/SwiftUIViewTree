@@ -26,7 +26,38 @@ public extension View {
     }
 
 
-    func renderViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
+//    func renderViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
+//        var tree = Tree(
+//            node: TreeNode(
+//                type: "Root node",
+//                label: "Root node",
+//                value: "Root node"
+//            )
+//        )
+//        tree.children = convertToTreesRecursively(
+//            mirror: Mirror(reflecting: self),
+//            maxDepth: maxDepth
+//        )
+//
+//        return TreeWindow(
+//            originalContent: self,
+//            treeBreakDownOfOriginalContent: tree
+//        )
+//    }
+
+    func modi(maxDepth: Int = .max) -> some View {
+        TreeContainer.shared.getit(maxDepth: maxDepth, source: self)
+        return modifier(Modi(treeContainer: TreeContainer.shared))
+//            .id(UUID())
+    }
+}
+
+@Observable
+final class TreeContainer {
+    static var shared: TreeContainer = .init()
+    var tree: Tree?
+
+    func getit(maxDepth: Int, source: any View) {
         var tree = Tree(
             node: TreeNode(
                 type: "Root node",
@@ -35,13 +66,23 @@ public extension View {
             )
         )
         tree.children = convertToTreesRecursively(
-            mirror: Mirror(reflecting: self),
+            mirror: Mirror(reflecting: source),
             maxDepth: maxDepth
         )
 
-        return TreeWindow(
-            originalContent: self,
-            treeBreakDownOfOriginalContent: tree
+        self.tree = tree
+    }
+
+}
+
+struct Modi: ViewModifier {
+    @State var treeContainer: TreeContainer
+
+    func body(content: Content) -> some View {
+        TreeWindow(
+            originalContent: content,
+            treeBreakDownOfOriginalContent: treeContainer.tree ?? .init(node: .init(type: "Sad", label: "Sad", value: "Sad"))
         )
+//        .id(UUID())
     }
 }

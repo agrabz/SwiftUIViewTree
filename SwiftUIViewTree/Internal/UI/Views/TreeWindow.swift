@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct TreeWindow<Content: View>: View, Equatable {
-    static func == (lhs: TreeWindow<Content>, rhs: TreeWindow<Content>) -> Bool {
-        lhs.treeBreakDownOfOriginalContent == rhs.treeBreakDownOfOriginalContent
-    }
+struct TreeWindow<Content: View>: View/*, Equatable*/ {
+//    static func == (lhs: TreeWindow<Content>, rhs: TreeWindow<Content>) -> Bool {
+//        lhs.treeBreakDownOfOriginalContent == rhs.treeBreakDownOfOriginalContent
+//    }
     
     let originalContent: Content
     let treeBreakDownOfOriginalContent: Tree

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct TreeView: View, Equatable {
-    static func == (lhs: TreeView, rhs: TreeView) -> Bool {
-        lhs.tree == rhs.tree //TODO: zooms?
-    }
-    
+struct TreeView: View/*, Equatable*/ {
+//    static func == (lhs: TreeView, rhs: TreeView) -> Bool {
+//        lhs.tree == rhs.tree //TODO: zooms?
+//    }
+//    
     let tree: Tree
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0

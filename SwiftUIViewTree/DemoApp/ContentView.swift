@@ -23,7 +23,7 @@ struct ContentView: View {
         }
 //        .printViewTree()
 //        .renderViewTree(maxDepth: 3)
-        .renderViewTree()
+        .modi()
     }
 }
 

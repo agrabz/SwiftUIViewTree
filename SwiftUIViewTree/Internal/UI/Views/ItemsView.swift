@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct ItemsView: View, Equatable {
-    static func == (lhs: ItemsView, rhs: ItemsView) -> Bool {
-        lhs.tree == rhs.tree //TODO: logic here?
-    }
+struct ItemsView: View {
+//    static func == (lhs: ItemsView, rhs: ItemsView) -> Bool {
+//        lhs.tree == rhs.tree //TODO: logic here?
+//    }
 
     @State private var isPopoverPresented = false
 
