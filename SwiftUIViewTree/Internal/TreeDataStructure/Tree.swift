@@ -8,12 +8,7 @@
 import Foundation
 
 @Observable
-final class Tree: CustomStringConvertible, Equatable {
-    static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.node == rhs.node &&
-        lhs.children == rhs.children
-    }
-    
+final class Tree: CustomStringConvertible/*, Equatable*/ {
     let node: TreeNode
     var children: [Tree]
 
