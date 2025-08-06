@@ -16,6 +16,7 @@ final class TreeNode: Equatable {
     let subjectType: String
     let superclassMirror: String
     let mirrorDescription: String
+    let isParent: Bool
 
     var id: String {
         "\(type.fullString)-\(label)-\(value.fullString)"
@@ -40,7 +41,8 @@ final class TreeNode: Equatable {
         displayStyle: String,
         subjectType: String,
         superclassMirror: String,
-        mirrorDescription: String
+        mirrorDescription: String,
+        isParent: Bool
     ) {
         self.type = type
         self.label = label
@@ -49,6 +51,7 @@ final class TreeNode: Equatable {
         self.subjectType = subjectType
         self.superclassMirror = superclassMirror
         self.mirrorDescription = mirrorDescription
+        self.isParent = isParent
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
@@ -69,6 +72,7 @@ extension TreeNode {
         displayStyle: "Root node",
         subjectType: "Root node",
         superclassMirror: "Root node",
-        mirrorDescription: "Root node"
+        mirrorDescription: "Root node",
+        isParent: true
     )
 }

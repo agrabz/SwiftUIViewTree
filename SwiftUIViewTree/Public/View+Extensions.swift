@@ -9,16 +9,8 @@ import SwiftUI
 
 public extension View {
     func printViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
-        var tree = Tree(
-            node: TreeNode( //TODO: root node thingy looks annoying
-                type: ShortenableString(fullString: "Root node"),
-                label: "Root node",
-                value: ShortenableString(fullString: "Root node"),
-                displayStyle: "Root node",
-                subjectType: "Root node",
-                superclassMirror: "Root node",
-                mirrorDescription: "Root node"
-                          )
+        let tree = Tree(
+            node: .rootNode
         )
         tree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: self),

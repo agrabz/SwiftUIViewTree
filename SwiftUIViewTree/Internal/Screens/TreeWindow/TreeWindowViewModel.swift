@@ -39,15 +39,7 @@ private extension TreeWindowViewModel {
     func computeTreeBreakDownOfOriginalContent(source: Content, maxDepth: Int) {
         Task {
             var tree = Tree(
-                node: TreeNode(
-                    type: ShortenableString(fullString: "Root node"),
-                    label: "Root node",
-                    value: ShortenableString(fullString: "Root node"),
-                    displayStyle: "Root node",
-                    subjectType: "Root node",
-                    superclassMirror: "Root node",
-                    mirrorDescription: "Root node"
-                )
+                node: .rootNode
             )
             tree.children = convertToTreesRecursively(
                 mirror: Mirror(reflecting: source),
