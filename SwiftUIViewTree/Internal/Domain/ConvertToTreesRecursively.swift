@@ -22,10 +22,10 @@ func convertToTreesRecursively( //TODO: to test
                 type: "\(type(of: child.value))",
                 label: child.label ?? "<unknown>",
                 value: "\(child.value)",
-                displayStyle: String(describing: childMirror.displayStyle),
-                subjectType: "\(childMirror.subjectType)",
-                superclassMirror: String(describing: childMirror.superclassMirror),
-                mirrorDescription: childMirror.description,
+//                displayStyle: String(describing: childMirror.displayStyle),
+//                subjectType: "\(childMirror.subjectType)",
+//                superclassMirror: String(describing: childMirror.superclassMirror),
+//                mirrorDescription: childMirror.description,
                 isParent: childMirror.children.count > 0
             )
         ) // as Any? see type(of:) docs

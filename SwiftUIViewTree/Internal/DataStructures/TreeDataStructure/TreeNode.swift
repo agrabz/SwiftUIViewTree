@@ -12,10 +12,10 @@ final class TreeNode: Equatable {
     let type: String
     let label: String
     var value: String
-    let displayStyle: String
-    let subjectType: String
-    let superclassMirror: String
-    let mirrorDescription: String
+//    let displayStyle: String
+//    let subjectType: String
+//    let superclassMirror: String
+//    let mirrorDescription: String
     let isParent: Bool
 
     var id: String {
@@ -42,19 +42,19 @@ final class TreeNode: Equatable {
         type: String,
         label: String,
         value: String,
-        displayStyle: String,
-        subjectType: String,
-        superclassMirror: String,
-        mirrorDescription: String,
+//        displayStyle: String,
+//        subjectType: String,
+//        superclassMirror: String,
+//        mirrorDescription: String,
         isParent: Bool
     ) {
         self.type = type
         self.label = label
         self.value = value
-        self.displayStyle = displayStyle
-        self.subjectType = subjectType
-        self.superclassMirror = superclassMirror
-        self.mirrorDescription = mirrorDescription
+//        self.displayStyle = displayStyle
+//        self.subjectType = subjectType
+//        self.superclassMirror = superclassMirror
+//        self.mirrorDescription = mirrorDescription
         self.isParent = isParent
     }
 
@@ -79,10 +79,10 @@ extension TreeNode {
         type: "Root node",
         label: "Root node",
         value: "Root node",
-        displayStyle: "Root node",
-        subjectType: "Root node",
-        superclassMirror: "Root node",
-        mirrorDescription: "Root node",
+//        displayStyle: "Root node",
+//        subjectType: "Root node",
+//        superclassMirror: "Root node",
+//        mirrorDescription: "Root node",
         isParent: true
     )
 }
