@@ -8,7 +8,6 @@
 import Foundation
 
 struct TreeNode: Equatable {
-    let id: UUID = UUID()
     let type: ShortenableString
     let label: String
     let value: ShortenableString
@@ -17,6 +16,11 @@ struct TreeNode: Equatable {
     let superclassMirror: String
     let mirrorDescription: String
 
+    var id: String {
+        "\(type.fullString)-\(label)-\(value.fullString)"
+    }
+
+    #warning("in test branch there is a plain description which is used in NodeView and Popover")
     var printDescription: String {   //TODO: to outsource to some mapper and test
         """
         

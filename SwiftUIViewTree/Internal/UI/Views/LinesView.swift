@@ -9,9 +9,9 @@ import SwiftUI
 
 struct LinesView: View {
     let parent: Tree
-    let nodeCenters: [UUID: Anchor<CGPoint>]
+    let nodeCenters: [String: Anchor<CGPoint>] //TODO: ID collision can happen with this setup so we'd need something else like position in tree or parent ID
 
-    private func pointFor(nodeID: UUID, in proxy: GeometryProxy) -> CGPoint? { //TODO: to test?
+    private func pointFor(nodeID: String, in proxy: GeometryProxy) -> CGPoint? { //TODO: to test?
         guard let anchor = nodeCenters[nodeID] else { return nil }
         return proxy[anchor]
     }

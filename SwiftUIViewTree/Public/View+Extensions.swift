@@ -64,7 +64,11 @@ final class TreeContainer {
             maxDepth: maxDepth
         )
 
-        self.tree = tree
+        if self.tree != nil {
+            self.tree?.children = tree.children //replace only what's needed
+        } else {
+            self.tree = tree
+        }
     }
 }
 
