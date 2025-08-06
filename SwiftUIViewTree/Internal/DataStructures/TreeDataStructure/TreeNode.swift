@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TreeNode {
+struct TreeNode: Equatable {
     let id: UUID = UUID()
     let type: ShortenableString
     let label: String

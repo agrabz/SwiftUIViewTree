@@ -5,7 +5,7 @@
 //  Created by Grabecz, Akos on 2025. 07. 29..
 //
 
-struct ShortenableString {
+struct ShortenableString: Equatable {
     let fullString: String
     var maxLength: Int = 30
 
