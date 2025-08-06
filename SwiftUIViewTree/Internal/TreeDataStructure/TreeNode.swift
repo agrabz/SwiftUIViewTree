@@ -9,7 +9,6 @@ import Foundation
 
 @Observable
 final class TreeNode/*: Equatable*/ {
-    let id: UUID = UUID()
     let type: String
     let label: String
     let value: String
@@ -18,6 +17,10 @@ final class TreeNode/*: Equatable*/ {
         self.type = type
         self.label = label
         self.value = value
+    }
+
+    var id: String { //TODO: ID collision can happen with this setup so we'd need something else like position in tree or parent ID
+        "\(type)-\(label)-\(value)"
     }
 
     var description: String {   //TODO: to outsource to some mapper and test
