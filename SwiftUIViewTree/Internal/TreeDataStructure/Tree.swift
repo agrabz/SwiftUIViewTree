@@ -10,15 +10,15 @@ import Foundation
 @Observable
 final class Tree: CustomStringConvertible, Equatable {
     static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.node == rhs.node &&
+        lhs.rootNode == rhs.rootNode &&
         lhs.children == rhs.children
     }
     
-    let node: TreeNode
+    let rootNode: TreeNode
     var children: [Tree]
 
     var description: String {  //TODO: to outsource to some mapper and test
-        var description = node.description
+        var description = rootNode.description
 
         description += children
             .map { $0.description }
@@ -31,7 +31,7 @@ final class Tree: CustomStringConvertible, Equatable {
         node: TreeNode,
         children: [Tree] = []
     ) {
-        self.node = node
+        self.rootNode = node
         self.children = children
     }
 }

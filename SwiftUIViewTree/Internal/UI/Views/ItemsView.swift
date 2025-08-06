@@ -21,16 +21,16 @@ struct ItemsView: View {
             Button {
                 isPopoverPresented.toggle()
             } label: {
-                NodeView(value: tree.node.description)
+                NodeView(value: tree.rootNode.description)
                     .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-                        [self.tree.node.id: anchor]
+                        [self.tree.rootNode.id: anchor]
                     }
             }
             .popover(isPresented: $isPopoverPresented) {
-                NodePopover(node: tree.node)
+                NodePopover(node: tree.rootNode)
             }
             HStack(alignment: .top) {
-                ForEach(tree.children, id: \.node.id) { child in
+                ForEach(tree.children, id: \.rootNode.id) { child in
                     ItemsView(tree: child)
                 }
             }

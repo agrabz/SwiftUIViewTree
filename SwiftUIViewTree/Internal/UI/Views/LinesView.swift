@@ -19,11 +19,11 @@ struct LinesView: View {
     private func lineFromParent(to child: Tree, in proxy: GeometryProxy) -> Line? { //TODO: to test?
         guard
             let startPoint = pointFor(
-                nodeID: self.parent.node.id,
+                nodeID: self.parent.rootNode.id,
                 in: proxy
             ),
             let endPoint = pointFor(
-                nodeID: child.node.id,
+                nodeID: child.rootNode.id,
                 in: proxy
             )
         else {
@@ -40,7 +40,7 @@ struct LinesView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            ForEach(self.parent.children, id: \.node.id) { child in
+            ForEach(self.parent.children, id: \.rootNode.id) { child in
                 Group {
                     self.lineFromParent(
                         to: child,
