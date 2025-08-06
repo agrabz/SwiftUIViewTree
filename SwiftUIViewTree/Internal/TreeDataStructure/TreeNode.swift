@@ -10,6 +10,12 @@ import Foundation
 @Observable
 final class TreeNode: Equatable {
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        if lhs.isParent && rhs.isParent {
+            print("--- Both are parents", lhs.id, rhs.id)
+            return false
+        } else {
+//            print("--- One of them is not a parent", lhs.id, rhs.id)
+        }
         let a =
         lhs.id == rhs.id
         if !a {
@@ -36,7 +42,12 @@ final class TreeNode: Equatable {
     }
 
     var id: String { //TODO: ID collision can happen with this setup so we'd need something else like position in tree or parent ID
-        "\(type)-\(label)-\(value)"
+//        "\(type)-\(label)-\(value)"
+        """
+        \(label.prefix(20))
+        \(type.prefix(20)) \(value.prefix(20))
+        """
+
     }
 
     var description: String {   //TODO: to outsource to some mapper and test
