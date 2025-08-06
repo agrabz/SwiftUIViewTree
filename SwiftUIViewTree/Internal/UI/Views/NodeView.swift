@@ -25,7 +25,7 @@ struct NodeView: View {
                     .italic()
             }
             .padding(.all, 8)
-            .background(.gray.opacity(0.2))
+            .background(Bool.random() ? .gray.opacity(0.2) : .purple)
             .cornerRadius(20)
             .overlay {
                 RoundedRectangle(cornerRadius: 20)
