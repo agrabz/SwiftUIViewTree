@@ -41,3 +41,5 @@ public extension View {
         .id(UUID()) // Force re-initialization on every state change
     }
 }
+
+//TODO: copy over from testbranch the changes to re-render only the changed nodes
