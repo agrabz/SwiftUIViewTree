@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-struct NodeView: View {
+struct NodeView: View, Equatable {
     let node: TreeNode
 
     var body: some View {
         VStack {
-            Text(node.label)
+            Text(node.label.prefix(20))
                 .font(.headline)
                 .fontWeight(.black)
 
             HStack {
-                Text(node.type.shortenedString)
+                Text(node.type.prefix(20))
                     .font(.caption)
                     .bold()
-                Text(node.value.shortenedString)
+                Text(node.value.prefix(20))
                     .font(.caption)
                     .italic()
             }

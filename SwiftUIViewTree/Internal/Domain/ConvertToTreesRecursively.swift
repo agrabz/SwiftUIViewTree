@@ -19,14 +19,14 @@ func convertToTreesRecursively( //TODO: to test
 
         let childTree = Tree(
             node: TreeNode(
-                type: ShortenableString(fullString: "\(type(of: child.value))"),
+                type: "\(type(of: child.value))",
                 label: child.label ?? "<unknown>",
-                value: ShortenableString(fullString: "\(child.value)"),
+                value: "\(child.value)",
                 displayStyle: String(describing: childMirror.displayStyle),
                 subjectType: "\(childMirror.subjectType)",
                 superclassMirror: String(describing: childMirror.superclassMirror),
                 mirrorDescription: childMirror.description,
-                isParent: childMirror.children.isEmpty == false
+                isParent: childMirror.children.count > 0
             )
         ) // as Any? see type(of:) docs
         childTree.children = convertToTreesRecursively(

@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct TreeView: View {
+//    static func == (lhs: TreeView, rhs: TreeView) -> Bool {
+//        lhs.tree == rhs.tree
+//    }
+
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
     @State private var itemsViewSize: CGSize = .zero

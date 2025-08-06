@@ -34,9 +34,11 @@ public extension View {
 //    }
 
     func modi(maxDepth: Int = .max) -> some View {
-        TreeContainer.shared.getit(maxDepth: maxDepth, source: self)
+        TreeContainer.shared.getit(
+            maxDepth: maxDepth,
+            source: self
+        )
         return modifier(Modi(treeContainer: TreeContainer.shared))
-        //            .id(UUID())
     }
 }
 
@@ -72,6 +74,5 @@ struct Modi: ViewModifier {
             originalContent: content,
             treeBreakDownOfOriginalContent: treeContainer.tree ?? .init(node: .rootNode)
         )
-        //        .id(UUID())
     }
 }

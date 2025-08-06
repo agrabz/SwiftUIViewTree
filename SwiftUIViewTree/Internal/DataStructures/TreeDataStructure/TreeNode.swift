@@ -9,9 +9,9 @@ import Foundation
 
 @Observable
 final class TreeNode: Equatable {
-    let type: ShortenableString
+    let type: String
     let label: String
-    let value: ShortenableString
+    var value: String
     let displayStyle: String
     let subjectType: String
     let superclassMirror: String
@@ -19,25 +19,29 @@ final class TreeNode: Equatable {
     let isParent: Bool
 
     var id: String {
-        "\(type.shortenedString)-\(label)-\(value.shortenedString)"
+        "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
     }
 
-    #warning("in test branch there is a plain description which is used in NodeView and Popover")
-    var printDescription: String {   //TODO: to outsource to some mapper and test
-        """
-        
-        Node
-        type: \(type)
-        label: \(label)
-        value: \(value)
-        
-        """
-    }
+//    var description: String {
+//        "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
+//    }
+
+//    #warning("in test branch there is a plain description which is used in NodeView and Popover")
+//    var printDescription: String {   //TODO: to outsource to some mapper and test
+//        """
+//        
+//        Node
+//        type: \(type)
+//        label: \(label)
+//        value: \(value)
+//        
+//        """
+//    }
 
     init(
-        type: ShortenableString,
+        type: String,
         label: String,
-        value: ShortenableString,
+        value: String,
         displayStyle: String,
         subjectType: String,
         superclassMirror: String,
@@ -56,10 +60,10 @@ final class TreeNode: Equatable {
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
         if lhs.isParent && rhs.isParent {
-            print("--- Both are parents", lhs.id, rhs.id)
+//            print("--- Both are parents", lhs.id, rhs.id)
             return false
         } else {
-            //            print("--- One of them is not a parent", lhs.id, rhs.id)
+            print("--- One of them is not a parent", lhs.id, rhs.id)
         }
         let a =
         lhs.id == rhs.id
@@ -72,9 +76,9 @@ final class TreeNode: Equatable {
 
 extension TreeNode {
     static let rootNode = TreeNode(
-        type: .init(fullString: "Root node"),
+        type: "Root node",
         label: "Root node",
-        value: .init(fullString: "Root node"),
+        value: "Root node",
         displayStyle: "Root node",
         subjectType: "Root node",
         superclassMirror: "Root node",
