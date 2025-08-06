@@ -58,20 +58,20 @@ final class TreeContainer {
     var tree: Tree?
 
     func getit(maxDepth: Int, source: any View) {
-        var tree = Tree(
+        var newTree = Tree(
             node: TreeNode(
                 type: "Root node",
                 label: "Root node",
                 value: "Root node"
             )
         )
-        tree.children = convertToTreesRecursively(
+        newTree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: source),
             maxDepth: maxDepth
         )
 
         if let selfTree = self.tree {
-            self.tree?.children = tree.children //replace only what's needed
+            self.tree?.children = newTree.children //replace only what's needed
 //            let diff = tree.children.difference(from: selfTree.children) { lhs, rhs in
 //                lhs.node.id == rhs.node.id &&
 //                lhs.node.type == rhs.node.type &&
@@ -85,7 +85,7 @@ final class TreeContainer {
 //            }
 //            }
         } else {
-            self.tree = tree
+            self.tree = newTree
         }
     }
 
