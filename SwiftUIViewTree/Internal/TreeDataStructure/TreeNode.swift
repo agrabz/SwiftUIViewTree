@@ -21,11 +21,18 @@ final class TreeNode: Equatable {
     let type: String
     let label: String
     let value: String
+    let isParent: Bool
 
-    init(type: String, label: String, value: String) {
+    init(
+        type: String,
+        label: String,
+        value: String,
+        isParent: Bool
+    ) {
         self.type = type
         self.label = label
         self.value = value
+        self.isParent = isParent
     }
 
     var id: String { //TODO: ID collision can happen with this setup so we'd need something else like position in tree or parent ID

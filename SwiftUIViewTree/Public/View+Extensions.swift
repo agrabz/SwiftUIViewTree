@@ -13,7 +13,8 @@ public extension View {
             node: TreeNode(
                 type: "Root node",
                 label: "Root node",
-                value: "Root node"
+                value: "Root node",
+                isParent: Mirror(reflecting: self).children.count > 0
             )
         )
         tree.children = convertToTreesRecursively(
@@ -62,7 +63,8 @@ final class TreeContainer {
             node: TreeNode(
                 type: "Root node",
                 label: "Root node",
-                value: "Root node"
+                value: "Root node",
+                isParent: true
             )
         )
         newTree.children = convertToTreesRecursively(
@@ -97,7 +99,14 @@ struct Modi: ViewModifier {
     func body(content: Content) -> some View {
         TreeWindow(
             originalContent: content,
-            treeBreakDownOfOriginalContent: treeContainer.tree ?? .init(node: .init(type: "Sad", label: "Sad", value: "Sad"))
+            treeBreakDownOfOriginalContent: treeContainer.tree ?? .init(
+                node: .init(
+                    type: "Sad",
+                    label: "Sad",
+                    value: "Sad",
+                    isParent: true
+                )
+            )
         )
 //        .id(UUID())
     }
