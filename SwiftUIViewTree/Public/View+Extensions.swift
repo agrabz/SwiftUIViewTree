@@ -56,18 +56,18 @@ final class TreeContainer {
     var tree: Tree?
 
     func getit(maxDepth: Int, source: any View) {
-        var tree = Tree(
+        let newTree = Tree(
             node: .rootNode
         )
-        tree.children = convertToTreesRecursively(
+        newTree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: source),
             maxDepth: maxDepth
         )
 
         if self.tree != nil {
-            self.tree?.children = tree.children //replace only what's needed
+            self.tree?.children = newTree.children //replace only what's needed
         } else {
-            self.tree = tree
+            self.tree = newTree
         }
     }
 }
