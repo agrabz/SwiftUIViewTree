@@ -23,7 +23,7 @@ struct TreeView: View {
                         ItemsView(tree: tree)
                             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                                 LinesView(
-                                    parent: self.tree,
+                                    parentTree: self.tree,
                                     nodeCenters: nodeCenters
                                 )
                             }

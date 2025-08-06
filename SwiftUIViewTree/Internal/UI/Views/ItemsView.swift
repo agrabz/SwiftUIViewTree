@@ -17,16 +17,16 @@ struct ItemsView: View {
             Button { //TODO: there's a performance issue here (the more you're zoomed in the worse), every time the button is tapped, the whole view is redrawn
                 isPopoverPresented.toggle()
             } label: {
-                NodeView(node: tree.node)
+                NodeView(node: tree.parentNode)
                     .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-                        [self.tree.node.id: anchor]
+                        [self.tree.parentNode.id: anchor]
                     }
             }
             .popover(isPresented: $isPopoverPresented) {
-                NodePopover(node: tree.node)
+                NodePopover(node: tree.parentNode)
             }
             HStack(alignment: .top) {
-                ForEach(tree.children, id: \.node.id) { child in
+                ForEach(tree.children, id: \.parentNode.id) { child in
                     ItemsView(tree: child)
                 }
             }

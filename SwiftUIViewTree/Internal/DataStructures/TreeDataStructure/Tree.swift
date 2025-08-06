@@ -9,11 +9,11 @@ import Observation
 
 @Observable
 final class Tree: CustomStringConvertible, Equatable {
-    let node: TreeNode
+    let parentNode: TreeNode
     var children: [Tree] // TODO: parents with only one child should be merged with their children
 
     var description: String {  //TODO: to outsource to some mapper and test
-        var description = node.printDescription
+        var description = parentNode.printDescription
 
         description += children
             .map { $0.description }
@@ -26,12 +26,12 @@ final class Tree: CustomStringConvertible, Equatable {
         node: TreeNode,
         children: [Tree] = []
     ) {
-        self.node = node
+        self.parentNode = node
         self.children = children
     }
 
     static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.node == rhs.node &&
+        lhs.parentNode == rhs.parentNode &&
         lhs.children == rhs.children
     }
 }
