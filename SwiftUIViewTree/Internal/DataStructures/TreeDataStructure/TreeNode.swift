@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct TreeNode: Equatable {
+@Observable
+final class TreeNode: Equatable {
     let type: ShortenableString
     let label: String
     let value: ShortenableString
@@ -30,6 +31,33 @@ struct TreeNode: Equatable {
         value: \(value)
         
         """
+    }
+
+    init(
+        type: ShortenableString,
+        label: String,
+        value: ShortenableString,
+        displayStyle: String,
+        subjectType: String,
+        superclassMirror: String,
+        mirrorDescription: String
+    ) {
+        self.type = type
+        self.label = label
+        self.value = value
+        self.displayStyle = displayStyle
+        self.subjectType = subjectType
+        self.superclassMirror = superclassMirror
+        self.mirrorDescription = mirrorDescription
+    }
+
+    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        let a =
+        lhs.id == rhs.id
+        if !a {
+            print(lhs.id, rhs.id)
+        }
+        return a
     }
 }
 

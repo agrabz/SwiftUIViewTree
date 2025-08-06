@@ -5,7 +5,10 @@
 //  Created by Grabecz, Akos on 2025. 07. 28..
 //
 
-struct Tree: CustomStringConvertible, Equatable {
+import Observation
+
+@Observable
+final class Tree: CustomStringConvertible, Equatable {
     let node: TreeNode
     var children: [Tree] // TODO: parents with only one child should be merged with their children
 
@@ -25,5 +28,10 @@ struct Tree: CustomStringConvertible, Equatable {
     ) {
         self.node = node
         self.children = children
+    }
+
+    static func == (lhs: Tree, rhs: Tree) -> Bool {
+        lhs.node == rhs.node &&
+        lhs.children == rhs.children
     }
 }
