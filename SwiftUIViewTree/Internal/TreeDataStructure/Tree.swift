@@ -10,7 +10,8 @@ import Foundation
 @Observable
 final class Tree: CustomStringConvertible, Equatable {
     static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.rootNode == rhs.rootNode &&
+        lhs.rootNode == rhs.rootNode
+        &&
         lhs.children == rhs.children
     }
     
