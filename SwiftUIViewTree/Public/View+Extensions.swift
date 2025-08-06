@@ -13,7 +13,8 @@ public extension View {
             node: TreeNode(
                 type: "Root node",
                 label: "Root node",
-                value: "Root node"
+                value: "Root node",
+                isParent: true,
             )
         )
         tree.children = convertToTreesRecursively(
@@ -62,7 +63,8 @@ final class TreeContainer {
             node: TreeNode(
                 type: "Root node",
                 label: "Root node",
-                value: "Root node"
+                value: "Root node",
+                isParent: true
             )
         )
         tree.children = convertToTreesRecursively(
@@ -71,18 +73,24 @@ final class TreeContainer {
         )
 
         if let selfTree = self.tree {
-//            self.tree?.children = tree.children //replace only what's needed
-            let diff = tree.children.difference(from: selfTree.children) { lhs, rhs in
-                lhs.node.id == rhs.node.id &&
-                lhs.node.type == rhs.node.type &&
-                lhs.node.label == rhs.node.label &&
-                lhs.node.value == rhs.node.value
-            }
-//            if let diff {
-                let a = selfTree.children.applying(diff)
-            if let a {
-                self.tree?.children = a
-            }
+            self.tree?.children = tree.children //replace only what's needed
+//            let diff = tree.children.difference(from: selfTree.children) { lhs, rhs in
+//                lhs.node.id == rhs.node.id &&
+//                lhs.node.type == rhs.node.type &&
+//                lhs.node.label == rhs.node.label &&
+//                lhs.node.value == rhs.node.value
+//            }
+//////            if let diff {
+//            let a = self.tree?.children.applying(diff)
+//            if let a {
+//                print(a[0])
+//                print("\n")
+//                print(a[1])
+//                print("\n")
+//                print(a[2])
+//                print("\n")
+//                self.tree?.children[0].node.value = a[0].node.value
+//            }
 //            }
         } else {
             self.tree = tree
@@ -97,7 +105,7 @@ struct Modi: ViewModifier {
     func body(content: Content) -> some View {
         TreeWindow(
             originalContent: content,
-            treeBreakDownOfOriginalContent: treeContainer.tree ?? .init(node: .init(type: "Sad", label: "Sad", value: "Sad"))
+            treeBreakDownOfOriginalContent: treeContainer.tree ?? .init(node: .init(type: "Sad", label: "Sad", value: "Sad", isParent: true))
         )
 //        .id(UUID())
     }

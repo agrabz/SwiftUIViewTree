@@ -19,7 +19,8 @@ func convertToTreesRecursively( //TODO: to test
             node: TreeNode(
                 type: "\(type(of: child.value))",
                 label: child.label ?? "<unknown>",
-                value: "\(child.value)"
+                value: "\(child.value)",
+                isParent: Mirror(reflecting: child.value).children.count > 0
             )
         ) // as Any? see type(of:) docs
         childTree.children = convertToTreesRecursively(
