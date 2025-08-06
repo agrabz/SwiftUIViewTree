@@ -41,8 +41,8 @@ final class TreeNode: Equatable {
 
     var description: String {   //TODO: to outsource to some mapper and test
         """
-        \(type)
-        \(label) \(value)
+        \(label.prefix(20))
+        \(type.prefix(20)) \(value.prefix(20))
         """
     }
 
