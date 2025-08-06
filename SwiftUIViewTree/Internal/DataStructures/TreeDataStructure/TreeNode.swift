@@ -19,7 +19,7 @@ final class TreeNode: Equatable {
     let isParent: Bool
 
     var id: String {
-        "\(type.fullString)-\(label)-\(value.fullString)"
+        "\(type.shortenedString)-\(label)-\(value.shortenedString)"
     }
 
     #warning("in test branch there is a plain description which is used in NodeView and Popover")
@@ -55,6 +55,12 @@ final class TreeNode: Equatable {
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        if lhs.isParent && rhs.isParent {
+            print("--- Both are parents", lhs.id, rhs.id)
+            return false
+        } else {
+            //            print("--- One of them is not a parent", lhs.id, rhs.id)
+        }
         let a =
         lhs.id == rhs.id
         if !a {

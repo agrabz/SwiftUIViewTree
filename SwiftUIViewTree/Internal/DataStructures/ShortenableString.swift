@@ -7,7 +7,7 @@
 
 struct ShortenableString: Equatable {
     let fullString: String
-    var maxLength: Int = 30
+    var maxLength: Int = 20
 
     var shortenedString: String {
         if fullString.count <= maxLength {
