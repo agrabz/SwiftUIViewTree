@@ -8,7 +8,16 @@
 import Foundation
 
 @Observable
-final class TreeNode/*: Equatable*/ {
+final class TreeNode: Equatable {
+    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        let a =
+        lhs.id == rhs.id
+        if !a {
+            print(lhs.id, rhs.id)
+        }
+        return a
+    }
+    
     let type: String
     let label: String
     let value: String
