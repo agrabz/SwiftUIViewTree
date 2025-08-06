@@ -28,3 +28,15 @@ struct TreeNode: Equatable {
         """
     }
 }
+
+extension TreeNode {
+    static let rootNode = TreeNode(
+        type: .init(fullString: "Root node"),
+        label: "Root node",
+        value: .init(fullString: "Root node"),
+        displayStyle: "Root node",
+        subjectType: "Root node",
+        superclassMirror: "Root node",
+        mirrorDescription: "Root node"
+    )
+}
