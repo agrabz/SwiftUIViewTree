@@ -10,9 +10,7 @@ import Foundation
 @Observable
 final class Tree: CustomStringConvertible, Equatable {
     static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.rootNode == rhs.rootNode
-        &&
-        lhs.children == rhs.children
+        lhs.rootNode == rhs.rootNode //TODO: is this correct? is that enough to update only the nodes not a whole tree?
     }
     
     let rootNode: TreeNode
