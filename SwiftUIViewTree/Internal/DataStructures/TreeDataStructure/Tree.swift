@@ -31,7 +31,8 @@ final class Tree: /*CustomStringConvertible,*/ Equatable {
     }
 
     static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.parentNode == rhs.parentNode &&
-        lhs.children == rhs.children
+        lhs.parentNode == rhs.parentNode
+//        &&
+//        lhs.children == rhs.children //TODO: is this correct? is that enough to update only the nodes not a whole tree?
     }
 }
