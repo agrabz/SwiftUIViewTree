@@ -15,7 +15,7 @@ struct NodeView: View, Equatable {
                 Text(type)
                     .font(.caption)
                     .bold()
-                Text(value)
+                Text("`\(value)`")
                     .font(.caption)
                     .italic()
             }
