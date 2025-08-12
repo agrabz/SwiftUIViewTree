@@ -34,10 +34,10 @@ private extension TreeWindowViewModel {
             var tree = Tree(
                 node: .rootNode
             )
-            tree.children = convertToTreesRecursively(
-                mirror: Mirror(reflecting: source),
-                maxDepth: maxDepth
-            )
+//            tree.children = convertToTreesRecursively( //TODO: as VM is not used for now, this is just commented out
+//                mirror: Mirror(reflecting: source),
+//                maxDepth: maxDepth
+//            )
 
             self.uiModel = .treeComputed(
                 TreeWindowUIModel.ComputedUIState(
