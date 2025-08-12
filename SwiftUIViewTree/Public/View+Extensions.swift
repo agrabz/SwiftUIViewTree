@@ -1,6 +1,7 @@
 import SwiftUI
 
 public extension View {
+    /// Left behind. Working out renderViewTree for now.
     func printViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
         let tree = Tree(
             node: .rootNode
@@ -14,23 +15,21 @@ public extension View {
         return self
     }
 
-    func modi(maxDepth: Int = .max) -> some View {
-        TreeContainer.shared.getit(
+    func renderViewTree(maxDepth: Int = .max) -> some View {
+        TreeContainer.shared.computeViewTree(
             maxDepth: maxDepth,
             source: self
         )
-        return modifier(Modi(treeContainer: TreeContainer.shared))
+        return modifier(RenderViewTreeModifier(treeContainer: TreeContainer.shared))
     }
 }
-
-//TODO: copy over from testbranch the changes to re-render only the changed nodes
 
 @Observable
 final class TreeContainer {
     static var shared: TreeContainer = .init()
     var tree: Tree?
 
-    func getit(maxDepth: Int, source: any View) {
+    func computeViewTree(maxDepth: Int, source: any View) {
         let newTree = Tree(
             node: .rootNode
         )
@@ -47,7 +46,7 @@ final class TreeContainer {
     }
 }
 
-struct Modi: ViewModifier {
+struct RenderViewTreeModifier: ViewModifier {
     @State var treeContainer: TreeContainer
 
     func body(content: Content) -> some View {
