@@ -58,7 +58,7 @@ final class TreeContainer {
             maxDepth: maxDepth
         )
 
-        if self.tree != nil { #error("something is still wrong, however it seems that every change is taken from the testbranch. there must be other differences between the branches")
+        if self.tree != nil {
             self.tree?.children = newTree.children //replace only what's needed
         } else {
             self.tree = newTree

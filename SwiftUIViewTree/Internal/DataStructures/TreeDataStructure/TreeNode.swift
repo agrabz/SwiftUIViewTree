@@ -22,9 +22,9 @@ final class TreeNode: Equatable {
         "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
     }
 
-//    var description: String {
-//        "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
-//    }
+    var description: String {
+        "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
+    }
 
 //    #warning("in test branch there is a plain description which is used in NodeView and Popover")
 //    var printDescription: String {   //TODO: to outsource to some mapper and test

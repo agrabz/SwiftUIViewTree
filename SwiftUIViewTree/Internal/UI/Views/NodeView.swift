@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct NodeView: View, Equatable {
-    let node: TreeNode
+    let node: String
 
     var body: some View {
         VStack {
-            Text(node.label.prefix(20))
+            Text(node/*.label.prefix(20)*/)
                 .font(.headline)
                 .fontWeight(.black)
 
-            HStack {
-                Text(node.type.prefix(20))
-                    .font(.caption)
-                    .bold()
-                Text(node.value.prefix(20))
-                    .font(.caption)
-                    .italic()
-            }
+//            HStack {
+//                Text(node/*.type*/.prefix(20))
+//                    .font(.caption)
+//                    .bold()
+//                Text(node/*.value*/.prefix(20))
+//                    .font(.caption)
+//                    .italic()
+//            }
             .padding(.all, 8)
             .background(Bool.random() ? .gray.opacity(0.2) : .purple)
             .cornerRadius(20)

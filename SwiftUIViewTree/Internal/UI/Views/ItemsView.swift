@@ -21,7 +21,7 @@ struct ItemsView: View {
             Button { //TODO: there's a performance issue here (the more you're zoomed in the worse), every time the button is tapped, the whole view is redrawn
                 isPopoverPresented.toggle()
             } label: {
-                NodeView(node: tree.parentNode)
+                NodeView(node: tree.parentNode.description)
                     .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                         [self.tree.parentNode.id: anchor]
                     }
