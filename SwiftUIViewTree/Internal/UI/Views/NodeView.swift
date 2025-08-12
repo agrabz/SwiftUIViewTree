@@ -8,22 +8,24 @@
 import SwiftUI
 
 struct NodeView: View, Equatable {
-    let node: String
+    let label: String
+    let type: String
+    let value: String
 
     var body: some View {
         VStack {
-            Text(node/*.label.prefix(20)*/)
+            Text(label)
                 .font(.headline)
                 .fontWeight(.black)
 
-//            HStack {
-//                Text(node/*.type*/.prefix(20))
-//                    .font(.caption)
-//                    .bold()
-//                Text(node/*.value*/.prefix(20))
-//                    .font(.caption)
-//                    .italic()
-//            }
+            HStack {
+                Text(type)
+                    .font(.caption)
+                    .bold()
+                Text(value)
+                    .font(.caption)
+                    .italic()
+            }
             .padding(.all, 8)
             .background(Bool.random() ? .gray.opacity(0.2) : .purple)
             .cornerRadius(20)
