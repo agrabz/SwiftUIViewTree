@@ -1,10 +1,3 @@
-//
-//  NodeCenterPreferenceKey.swift
-//  SwiftUIViewTree
-//
-//  Created by Grabecz, Akos on 2025. 07. 28..
-//
-
 import SwiftUI
 
 struct NodeCenterPreferenceKey<ID: Hashable>: PreferenceKey {

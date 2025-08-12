@@ -1,10 +1,3 @@
-//
-//  TreeWindowScreen.swift
-//  SwiftUIViewTree
-//
-//  Created by Grabecz, Akos on 2025. 07. 29..
-//
-
 import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {

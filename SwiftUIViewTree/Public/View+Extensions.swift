@@ -1,10 +1,3 @@
-//
-//  View+Extensions.swift
-//  SwiftUIViewTree
-//
-//  Created by Grabecz, Akos on 2025. 07. 28..
-//
-
 import SwiftUI
 
 public extension View {
