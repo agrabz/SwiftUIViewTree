@@ -8,10 +8,6 @@
 import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
-//    static func == (lhs: TreeWindowScreen<Content>, rhs: TreeWindowScreen<Content>) -> Bool {
-//        lhs.treeBreakDownOfOriginalContent == rhs.treeBreakDownOfOriginalContent
-//    }
-    
 //    @State var viewModel: TreeWindowViewModel<Content>
     let originalContent: Content
     var treeBreakDownOfOriginalContent: Tree

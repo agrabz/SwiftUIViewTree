@@ -8,10 +8,6 @@
 import SwiftUI
 
 struct ItemsView: View {
-//    static func == (lhs: ItemsView, rhs: ItemsView) -> Bool {
-//        lhs.tree == rhs.tree
-//    }
-
     @State private var isPopoverPresented = false
 
     let tree: Tree

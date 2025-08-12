@@ -12,16 +12,6 @@ final class Tree: /*CustomStringConvertible,*/ Equatable {
     let parentNode: TreeNode
     var children: [Tree] // TODO: parents with only one child should be merged with their children
 
-//    var description: String {  //TODO: to outsource to some mapper and test
-//        var description = parentNode.description
-//
-//        description += children
-//            .map { $0.description }
-//            .joined(separator: "\n")
-//
-//        return description
-//    }
-
     init(
         node: TreeNode,
         children: [Tree] = []
@@ -32,7 +22,5 @@ final class Tree: /*CustomStringConvertible,*/ Equatable {
 
     static func == (lhs: Tree, rhs: Tree) -> Bool {
         lhs.parentNode == rhs.parentNode
-//        &&
-//        lhs.children == rhs.children //TODO: is this correct? is that enough to update only the nodes not a whole tree?
     }
 }

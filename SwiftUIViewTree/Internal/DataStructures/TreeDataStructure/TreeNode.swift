@@ -26,18 +26,6 @@ final class TreeNode: Equatable {
         "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
     }
 
-//    #warning("in test branch there is a plain description which is used in NodeView and Popover")
-//    var printDescription: String {   //TODO: to outsource to some mapper and test
-//        """
-//        
-//        Node
-//        type: \(type)
-//        label: \(label)
-//        value: \(value)
-//        
-//        """
-//    }
-
     init(
         type: String,
         label: String,
@@ -60,7 +48,6 @@ final class TreeNode: Equatable {
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
         if lhs.isParent && rhs.isParent {
-//            print("--- Both are parents", lhs.id, rhs.id)
             return false
         } else {
             print("--- One of them is not a parent", lhs.id, rhs.id)

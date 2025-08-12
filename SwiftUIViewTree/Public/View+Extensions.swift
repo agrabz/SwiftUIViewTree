@@ -21,18 +21,6 @@ public extension View {
         return self
     }
 
-
-//    func renderViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
-//        TreeWindowScreen(
-//            viewModel: TreeWindowViewModel(
-//                source: self,
-//                maxDepth: maxDepth
-//            ),
-//            originalContent: self
-//        )
-//        .id(UUID()) // Force re-initialization on every state change
-//    }
-
     func modi(maxDepth: Int = .max) -> some View {
         TreeContainer.shared.getit(
             maxDepth: maxDepth,
