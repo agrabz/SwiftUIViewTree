@@ -20,7 +20,7 @@ final class TreeContainer {
             try? await Task.sleep(for: .seconds(2))
 
             if case .treeComputed(let computedUIState) = uiState {
-                computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //instead of this it should be like .children[changedItemIndex] = newValue one-by-one
+                computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
                 self.uiState = .treeComputed(computedUIState)
                 //replace only what's needed, better diffing
             } else {
