@@ -16,7 +16,7 @@ final class TreeContainer {
             )
 
             // Uncomment this to simulate delay in computing the tree
-//            try? await Task.sleep(for: .seconds(1))
+            try? await Task.sleep(for: .seconds(0.5))
 
             if case .treeComputed(let computedUIState) = uiState {
                 computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //instead of this it should be like .children[changedItemIndex] = newValue one-by-one
