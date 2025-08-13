@@ -41,16 +41,10 @@ final class TreeNode: Equatable {
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
         if lhs.isParent && rhs.isParent {
-            return false
-        } else {
-            print("--- One of them is not a parent", lhs.id, rhs.id)
+            return false //that doesn't seem to be working? if a parent is updated then only the NodeView should be updated not its full children tree
         }
-        let a =
-        lhs.id == rhs.id
-        if !a {
-            print(lhs.id, rhs.id)
-        }
-        return a
+
+        return lhs.id == rhs.id
     }
 }
 
