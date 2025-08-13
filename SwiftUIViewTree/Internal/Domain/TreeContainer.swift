@@ -3,7 +3,7 @@ import SwiftUI
 @Observable
 final class TreeContainer {
     static var shared: TreeContainer = .init()
-    var tree: Tree?
+    var uiState: TreeWindowUIModel = .computingTree
 
     func computeViewTree(maxDepth: Int, source: any View) {
         Task {
@@ -16,12 +16,18 @@ final class TreeContainer {
             )
 
             // Uncomment this to simulate delay in computing the tree
-//            try? await Task.sleep(for: .seconds(2))
+            try? await Task.sleep(for: .seconds(2))
 
-            if self.tree != nil {
-                self.tree?.children = newTree.children //replace only what's needed
+            if case .treeComputed(let computedUIState) = uiState {
+                computedUIState.treeBreakDownOfOriginalContent.children = newTree.children
+                self.uiState = .treeComputed(computedUIState)
+                //replace only what's needed, better diffing
             } else {
-                self.tree = newTree
+                self.uiState = .treeComputed(
+                    .init(
+                        treeBreakDownOfOriginalContent: newTree
+                    )
+                )
             }
         }
     }
