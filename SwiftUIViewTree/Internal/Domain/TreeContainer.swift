@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 @Observable
 final class TreeContainer {
     static var shared: TreeContainer = .init()
@@ -16,7 +17,7 @@ final class TreeContainer {
             )
 
             // Uncomment this to simulate delay in computing the tree
-            try? await Task.sleep(for: .seconds(0.5))
+            try? await Task.sleep(for: .seconds(2))
 
             if case .treeComputed(let computedUIState) = uiState {
                 computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //instead of this it should be like .children[changedItemIndex] = newValue one-by-one

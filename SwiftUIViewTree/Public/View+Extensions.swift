@@ -20,11 +20,11 @@ public extension View {
             maxDepth: maxDepth,
             source: self
         )
-        return modifier(RenderViewTreeModifier(treeContainer: TreeContainer.shared))
+        return modifier(RenderViewTreeModifier())
     }
 }
 
-
+@MainActor
 func getViewTree<Content: View>(content: Content) -> some View {
     TreeContainer.shared.computeViewTree(
         maxDepth: .max,
