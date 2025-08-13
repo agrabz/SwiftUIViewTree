@@ -4,16 +4,9 @@ import SwiftUI
 final class TreeContainer {
     static var shared: TreeContainer = .init()
     var tree: Tree?
-    var isReloading = false
 
     func computeViewTree(maxDepth: Int, source: any View) {
         Task {
-            if tree != nil {
-                isReloading = true
-            } else {
-                isReloading = false
-            }
-
             let newTree = Tree(
                 node: .rootNode
             )
@@ -23,14 +16,13 @@ final class TreeContainer {
             )
 
             // Uncomment this to simulate delay in computing the tree
-            try? await Task.sleep(for: .seconds(1))
+//            try? await Task.sleep(for: .seconds(2))
 
             if self.tree != nil {
                 self.tree?.children = newTree.children //replace only what's needed
             } else {
                 self.tree = newTree
             }
-            isReloading = false
         }
     }
 }
