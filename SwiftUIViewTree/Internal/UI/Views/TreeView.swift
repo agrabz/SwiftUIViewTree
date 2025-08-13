@@ -5,11 +5,9 @@ struct TreeView: View {
 
     var body: some View {
         VStack {
-            ParentNodeView(
-                parentNode: tree.parentNode,
-            )
+            ParentNodeView(parentNode: tree.parentNode)
 
-            ChildrenView(children: tree.children)
+            ChildrenNodeView(children: tree.children)
         }
     }
 }

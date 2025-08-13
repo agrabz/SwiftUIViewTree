@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ChildrenView: View {
+struct ChildrenNodeView: View {
     let children: [Tree]
 
     var body: some View {
