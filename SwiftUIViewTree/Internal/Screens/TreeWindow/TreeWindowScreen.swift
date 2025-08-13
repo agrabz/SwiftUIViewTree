@@ -10,7 +10,14 @@ struct TreeWindowScreen<Content: View>: View {
                     .frame(width: geometry.size.width * 1/4)
 
                 NavigationStack {
-                    if let treeBreakDownOfOriginalContent = TreeContainer.shared.tree {
+                    if let treeBreakDownOfOriginalContent = TreeContainer.shared.tree,
+                       TreeContainer.shared.isReloading
+                    {
+                        ZStack {
+                            TreeView(tree: treeBreakDownOfOriginalContent)
+                            ViewTreeTraversalProgressView()
+                        }
+                    } else if let treeBreakDownOfOriginalContent = TreeContainer.shared.tree {
                         TreeView(tree: treeBreakDownOfOriginalContent)
                     } else {
                         ViewTreeTraversalProgressView()
