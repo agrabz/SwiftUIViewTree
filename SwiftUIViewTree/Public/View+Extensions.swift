@@ -23,3 +23,14 @@ public extension View {
         return modifier(RenderViewTreeModifier(treeContainer: TreeContainer.shared))
     }
 }
+
+
+func getViewTree<Content: View>(content: Content) -> some View {
+    TreeContainer.shared.computeViewTree(
+        maxDepth: .max,
+        source: content
+    )
+    return TreeWindowScreen(
+        originalContent: content
+    )
+}

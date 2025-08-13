@@ -8,17 +8,17 @@ struct ContentView: View {
 //            Image(systemName: "globe")
 //                .imageScale(.large)
 //                .foregroundStyle(.tint)
-        Button {
+        getViewTree(content: Button {
             asd.toggle()
         } label: {
             Text("Hello, world!")
                 .font(.largeTitle)
                 .bold(asd ? true : false)
-        }
+        })
 //        .printViewTree()
 //        .renderViewTree(maxDepth: 3)
 //        .renderViewTree()
-        .renderViewTree()
+//        .renderViewTree()
     }
 }
 
