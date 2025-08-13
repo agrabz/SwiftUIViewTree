@@ -3,18 +3,9 @@ import SwiftUI
 @Observable
 final class TreeContainer {
     static var shared: TreeContainer = .init()
-    var uiState: TreeWindowUIModel = .initialComputingTree
+    var uiState: TreeWindowUIModel = .computingTree
 
     func computeViewTree(maxDepth: Int, source: any View) {
-        switch uiState {
-            case .initialComputingTree:
-                break
-            case .treeComputed(let computedUIState):
-                self.uiState = .recomputingTree(alreadyComputedState: computedUIState)
-            case .recomputingTree(alreadyComputedState: let alreadyComputedState):
-                self.uiState = .recomputingTree(alreadyComputedState: alreadyComputedState)
-        }
-
         Task {
             let newTree = Tree(
                 node: .rootNode
@@ -25,7 +16,7 @@ final class TreeContainer {
             )
 
             // Uncomment this to simulate delay in computing the tree
-            try? await Task.sleep(for: .seconds(1))
+            try? await Task.sleep(for: .seconds(2))
 
             if case .treeComputed(let computedUIState) = uiState {
                 computedUIState.treeBreakDownOfOriginalContent.children = newTree.children
