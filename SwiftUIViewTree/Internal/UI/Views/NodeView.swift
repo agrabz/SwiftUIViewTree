@@ -5,7 +5,12 @@ struct NodeView: View {
     let type: String
     let value: String
 
-    static let colors: [Color] = [.gray, .purple, .blue, .green]
+    static let colors: [Color] = [
+        .gray.opacity(0.8),
+        .purple.opacity(0.8),
+        .blue.opacity(0.8),
+        .green.opacity(0.8),
+    ]
     static var colorIndex: Int = 0
 
     static func nextColor() -> Color {
