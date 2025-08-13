@@ -20,7 +20,7 @@ struct NodeView: View, Equatable {
                     .italic()
             }
             .padding(.all, 8)
-            .background(Bool.random() ? .gray.opacity(0.2) : .purple)
+            .background(.white)
             .cornerRadius(20)
             .overlay {
                 RoundedRectangle(cornerRadius: 20)
@@ -28,7 +28,7 @@ struct NodeView: View, Equatable {
             }
         }
         .padding(.all, 8)
-        .background(.white)
+        .background(Bool.random() ? .gray : .purple)
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
