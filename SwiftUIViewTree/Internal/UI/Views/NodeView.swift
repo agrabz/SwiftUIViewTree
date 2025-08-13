@@ -6,8 +6,8 @@ struct NodeView: View {
     let value: String
 
     static let colors: [Color] = [
-        .gray.opacity(0.8),
         .purple.opacity(0.8),
+        .red.opacity(0.8),
         .blue.opacity(0.8),
         .green.opacity(0.8),
     ]
