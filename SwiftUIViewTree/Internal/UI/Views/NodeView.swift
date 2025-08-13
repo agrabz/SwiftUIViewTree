@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NodeView: View, Equatable {
+struct NodeView: View {
     let label: String
     let type: String
     let value: String
@@ -35,6 +35,7 @@ struct NodeView: View, Equatable {
                     .stroke(.black, lineWidth: 0.5)
             }
         }
+        .foregroundStyle(.black)
         .padding(.all, 8)
         .background(NodeView.nextColor())
         .cornerRadius(20)
