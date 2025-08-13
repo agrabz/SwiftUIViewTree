@@ -14,7 +14,7 @@ struct TreeWindowScreen<Content: View>: View {
                         case .computingTree:
                             ViewTreeTraversalProgressView()
                         case .treeComputed(let computedUIState):
-                            TreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
+                            ScrollableZoomableTreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
                     }
                 }
                 .frame(width: geometry.size.width * 3/4)
