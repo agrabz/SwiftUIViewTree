@@ -11,10 +11,15 @@ struct TreeWindowScreen<Content: View>: View {
 
                 NavigationStack {
                     switch TreeContainer.shared.uiState {
-                        case .computingTree:
+                        case .initialComputingTree:
                             ViewTreeTraversalProgressView()
                         case .treeComputed(let computedUIState):
                             TreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
+                        case .recomputingTree(alreadyComputedState: let alreadyComputedState):
+                            ZStack {
+                                ViewTreeTraversalProgressView()
+                                TreeView(tree: alreadyComputedState.treeBreakDownOfOriginalContent)
+                            }
                     }
                 }
                 .frame(width: geometry.size.width * 3/4)
