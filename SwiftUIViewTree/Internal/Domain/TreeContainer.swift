@@ -19,7 +19,7 @@ final class TreeContainer {
 //            try? await Task.sleep(for: .seconds(1))
 
             if case .treeComputed(let computedUIState) = uiState {
-                computedUIState.treeBreakDownOfOriginalContent.children = newTree.children
+                computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //instead of this it should be like .children[changedItemIndex] = newValue one-by-one
                 self.uiState = .treeComputed(computedUIState)
                 //replace only what's needed, better diffing
             } else {
