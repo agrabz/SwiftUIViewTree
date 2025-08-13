@@ -42,12 +42,25 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background(NodeView.nextColor())
+        .background(Color.getRandomBrightColor())
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.black, lineWidth: 0.5)
         }
         .padding(.all, 8)
+    }
+}
+
+private extension Color {
+    static func getRandomBrightColor() -> Color {
+        Color(
+            uiColor: UIColor(
+                hue: .random(in: 0...1),
+                saturation: .random(in: 0.6...1),
+                brightness: .random(in: 0.8...1),
+                alpha: 1
+            )
+        )
     }
 }
