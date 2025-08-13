@@ -5,6 +5,14 @@ struct NodeView: View, Equatable {
     let type: String
     let value: String
 
+    static let colors: [Color] = [.gray, .purple, .blue, .green]
+    static var colorIndex: Int = 0
+
+    static func nextColor() -> Color {
+        colorIndex = (colorIndex + 1) % colors.count
+        return colors[colorIndex]
+    }
+
     var body: some View {
         VStack {
             Text(label)
@@ -28,7 +36,7 @@ struct NodeView: View, Equatable {
             }
         }
         .padding(.all, 8)
-        .background(Bool.random() ? .gray : .purple)
+        .background(NodeView.nextColor())
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
