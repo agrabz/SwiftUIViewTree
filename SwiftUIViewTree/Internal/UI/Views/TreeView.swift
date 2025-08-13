@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct TreeView: View {
-
     let tree: Tree
 
     var body: some View {
@@ -10,11 +9,7 @@ struct TreeView: View {
                 parentNode: tree.parentNode,
             )
 
-            HStack(alignment: .top) {
-                ForEach(tree.children, id: \.parentNode.id) { child in
-                    TreeView(tree: child)
-                }
-            }
+            ChildrenView(children: tree.children)
         }
     }
 }
