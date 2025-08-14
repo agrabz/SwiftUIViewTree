@@ -35,7 +35,7 @@ final class TreeContainer {
 
             switch uiState {
                 case .computingTree:
-                    withAnimation {
+                    withAnimation(.easeInOut(duration: 1)) {
                         self.uiState = .treeComputed(
                             .init(
                                 treeBreakDownOfOriginalContent: newTree
@@ -44,7 +44,7 @@ final class TreeContainer {
                     }
                 case .treeComputed(let computedUIState):
                     computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
-                    withAnimation {
+                    withAnimation(.easeInOut(duration: 1)) {
                         self.uiState = .treeComputed(computedUIState) //replace only what's needed, better diffing
                     }
             }
