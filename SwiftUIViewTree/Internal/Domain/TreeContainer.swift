@@ -4,10 +4,18 @@ import SwiftUI
 @Observable
 final class TreeContainer {
     static var shared: TreeContainer = .init()
-    var uiState: TreeWindowUIModel = .computingTree
+    private(set) var uiState: TreeWindowUIModel = .computingTree
+    private(set) var isRecomputing = false
 
     func computeViewTree(maxDepth: Int, source: any View) {
         Task {
+            switch uiState {
+                case .computingTree:
+                    break
+                case .treeComputed:
+                    isRecomputing = true
+            }
+
             let newTree = Tree(
                 node: .rootNode
             )
@@ -18,6 +26,8 @@ final class TreeContainer {
 
             // Uncomment this to simulate delay in computing the tree
             try? await Task.sleep(for: .seconds(2))
+
+            isRecomputing = false
 
             if case .treeComputed(let computedUIState) = uiState {
                 computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
