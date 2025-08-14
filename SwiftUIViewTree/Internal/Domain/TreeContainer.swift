@@ -13,7 +13,9 @@ final class TreeContainer {
                 case .computingTree:
                     break
                 case .treeComputed:
-                    isRecomputing = true
+                    withAnimation {
+                        isRecomputing = true
+                    }
             }
 
             let newTree = Tree(
@@ -27,7 +29,9 @@ final class TreeContainer {
             // Uncomment this to simulate delay in computing the tree
             try? await Task.sleep(for: .seconds(2))
 
-            isRecomputing = false
+            withAnimation {
+                isRecomputing = false
+            }
 
             switch uiState {
                 case .computingTree:
