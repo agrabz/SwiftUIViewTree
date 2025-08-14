@@ -42,7 +42,7 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background(Color.getRandomBrightColor())
+        .background(Color.getRandomBrightColor()) //TODO: this should not be like this but every node should go through a lifecycle based on redraws to spot the differences more easily. maybe color animation should be done here as well not just on the uiState update
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
