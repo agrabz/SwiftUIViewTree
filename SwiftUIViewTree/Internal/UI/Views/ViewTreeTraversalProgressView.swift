@@ -10,5 +10,21 @@ struct ViewTreeTraversalProgressView: View {
             Text("It might take a while. If this takes too long, consider using `maxDepth`.")
                 .font(.caption)
         }
+        .padding()
+        .background(
+            LinearGradient(
+                colors: [
+                    .white.opacity(0.5),
+                    .gray.opacity(0.5),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
+        .cornerRadius(20)
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(.black, lineWidth: 0.5)
+        }
     }
 }
