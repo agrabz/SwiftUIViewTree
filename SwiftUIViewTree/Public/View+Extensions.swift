@@ -1,59 +1,25 @@
 import SwiftUI
 
 public extension View {
-    func printViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
-        let tree = Tree(
-            node: .rootNode
-        )
-        tree.children = convertToTreesRecursively(
-            mirror: Mirror(reflecting: self),
-            maxDepth: maxDepth
-        )
+    /// Left behind. Working out renderViewTree for now.
+//    func printViewTree(maxDepth: Int = .max) -> some View { //TODO: to test
+//        let tree = Tree(
+//            node: .rootNode
+//        )
+//        tree.children = TreeContainer.shared.convertToTreesRecursively(
+//            mirror: Mirror(reflecting: self),
+//            maxDepth: maxDepth
+//        )
+//
+//        print(tree)
+//        return self
+//    }
 
-        print(tree)
-        return self
-    }
-
-    func modi(maxDepth: Int = .max) -> some View {
-        TreeContainer.shared.getit(
+    func renderViewTree(maxDepth: Int = .max) -> some View {
+        TreeContainer.shared.computeViewTree(
             maxDepth: maxDepth,
             source: self
         )
-        return modifier(Modi(treeContainer: TreeContainer.shared))
-    }
-}
-
-//TODO: copy over from testbranch the changes to re-render only the changed nodes
-
-@Observable
-final class TreeContainer {
-    static var shared: TreeContainer = .init()
-    var tree: Tree?
-
-    func getit(maxDepth: Int, source: any View) {
-        let newTree = Tree(
-            node: .rootNode
-        )
-        newTree.children = convertToTreesRecursively(
-            mirror: Mirror(reflecting: source),
-            maxDepth: maxDepth
-        )
-
-        if self.tree != nil {
-            self.tree?.children = newTree.children //replace only what's needed
-        } else {
-            self.tree = newTree
-        }
-    }
-}
-
-struct Modi: ViewModifier {
-    @State var treeContainer: TreeContainer
-
-    func body(content: Content) -> some View {
-        TreeWindowScreen(
-            originalContent: content,
-            treeBreakDownOfOriginalContent: treeContainer.tree ?? .init(node: .rootNode)
-        )
+        return modifier(RenderViewTreeModifier())
     }
 }

@@ -4,10 +4,6 @@ struct ContentView: View {
     @State var asd = false
 
     var body: some View {
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
         Button {
             asd.toggle()
         } label: {
@@ -17,8 +13,7 @@ struct ContentView: View {
         }
 //        .printViewTree()
 //        .renderViewTree(maxDepth: 3)
-//        .renderViewTree()
-        .modi()
+        .renderViewTree()
     }
 }
 

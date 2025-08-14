@@ -1,23 +1,31 @@
 import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
-//    @State var viewModel: TreeWindowViewModel<Content>
     let originalContent: Content
-    var treeBreakDownOfOriginalContent: Tree
 
     var body: some View {
         GeometryReader { geometry in
             HStack {
                 originalContent
                     .frame(width: geometry.size.width * 1/4)
+                    .disabled(TreeContainer.shared.isRecomputing)
+                    .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
 
                 NavigationStack {
-//                    switch viewModel.uiModel {
-//                        case .computingTree:
-//                            ViewTreeTraversalProgressView()
-//                        case .treeComputed(let computedUIState):
-                            TreeView(tree: treeBreakDownOfOriginalContent)
-//                    }
+                    switch TreeContainer.shared.uiState {
+                        case .computingTree:
+                            ViewTreeTraversalProgressView()
+                        case .treeComputed(let computedUIState):
+                            ZStack {
+                                ScrollableZoomableTreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
+                                    .disabled(TreeContainer.shared.isRecomputing)
+                                    .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
+
+                                if TreeContainer.shared.isRecomputing {
+                                    ViewTreeTraversalProgressView()
+                                }
+                            }
+                    }
                 }
                 .frame(width: geometry.size.width * 3/4)
             }
