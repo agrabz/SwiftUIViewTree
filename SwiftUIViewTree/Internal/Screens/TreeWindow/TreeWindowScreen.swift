@@ -8,13 +8,23 @@ struct TreeWindowScreen<Content: View>: View {
             HStack {
                 originalContent
                     .frame(width: geometry.size.width * 1/4)
+                    .disabled(TreeContainer.shared.isRecomputing)
+                    .blur(radius: TreeContainer.shared.isRecomputing ? 5.0 : 0.0)
 
                 NavigationStack {
                     switch TreeContainer.shared.uiState {
                         case .computingTree:
                             ViewTreeTraversalProgressView()
                         case .treeComputed(let computedUIState):
-                            ScrollableZoomableTreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
+                            ZStack {
+                                ScrollableZoomableTreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
+                                    .disabled(TreeContainer.shared.isRecomputing)
+                                    .blur(radius: TreeContainer.shared.isRecomputing ? 5.0 : 0.0)
+
+                                if TreeContainer.shared.isRecomputing {
+                                    ViewTreeTraversalProgressView()
+                                }
+                            }
                     }
                 }
                 .frame(width: geometry.size.width * 3/4)
