@@ -29,16 +29,17 @@ final class TreeContainer {
 
             isRecomputing = false
 
-            if case .treeComputed(let computedUIState) = uiState {
-                computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
-                self.uiState = .treeComputed(computedUIState)
-                //replace only what's needed, better diffing
-            } else {
-                self.uiState = .treeComputed(
-                    .init(
-                        treeBreakDownOfOriginalContent: newTree
+            switch uiState {
+                case .computingTree:
+                    self.uiState = .treeComputed(
+                        .init(
+                            treeBreakDownOfOriginalContent: newTree
+                        )
                     )
-                )
+                case .treeComputed(let computedUIState):
+                    computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
+                    self.uiState = .treeComputed(computedUIState)
+                    //replace only what's needed, better diffing
             }
         }
     }
