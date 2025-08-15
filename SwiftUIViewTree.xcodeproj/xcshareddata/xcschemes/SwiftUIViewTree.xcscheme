@@ -74,7 +74,7 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       consoleMode = "0"
-      structuredConsoleMode = "2">
+      structuredConsoleMode = "1">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
@@ -88,23 +88,23 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "OS_ACTIVITY_MODE"
-            value = "enable"
+            value = "default"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "IDELogRedirectionPolicy"
             value = "stdioToOSLog"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "OS_LOG_DEBUG"
             value = "1"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "OS_ACTIVITY_DT_MODE"
             value = "YES"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "SWIFTUI_ENABLELOGGING"

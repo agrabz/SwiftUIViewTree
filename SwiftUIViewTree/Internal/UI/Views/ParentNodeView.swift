@@ -17,7 +17,8 @@ struct ParentNodeView: View {
 
         if parentNode.label == "label" {
             let _ = print("-ParentNodeView label")
-            let _ = Self._printChanges()
+//            let _ = Self._printChanges()
+            let _ = Self._logChanges()
             let _ = logger.log("visible?")
             let _ = print("\n")
         }
