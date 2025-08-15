@@ -15,9 +15,9 @@ final class NodeViewModel {
     private var currentIndex = 0
 
     func backgroundColor() -> Color {
-        let a = colors.safeGetElement(at: currentIndex % colors.count) ?? colors[0]
+        let backgroundColor = colors.safeGetElement(at: currentIndex % colors.count) ?? colors[0]
         currentIndex += 1
-        return a
+        return backgroundColor
     }
 }
 
