@@ -5,16 +5,17 @@ struct ParentNodeView: View {
     let parentNode: TreeNode
 
     var body: some View {
-        if parentNode.label == "isActive" {
-            let _ = print("-ParentNodeView isActive")
+//        if parentNode.label == "isActive" {
+//            let _ = print("-ParentNodeView isActive")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
+
+        if parentNode.label == "label" {
+            let _ = print("-ParentNodeView label")
             let _ = Self._printChanges()
             let _ = print("\n")
         }
-
-//        if parentNode.label == "label" {
-//            let _ = print("-ParentNodeView label")
-//            let _ = Self._printChanges()
-//        }
 //
 //        if parentNode.label == "anyTextModifier" {
 //            let _ = print("-ParentNodeView anyTextModifier")

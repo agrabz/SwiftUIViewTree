@@ -4,8 +4,14 @@ struct TreeView: View {
     let tree: Tree
 
     var body: some View {
-        if tree.parentNode.label == "isActive" {
-            let _ = print("--TreeView isActive")
+//        if tree.parentNode.label == "isActive" {
+//            let _ = print("--TreeView isActive")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
+
+        if tree.parentNode.label == "label" {
+            let _ = print("-TreeView label")
             let _ = Self._printChanges()
             let _ = print("\n")
         }

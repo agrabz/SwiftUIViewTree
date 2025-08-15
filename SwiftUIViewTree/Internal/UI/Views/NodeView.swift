@@ -35,16 +35,17 @@ struct NodeView: View, Equatable {
     var value: String
 
     var body: some View {
-        if label == "isActive" {
-            let _ = print("NodeView isActive")
+//        if label == "isActive" {
+//            let _ = print("NodeView isActive")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
+
+        if label == "label" {
+            let _ = print("NodeView label")
             let _ = Self._printChanges()
             let _ = print("\n")
         }
-
-//        if label == "label" {
-//            let _ = print("label")
-//            let _ = Self._printChanges()
-//        }
 //
 //        if label == "anyTextModifier" {
 //            let _ = print("anyTextModifier")
