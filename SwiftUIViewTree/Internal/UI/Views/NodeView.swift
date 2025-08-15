@@ -1,22 +1,15 @@
 import SwiftUI
 
-struct NodeView: View {
+struct NodeView: View, Equatable {
+    static func == (lhs: NodeView, rhs: NodeView) -> Bool {
+        lhs.label == rhs.label &&
+        lhs.type == rhs.type &&
+        lhs.value == rhs.value
+    }
+
     let label: String
     let type: String
     let value: String
-
-    static let colors: [Color] = [
-        .purple.opacity(0.8),
-        .red.opacity(0.8),
-        .blue.opacity(0.8),
-        .green.opacity(0.8),
-    ]
-    static var colorIndex: Int = 0
-
-    static func nextColor() -> Color {
-        colorIndex = (colorIndex + 1) % colors.count
-        return colors[colorIndex]
-    }
 
     var body: some View {
         VStack {
