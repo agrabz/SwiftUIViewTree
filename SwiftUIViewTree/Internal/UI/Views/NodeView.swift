@@ -26,9 +26,9 @@ final class NodeViewModel {
 
 struct NodeView: View, Equatable {
     static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-//        lhs.label == rhs.label &&
-//        lhs.type == rhs.type
-//        &&
+        lhs.label == rhs.label &&
+        lhs.type == rhs.type
+        &&
         lhs.value == rhs.value
     }
 
