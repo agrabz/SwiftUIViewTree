@@ -11,7 +11,7 @@ struct ParentNodeView: View {
             NodeView(
                 label: parentNode.label,
                 type: parentNode.type,
-                value: String(parentNode.value.prefix(20)), // A memory address is being changed in one of the first parents, but with the prefix approach it never gets redrawn, so it is not visible in the UI.
+                value: String(parentNode.value), // A memory address is being changed in one of the first parents, but with the prefix approach it never gets redrawn, so it is not visible in the UI.
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                 [parentNode.id: anchor]

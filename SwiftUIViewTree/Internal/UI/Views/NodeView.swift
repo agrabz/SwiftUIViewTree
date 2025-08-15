@@ -1,15 +1,41 @@
 import SwiftUI
 
+@Observable
+final class NodeViewModel {
+    @ObservationIgnored
+    let colors: [Color] = [
+        .purple.opacity(0.8),
+        .red.opacity(0.8),
+        .blue.opacity(0.8),
+        .green.opacity(0.8),
+    ]
+
+
+    @ObservationIgnored
+    private var currentIndex = 0
+
+    func backgroundColor(value: String) -> Color {
+        if value == "false" || value == "true" {
+            print(value)
+        }
+        let a = colors.safeGetElement(at: currentIndex % colors.count) ?? colors[0]
+        currentIndex += 1
+        return a
+    }
+}
+
 struct NodeView: View, Equatable {
     static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-        lhs.label == rhs.label &&
-        lhs.type == rhs.type &&
+//        lhs.label == rhs.label &&
+//        lhs.type == rhs.type
+//        &&
         lhs.value == rhs.value
     }
 
+    @State private var vm = NodeViewModel()
     let label: String
     let type: String
-    let value: String
+    var value: String
 
     var body: some View {
         VStack {
@@ -35,7 +61,7 @@ struct NodeView: View, Equatable {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background(Color.getRandomBrightColor()) //TODO: this should not be like this but every node should go through a lifecycle based on redraws to spot the differences more easily. maybe color animation should be done here as well not just on the uiState update
+        .background(vm.backgroundColor(value: value)) //TODO: this should not be like this but every node should go through a lifecycle based on redraws to spot the differences more easily. maybe color animation should be done here as well not just on the uiState update
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
@@ -55,5 +81,14 @@ private extension Color {
                 alpha: 1
             )
         )
+    }
+}
+
+extension Array {
+    func safeGetElement(at index: Int) -> Element? {
+        guard indices.contains(index) else {
+            return nil
+        }
+        return self[index]
     }
 }
