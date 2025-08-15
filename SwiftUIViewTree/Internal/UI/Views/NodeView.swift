@@ -14,10 +14,7 @@ final class NodeViewModel {
     @ObservationIgnored
     private var currentIndex = 0
 
-    func backgroundColor(value: String) -> Color {
-        if value == "false" || value == "true" {
-            print(value)
-        }
+    func backgroundColor() -> Color {
         let a = colors.safeGetElement(at: currentIndex % colors.count) ?? colors[0]
         currentIndex += 1
         return a
@@ -76,7 +73,7 @@ struct NodeView: View, Equatable {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background(vm.backgroundColor(value: value)) //TODO: this should not be like this but every node should go through a lifecycle based on redraws to spot the differences more easily. maybe color animation should be done here as well not just on the uiState update
+        .background(vm.backgroundColor()) //TODO: this should not be like this but every node should go through a lifecycle based on redraws to spot the differences more easily. maybe color animation should be done here as well not just on the uiState update
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
