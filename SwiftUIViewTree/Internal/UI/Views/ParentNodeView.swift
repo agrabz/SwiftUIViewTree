@@ -5,6 +5,21 @@ struct ParentNodeView: View {
     let parentNode: TreeNode
 
     var body: some View {
+        if parentNode.label == "isActive" {
+            let _ = print("-ParentNodeView isActive")
+            let _ = Self._printChanges()
+        }
+
+//        if parentNode.label == "label" {
+//            let _ = print("-ParentNodeView label")
+//            let _ = Self._printChanges()
+//        }
+//
+//        if parentNode.label == "anyTextModifier" {
+//            let _ = print("-ParentNodeView anyTextModifier")
+//            let _ = Self._printChanges()
+//        }
+
         Button { //TODO: there's a performance issue here (the more you're zoomed in the worse), every time the button is tapped, the whole view is redrawn
             isPopoverPresented.toggle()
         } label: {
