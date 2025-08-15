@@ -7,6 +7,7 @@ final class NodeViewModel {
         .purple.opacity(0.8),
         .red.opacity(0.8),
         .blue.opacity(0.8),
+        .yellow.opacity(0.8),
         .green.opacity(0.8),
     ]
 
