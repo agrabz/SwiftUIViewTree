@@ -6,7 +6,7 @@ struct ScrollableZoomableTreeView: View {
     @State private var itemsViewSize: CGSize = .zero
     @State private var scrollViewSize: CGSize = .zero
     @State private var hasScrolledToCenter: Bool = false
-    let tree: Tree
+    let tree: Tree // TODO: @State?
 
     var body: some View {
         GeometryReader { scrollProxy in
