@@ -89,7 +89,7 @@
          <EnvironmentVariable
             key = "OS_ACTIVITY_MODE"
             value = "default"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "IDELogRedirectionPolicy"
@@ -98,13 +98,13 @@
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "OS_LOG_DEBUG"
-            value = "1"
-            isEnabled = "YES">
+            value = "2"
+            isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "OS_ACTIVITY_DT_MODE"
             value = "YES"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "SWIFTUI_ENABLELOGGING"
