@@ -7,6 +7,7 @@ struct TreeView: View {
         if tree.parentNode.label == "isActive" {
             let _ = print("--TreeView isActive")
             let _ = Self._printChanges()
+            let _ = print("\n")
         }
 
         VStack {

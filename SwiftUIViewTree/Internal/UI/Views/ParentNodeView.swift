@@ -8,6 +8,7 @@ struct ParentNodeView: View {
         if parentNode.label == "isActive" {
             let _ = print("-ParentNodeView isActive")
             let _ = Self._printChanges()
+            let _ = print("\n")
         }
 
 //        if parentNode.label == "label" {
