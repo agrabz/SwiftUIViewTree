@@ -15,10 +15,6 @@ final class TreeNode: Equatable {
         "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
     }
 
-    var description: String {
-        "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
-    }
-
     init(
         type: String,
         label: String,
