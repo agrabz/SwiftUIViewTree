@@ -1,8 +1,12 @@
 import SwiftUI
+import os.log
 
 struct ParentNodeView: View {
     @State private var isPopoverPresented = false
     let parentNode: TreeNode
+
+    private let logger = Logger(subsystem: "com.sap.ariba.ibx.SwiftUIViewTree", category: "Akos")
+
 
     var body: some View {
 //        if parentNode.label == "isActive" {
@@ -14,6 +18,7 @@ struct ParentNodeView: View {
         if parentNode.label == "label" {
             let _ = print("-ParentNodeView label")
             let _ = Self._printChanges()
+            let _ = logger.log("visible?")
             let _ = print("\n")
         }
 //
