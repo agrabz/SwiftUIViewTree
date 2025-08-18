@@ -65,16 +65,23 @@ private extension TreeContainer {
         let result = mirror.children.map { child in
             let childMirror = Mirror(reflecting: child.value)
 
+            var childValue = "\(child.value)"
+            if childValue == true.description {
+                childValue = "true 123456789123456789123456789"
+            } else if childValue == false.description {
+                childValue = "false 123456789123456789123456789"
+            }
+
             let childTree = Tree(
                 node: TreeNode(
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
-                    value: "\(child.value)",
+                    value: childValue,
                     //                displayStyle: String(describing: childMirror.displayStyle),
                     //                subjectType: "\(childMirror.subjectType)",
                     //                superclassMirror: String(describing: childMirror.superclassMirror),
                     //                mirrorDescription: childMirror.description,
-                    isParent: childMirror.children.count > 0
+//                    isParent: childMirror.children.count > 0
                 )
             ) // as Any? see type(of:) docs
             childTree.children = convertToTreesRecursively(
