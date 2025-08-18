@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NodeContextMenuContent: View {
+struct NodeMenuContent: View {
     let node: TreeNode
 
     var body: some View {
