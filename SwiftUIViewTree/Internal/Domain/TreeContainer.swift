@@ -81,7 +81,7 @@ private extension TreeContainer {
                     //                subjectType: "\(childMirror.subjectType)",
                     //                superclassMirror: String(describing: childMirror.superclassMirror),
                     //                mirrorDescription: childMirror.description,
-//                    isParent: childMirror.children.count > 0
+                    isParent: childMirror.children.count > 0
                 )
             ) // as Any? see type(of:) docs
             childTree.children = convertToTreesRecursively(
