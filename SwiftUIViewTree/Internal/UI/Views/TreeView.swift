@@ -32,10 +32,10 @@ struct TreeView: View {
         }
 
         VStack {
-            NodeView(
-                label: $tree.parentNode.label,
-                type: $tree.parentNode.type,
-                value: $tree.parentNode.value,
+            NodeView(node: $tree.parentNode
+//                label: $tree.parentNode.label,
+//                type: $tree.parentNode.type,
+//                value: $tree.parentNode.value,
 //                id: $tree.parentNode.id
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in

@@ -23,45 +23,46 @@ final class NodeViewModel {
 
 struct NodeView: View, Equatable {
     static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-        lhs.label == rhs.label &&
-        lhs.type == rhs.type
+        lhs.node.label == rhs.node.label &&
+        lhs.node.type == rhs.node.type
         &&
-        lhs.value == rhs.value
+        lhs.node.value == rhs.node.value
     }
 
     @State private var vm = NodeViewModel()
-    @Binding var label: String
-    @Binding var type: String
-    @Binding var value: String
+    @Binding var node: TreeNode
+//    @Binding var label: String
+//    @Binding var type: String
+//    @Binding var value: String
 //    @Binding var id: String
 
     var body: some View {
-        if label == "isActive" {
-            let _ = print("NodeView isActive")
-            let _ = Self._printChanges()
-            let _ = print("\n")
-        }
-        if label == "anyTextModifier" {
-            let _ = print("--NodeView anyTextModifier")
-            let _ = Self._printChanges()
-            let _ = print("\n")
-        }
-        if value == "anyTextModifier(SwiftUI.BoldTextModifier" {
-            let _ = print("--NodeView anyTextModifier(SwiftUI.BoldTextModifier")
-            let _ = Self._printChanges()
-            let _ = print("\n")
-        }
-        if label == "modifiers" {
-            let _ = print("--NodeView modifiers")
-            let _ = Self._printChanges()
-            let _ = print("\n")
-        }
-
-        if label == "label" {
-            let _ = print("NodeView label")
-            let _ = Self._printChanges()
-            let _ = print("\n")
-        }
+//        if node.label == "isActive" {
+//            let _ = print("NodeView isActive")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
+//        if label == "anyTextModifier" {
+//            let _ = print("--NodeView anyTextModifier")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
+//        if value == "anyTextModifier(SwiftUI.BoldTextModifier" {
+//            let _ = print("--NodeView anyTextModifier(SwiftUI.BoldTextModifier")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
+//        if label == "modifiers" {
+//            let _ = print("--NodeView modifiers")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
+//
+//        if label == "label" {
+//            let _ = print("NodeView label")
+//            let _ = Self._printChanges()
+//            let _ = print("\n")
+//        }
 //
 //        if label == "anyTextModifier" {
 //            let _ = print("anyTextModifier")
@@ -69,15 +70,15 @@ struct NodeView: View, Equatable {
 //        }
 
         VStack {
-            Text(label)
+            Text(node.label)
                 .font(.headline)
                 .fontWeight(.black)
 
             HStack {
-                Text(type)
+                Text(node.type)
                     .font(.caption)
                     .bold()
-                Text("`\(value)`")
+                Text("`\(node.value)`")
                     .font(.caption)
                     .italic()
             }
