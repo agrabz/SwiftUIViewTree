@@ -40,7 +40,7 @@ final class TreeNode: Equatable {
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
-        if lhs.value == rhs.value { // This is absolutely not clear here. Originally it was added to avoid comparing root nodes, but now it's needed otherwise many different issues can happen. E.g. the first isRecomputing will update the whole tree, but just once.
+        if lhs.value == rhs.value { // Without this check the initial isRecomputing would result in a complete tree color change. This is not clear. Probaly something with the Equatable conformances throughout the project.
             return false
         }
         return lhs.id == rhs.id
