@@ -3,6 +3,6 @@ enum TreeWindowUIModel {
     case treeComputed(ComputedUIState)
 
     struct ComputedUIState {
-        var treeBreakDownOfOriginalContent: Tree
+        let treeBreakDownOfOriginalContent: Tree
     }
 }

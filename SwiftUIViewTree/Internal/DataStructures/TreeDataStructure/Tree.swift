@@ -2,7 +2,7 @@ import Observation
 
 @Observable
 final class Tree: /*CustomStringConvertible,*/ Equatable {
-    var parentNode: TreeNode
+    let parentNode: TreeNode
     var children: [Tree] // TODO: parents with only one child should be merged with their children
 
     init(
