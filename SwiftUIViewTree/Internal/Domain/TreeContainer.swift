@@ -65,22 +65,16 @@ private extension TreeContainer {
         let result = mirror.children.enumerated().map { (index, child) in
             let childMirror = Mirror(reflecting: child.value)
 
-            var childValue = "\(child.value)"
-            if childValue == true.description {
-                childValue = "true 123456789123456789123456789"
-            } else if childValue == false.description {
-                childValue = "false 123456789123456789123456789"
-            }
-
             let childTree = Tree(
                 node: TreeNode(
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
-                    value: childValue,
-                                    displayStyle: String(describing: childMirror.displayStyle),
-                                    subjectType: "\(childMirror.subjectType)",
-                                    superclassMirror: String(describing: childMirror.superclassMirror),
-                                    mirrorDescription: "\(index)",
+                    value: "\(child.value)",
+                    displayStyle: String(describing: childMirror.displayStyle),
+                    subjectType: "\(childMirror.subjectType)",
+                    superclassMirror: String(describing: childMirror.superclassMirror),
+                    mirrorDescription: childMirror.description,
+                    childIndex: index,
                     isParent: childMirror.children.count > 0
                 )
             ) // as Any? see type(of:) docs

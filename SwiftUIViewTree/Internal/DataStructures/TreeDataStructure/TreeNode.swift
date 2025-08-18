@@ -1,7 +1,7 @@
 import Foundation
 
 @Observable
-final class TreeNode: Equatable { //TODO: it should depend on Node type not individual strings, but for that the diff applying should be more granular
+final class TreeNode: Equatable {
     var type: String
     var label: String
     var value: String
@@ -9,16 +9,12 @@ final class TreeNode: Equatable { //TODO: it should depend on Node type not indi
     let subjectType: String
     let superclassMirror: String
     let mirrorDescription: String
+    let childIndex: Int //If <unknown> label is used for multiple nodes, then we need to distinguish them by index. It may need a more stable differentiator.
     let isParent: Bool
 
+    // Everything except the `value`, because its change, does not mean that the node has changed and thus that the NodeView should be updated.
     var id: String {
-        if label == "isActive" {
-            print("TreeNode isActive id", "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))")
-        }
-        if label == "label" {
-            print("TreeNode label id", "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))")
-        }
-        return "\(label)-\(type)-\(displayStyle)-\(subjectType)-\(superclassMirror)-\(mirrorDescription)"
+        "\(label)-\(type)-\(displayStyle)-\(subjectType)-\(superclassMirror)-\(mirrorDescription)-\(childIndex)"
     }
 
     init(
@@ -29,6 +25,7 @@ final class TreeNode: Equatable { //TODO: it should depend on Node type not indi
         subjectType: String,
         superclassMirror: String,
         mirrorDescription: String,
+        childIndex: Int,
         isParent: Bool
     ) {
         self.type = type
@@ -38,13 +35,14 @@ final class TreeNode: Equatable { //TODO: it should depend on Node type not indi
         self.subjectType = subjectType
         self.superclassMirror = superclassMirror
         self.mirrorDescription = mirrorDescription
+        self.childIndex = childIndex
         self.isParent = isParent
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
-        if lhs.isParent && rhs.isParent {
-            return false //that doesn't seem to be working? if a parent is updated then only the NodeView should be updated not its full children tree
-        }
+//        if lhs.isParent && rhs.isParent {
+//            return false
+//        }
 
         return lhs.id == rhs.id
     }
@@ -59,6 +57,7 @@ extension TreeNode {
         subjectType: "Root node",
         superclassMirror: "Root node",
         mirrorDescription: "Root node",
+        childIndex: 0,
         isParent: true
     )
 }
