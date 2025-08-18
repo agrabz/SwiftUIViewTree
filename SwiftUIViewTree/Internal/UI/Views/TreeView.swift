@@ -5,12 +5,9 @@ struct TreeView: View {
 
     var body: some View {
         VStack {
-            NodeView(
-                node: $tree.parentNode
+            ParentNodeView(
+                parentNode: $tree.parentNode
             )
-            .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-                [tree.parentNode.id: anchor]
-            }
 
             ChildrenNodeView(children: $tree.children)
         }
