@@ -40,10 +40,6 @@ final class TreeNode: Equatable {
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
-//        if lhs.isParent && rhs.isParent {
-//            return false
-//        }
-
         return lhs.id == rhs.id
     }
 }
