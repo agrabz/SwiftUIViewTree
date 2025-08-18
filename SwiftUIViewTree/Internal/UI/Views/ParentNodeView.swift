@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct ParentNodeView: View {
-    @Environment(\.treeCoordinator) var treeCoordinator: TreeCoordinator
     @Binding var parentNode: TreeNode
 
     var body: some View {
@@ -19,10 +18,6 @@ struct ParentNodeView: View {
             Text("SubjectType: `\(parentNode.subjectType)`")
             Text("SuperclassMirror: `\(parentNode.superclassMirror)`")
             Text("mirrorDescription: `\(parentNode.mirrorDescription)`")
-
         }
-//        .onTapGesture {
-//            treeCoordinator.popover = .node(self.parentNode)
-//        }
     }
 }

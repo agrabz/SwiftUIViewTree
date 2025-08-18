@@ -1,31 +1,5 @@
 import SwiftUI
 
-@Observable
-final class TreeCoordinator {
-    static let shared = TreeCoordinator()
-
-    enum Popover: Identifiable {
-        case node(TreeNode)
-
-        var id: String {
-            switch self {
-                case .node(let node):
-                    return node.id
-            }
-        }
-    }
-
-    var popover: Popover? = nil
-
-    @ViewBuilder
-    func buildPopover(for popover: Popover) -> some View {
-        switch popover {
-            case .node(let node):
-                NodePopover(node: node)
-        }
-    }
-}
-
 struct ScrollableZoomableTreeView: View {
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0

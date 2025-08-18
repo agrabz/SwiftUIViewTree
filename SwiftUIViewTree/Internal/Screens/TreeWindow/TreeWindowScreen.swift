@@ -1,16 +1,9 @@
 import SwiftUI
 
-extension EnvironmentValues {
-    @Entry var treeCoordinator = TreeCoordinator.shared
-}
-
 struct TreeWindowScreen<Content: View>: View {
-    @Environment(\.treeCoordinator) private var coordinator: TreeCoordinator
     let originalContent: Content
 
     var body: some View {
-        @Bindable var coordinator = self.coordinator //TODO: Weird: https://www.swiftjectivec.com/getting-bindings-from-environment-swiftui/
-
         GeometryReader { geometry in
             HStack {
                 originalContent
@@ -33,9 +26,6 @@ struct TreeWindowScreen<Content: View>: View {
                                 if TreeContainer.shared.isRecomputing {
                                     ViewTreeTraversalProgressView()
                                 }
-                            }
-                            .sheet(item: $coordinator.popover) { popover in
-                                coordinator.buildPopover(for: popover)
                             }
                     }
                 }
