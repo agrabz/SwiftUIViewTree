@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
+    @State private var coordinator = TreeCoordinator.shared //TODO: Environment if works
     let originalContent: Content
 
     var body: some View {
@@ -26,6 +27,9 @@ struct TreeWindowScreen<Content: View>: View {
                                 if TreeContainer.shared.isRecomputing {
                                     ViewTreeTraversalProgressView()
                                 }
+                            }
+                            .popover(item: $coordinator.popover) { popover in
+                                coordinator.buildPopover(for: popover)
                             }
                     }
                 }

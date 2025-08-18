@@ -5,18 +5,21 @@ struct ParentNodeView: View { //TODO: having this layer makes the scrolling and 
     @Binding var parentNode: TreeNode
 
     var body: some View {
-        Button {
-            isPopoverPresented.toggle()
-        } label: {
+//        Button {
+//            isPopoverPresented.toggle()
+//        } label: {
             NodeView(
                 node: $parentNode
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                 [parentNode.id: anchor]
             }
-        }
-        .popover(isPresented: $isPopoverPresented) {
-            NodePopover(node: parentNode)
-        }
+            .onTapGesture {
+                TreeCoordinator.shared.popover = .node(self.parentNode)
+            }
+//        }
+//        .popover(isPresented: $isPopoverPresented) {
+//            NodePopover(node: parentNode)
+//        }
     }
 }
