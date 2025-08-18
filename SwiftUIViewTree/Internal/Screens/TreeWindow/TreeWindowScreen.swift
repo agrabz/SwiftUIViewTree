@@ -34,7 +34,7 @@ struct TreeWindowScreen<Content: View>: View {
                                     ViewTreeTraversalProgressView()
                                 }
                             }
-                            .popover(item: $coordinator.popover) { popover in
+                            .sheet(item: $coordinator.popover) { popover in
                                 coordinator.buildPopover(for: popover)
                             }
                     }
