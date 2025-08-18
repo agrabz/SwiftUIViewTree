@@ -26,7 +26,7 @@ final class TreeContainer {
                 maxDepth: maxDepth
             )
 
-            // Uncomment this to simulate delay in computing the tree
+            // (Un)comment this to simulate delay in computing the tree
             try? await Task.sleep(for: .seconds(1))
 
             withAnimation {
