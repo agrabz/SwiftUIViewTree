@@ -9,7 +9,9 @@ struct TreeView: View {
                 parentNode: $tree.parentNode
             )
 
-            ChildrenNodeView(children: $tree.children)
+            ChildrenNodeView(
+                children: $tree.children
+            )
         }
     }
 }
