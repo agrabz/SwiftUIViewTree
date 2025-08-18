@@ -40,6 +40,9 @@ final class TreeNode: Equatable {
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        if lhs.isParent && rhs.isParent { // This is absolutely not clear here. Originally it was added to avoid comparing root nodes, but now it's needed otherwise many different issues can happen. E.g. the first isRecomputing will update the whole tree, but just once.
+            return false
+        }
         return lhs.id == rhs.id
     }
 }
