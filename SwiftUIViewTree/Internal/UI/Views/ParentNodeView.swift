@@ -46,14 +46,14 @@ struct ParentNodeView: View {
         Button { //TODO: there's a performance issue here (the more you're zoomed in the worse), every time the button is tapped, the whole view is redrawn
             isPopoverPresented.toggle()
         } label: {
-            NodeView(
-                label: parentNode.label,
-                type: parentNode.type,
-                value: String(parentNode.value), // A memory address is being changed in one of the first parents, but with the prefix approach it never gets redrawn, so it is not visible in the UI.
-            )
-            .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-                [parentNode.id: anchor]
-            }
+//            NodeView(
+//                label: parentNode.label,
+//                type: parentNode.type,
+//                value: String(parentNode.value), // A memory address is being changed in one of the first parents, but with the prefix approach it never gets redrawn, so it is not visible in the UI.
+//            )
+//            .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
+//                [parentNode.id: anchor]
+//            }
         }
         .popover(isPresented: $isPopoverPresented) {
             NodePopover(node: parentNode)

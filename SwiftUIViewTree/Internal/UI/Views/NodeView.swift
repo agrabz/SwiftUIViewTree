@@ -33,6 +33,7 @@ struct NodeView: View, Equatable {
     let label: String
     let type: String
     var value: String
+    var id: String
 
     var body: some View {
         if label == "isActive" {
@@ -97,6 +98,10 @@ struct NodeView: View, Equatable {
                 .stroke(.black, lineWidth: 0.5)
         }
         .padding(.all, 8)
+
+        .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
+            [id: anchor]
+        }
     }
 }
 

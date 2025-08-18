@@ -32,7 +32,12 @@ struct TreeView: View {
         }
 
         VStack {
-            ParentNodeView(parentNode: tree.parentNode)
+            NodeView(
+                label: tree.parentNode.label,
+                type: tree.parentNode.type,
+                value: tree.parentNode.value,
+                id: tree.parentNode.id
+            )
 
             ChildrenNodeView(children: tree.children)
         }
