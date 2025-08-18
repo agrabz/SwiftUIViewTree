@@ -1,16 +1,3 @@
-
-# Intro & Credits
-
-This project is based on the work of Chris Eidhof (objc.io). In his 2019 Swiftable conference talk called "SwiftUI under the hood" ([link](https://www.youtube.com/watch?v=GuK6wwX8M0E)), he demoed a helper function which he called `.mirror()`. His mirror view modifier can be applied to any kind of SwiftUI View and will render its "viewtree" next to it:
-
-<img width="1876" height="905" alt="image" src="https://github.com/user-attachments/assets/4605091a-bfaa-4ed1-b802-8297e39433ac" />
-
-While his talk is not primarily about this helper function, it got the attention of many people as it seems to be a really promising debugging tool.
-
-Additionally when I started to work on my implementation of his tool, I researched GitHub for any open source Swift projects for building graphs and I found [danielctull-playground/TreeView](https://github.com/danielctull-playground/TreeView) where the author describes the repository as "Implementation following the objc.io TreeView". 
-
-I ended up using this repository's implementation with some tweaks, so I have to give the credits again to Chris and the whole objc.io team.
-
 # Usage
 
 Add one of the two view modifiers of this package to any of your `SwiftUI.View`s to see its full or partial view tree.
@@ -19,36 +6,40 @@ Use `.renderViewTree()` to see the view tree visually.
 
 ```swift
 struct ContentView: View {
+    @State var isTapped = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Button {
+            isTapped.toggle()
+        } label: {
+            Text(isTapped ? "Yo what?" : "Hello, world!")
                 .font(.largeTitle)
-                .bold()
+                .bold(isTapped ? true : false)
         }
-        .renderViewTree() // <--
+        .renderViewTree()
     }
 }
-
 ```
 
-<img width="928" height="520" alt="image" src="https://github.com/user-attachments/assets/5ddd7d00-3d5d-4b8d-af04-27a59d66d5d5" />
+<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-18 at 15 24 45" src="https://github.com/user-attachments/assets/ad327618-5ead-426e-a76b-8a3c49589a1d" />
+
+If something got updated due to a state change it gets a new color:
+
+https://github.com/user-attachments/assets/6531139b-8b70-4403-8d75-55aa7c255b02
+
 
 You can tap on any node to see its full details.
 
-<img width="933" height="521" alt="image" src="https://github.com/user-attachments/assets/282fab37-fa9d-49a8-8f68-ebd8de46f61c" />
+<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-18 at 15 26 03" src="https://github.com/user-attachments/assets/6b0a344f-6996-4b23-92c0-c40cb6edd80b" />
 
-Or you can pitch to zoom and also scroll to any direction:
+Or you can pitch to zoom:
 
-<img width="922" height="521" alt="image" src="https://github.com/user-attachments/assets/12101d48-bcc4-4311-8dde-7bc8a51e6e6b" />
+https://github.com/user-attachments/assets/2096aac2-7833-490b-9401-0e3b84b4db7f
 
-<Gif 1>
+And obviously, also scroll to any direction:
 
-Use `.printViewTree()` to see the view tree logged into the console.
+https://github.com/user-attachments/assets/c960256a-c7c6-45d5-96f3-f636733f69e5
 
-<Image 4>
 
 ## Why is this useful?
 
@@ -92,25 +83,25 @@ struct ContentView: View {
 
 - Add licence
 
+- Show @State changes, not just view changes
+
 - Full unit test coverage
 
-- Performance improvements, better UX with big views
+- Performance improvements, better UX with big views. See if https://github.com/wickwirew/Runtime is better.
 
 - Expandable nodes
 
 - Closable, reopenable viewtree window
 
-- Change detection between two view updates
-
 - Setable frame for the view tree
 
-- Supporting `Any` type and not just `SwiftUI.View` - that'll probably mean a repo name change as well
+- Supporting `Any` type and not just `SwiftUI.View`
 
 - Supporting logs for production usage
 
 - Dedicated documentation page
 
-- Merging only-childs with their parent
+- Merging only-childs with their parent (maybe?)
 
 ## Alternatives
 
@@ -168,3 +159,15 @@ If you face any problems, or have any feature request please feel free to open a
 ## Contribution
 
 While I'm not new to open source development, I'm new to being the author of a library. Any help is welcome, please feel free to open PRs.
+
+# Credits
+
+This project is based on the work of Chris Eidhof (objc.io). In his 2019 Swiftable conference talk called "SwiftUI under the hood" ([link](https://www.youtube.com/watch?v=GuK6wwX8M0E)), he demoed a helper function which he called `.mirror()`. His mirror view modifier can be applied to any kind of SwiftUI View and will render its "viewtree" next to it:
+
+<img width="1876" height="905" alt="image" src="https://github.com/user-attachments/assets/4605091a-bfaa-4ed1-b802-8297e39433ac" />
+
+While his talk is not primarily about this helper function, it got the attention of many people as it seems to be a really promising debugging tool.
+
+Additionally when I started to work on my implementation of his tool, I researched GitHub for any open source Swift projects for building graphs and I found [danielctull-playground/TreeView](https://github.com/danielctull-playground/TreeView) where the author describes the repository as "Implementation following the objc.io TreeView". 
+
+I ended up using this repository's implementation with some tweaks, so I have to give the credits again to Chris and the whole objc.io team.
