@@ -23,21 +23,18 @@ final class NodeViewModel {
 
 struct NodeView: View, Equatable {
     static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-//        lhs.node.label == rhs.node.label &&
-//        lhs.node.type == rhs.node.type
-//        &&
-//        lhs.node.value == rhs.node.value
-        lhs.label == rhs.label &&
-        lhs.type == rhs.type &&
-        lhs.value == rhs.value
+        lhs.node.label == rhs.node.label &&
+        lhs.node.type == rhs.node.type
+        &&
+        lhs.node.value == rhs.node.value
     }
 
     @State private var vm = NodeViewModel()
-//    let node: TreeNode
-    let label: String
-    let type: String
-    var value: String
-    let id: String
+    @Binding var node: TreeNode
+//    @Binding var label: String
+//    @Binding var type: String
+//    @Binding var value: String
+//    @Binding var id: String
 
     var body: some View {
 //        if node.label == "isActive" {
@@ -73,18 +70,15 @@ struct NodeView: View, Equatable {
 //        }
 
         VStack {
-//            Text(node.label)
-            Text(label)
+            Text(node.label)
                 .font(.headline)
                 .fontWeight(.black)
 
             HStack {
-//                Text(node.type)
-                Text(type)
+                Text(node.type)
                     .font(.caption)
                     .bold()
-//                Text("`\(node.value)`")
-                Text("`\(value)`")
+                Text("`\(node.value)`")
                     .font(.caption)
                     .italic()
             }
@@ -105,10 +99,6 @@ struct NodeView: View, Equatable {
                 .stroke(.black, lineWidth: 0.5)
         }
         .padding(.all, 8)
-
-        .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-            [id: anchor]
-        }
     }
 }
 

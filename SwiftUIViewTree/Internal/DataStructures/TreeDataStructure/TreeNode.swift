@@ -2,8 +2,8 @@ import Foundation
 
 @Observable
 final class TreeNode: Equatable {
-    let type: String
-    let label: String
+    var type: String
+    var label: String
     var value: String
     let displayStyle: String
     let subjectType: String

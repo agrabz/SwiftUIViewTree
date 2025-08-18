@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TreeView: View {
-    let tree: Tree
+    @Binding var tree: Tree
 
     var body: some View {
         if tree.parentNode.label == "isActive" {
@@ -32,16 +32,17 @@ struct TreeView: View {
         }
 
         VStack {
-            NodeView(
-//                node: tree.parentNode
-                label: tree.parentNode.label,
-                type: tree.parentNode.type,
-                value: tree.parentNode.value,
-                id: tree.parentNode.id
+            NodeView(node: $tree.parentNode
+//                label: $tree.parentNode.label,
+//                type: $tree.parentNode.type,
+//                value: $tree.parentNode.value,
+//                id: $tree.parentNode.id
             )
-#warning("place back to NodeView?")
+            .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
+                [tree.parentNode.id: anchor]
+            }
 
-            ChildrenNodeView(children: tree.children)
+            ChildrenNodeView(children: $tree.children)
         }
     }
 }
