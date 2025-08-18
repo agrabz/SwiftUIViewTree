@@ -11,13 +11,7 @@ struct ParentNodeView: View {
             [parentNode.id: anchor]
         }
         .contextMenu {
-            Text("Type: `\(parentNode.type)`")   //TODO: to come from node object or from a separate UIModel whose mapper is testable
-            Text("Label: `\(parentNode.label)`")
-            Text("Value: `\(parentNode.value)`")
-            Text("DisplayStyle: `\(parentNode.displayStyle)`")
-            Text("SubjectType: `\(parentNode.subjectType)`")
-            Text("SuperclassMirror: `\(parentNode.superclassMirror)`")
-            Text("mirrorDescription: `\(parentNode.mirrorDescription)`")
+            NodeContextMenuContent(node: parentNode)
         }
     }
 }
