@@ -4,7 +4,7 @@ struct NodePopover: View {
     let node: TreeNode
 
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             List {
                 Text("Type: `\(node.type)`")   //TODO: to come from node object or from a separate UIModel whose mapper is testable
                 Text("Label: `\(node.label)`")
@@ -14,10 +14,10 @@ struct NodePopover: View {
                 Text("SuperclassMirror: `\(node.superclassMirror)`")
                 Text("mirrorDescription: `\(node.mirrorDescription)`")
             }
-            .navigationTitle("Node Details")
-            .navigationBarTitleDisplayMode(.inline)
+//            .navigationTitle("Node Details")
+//            .navigationBarTitleDisplayMode(.inline)
             .padding(.all, 8)
-            .presentationDetents([.medium])
-        }
+//            .presentationDetents([.medium])
+//        }
     }
 }
