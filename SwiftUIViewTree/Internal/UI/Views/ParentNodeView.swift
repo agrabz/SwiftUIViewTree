@@ -1,5 +1,4 @@
 import SwiftUI
-import os.log
 
 struct ParentNodeView: View { //TODO: having this layer makes the scrolling and zooming more laggy. maybe because of the popover?
     @State private var isPopoverPresented = false
