@@ -2,36 +2,42 @@ import Foundation
 
 @Observable
 final class TreeNode: Equatable { //TODO: it should depend on Node type not individual strings, but for that the diff applying should be more granular
-    let type: String
-    let label: String
+    var type: String
+    var label: String
     var value: String
-//    let displayStyle: String
-//    let subjectType: String
-//    let superclassMirror: String
-//    let mirrorDescription: String
+    let displayStyle: String
+    let subjectType: String
+    let superclassMirror: String
+    let mirrorDescription: String
     let isParent: Bool
 
     var id: String {
-        "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))"
+        if label == "isActive" {
+            print("TreeNode isActive id", "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))")
+        }
+        if label == "label" {
+            print("TreeNode label id", "\(label.prefix(20))-\(type.prefix(20))-\(value.prefix(20))")
+        }
+        return "\(label)-\(type)-\(displayStyle)-\(subjectType)-\(superclassMirror)-\(mirrorDescription)"
     }
 
     init(
         type: String,
         label: String,
         value: String,
-//        displayStyle: String,
-//        subjectType: String,
-//        superclassMirror: String,
-//        mirrorDescription: String,
+        displayStyle: String,
+        subjectType: String,
+        superclassMirror: String,
+        mirrorDescription: String,
         isParent: Bool
     ) {
         self.type = type
         self.label = label
         self.value = value
-//        self.displayStyle = displayStyle
-//        self.subjectType = subjectType
-//        self.superclassMirror = superclassMirror
-//        self.mirrorDescription = mirrorDescription
+        self.displayStyle = displayStyle
+        self.subjectType = subjectType
+        self.superclassMirror = superclassMirror
+        self.mirrorDescription = mirrorDescription
         self.isParent = isParent
     }
 
@@ -49,10 +55,10 @@ extension TreeNode {
         type: "Root node",
         label: "Root node",
         value: "Root node",
-//        displayStyle: "Root node",
-//        subjectType: "Root node",
-//        superclassMirror: "Root node",
-//        mirrorDescription: "Root node",
+        displayStyle: "Root node",
+        subjectType: "Root node",
+        superclassMirror: "Root node",
+        mirrorDescription: "Root node",
         isParent: true
     )
 }

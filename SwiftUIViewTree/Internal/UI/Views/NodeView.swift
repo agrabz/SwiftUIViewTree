@@ -30,10 +30,10 @@ struct NodeView: View, Equatable {
     }
 
     @State private var vm = NodeViewModel()
-    let label: String
-    let type: String
-    var value: String
-    var id: String
+    @Binding var label: String
+    @Binding var type: String
+    @Binding var value: String
+//    @Binding var id: String
 
     var body: some View {
         if label == "isActive" {
@@ -98,10 +98,6 @@ struct NodeView: View, Equatable {
                 .stroke(.black, lineWidth: 0.5)
         }
         .padding(.all, 8)
-
-        .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-            [id: anchor]
-        }
     }
 }
 

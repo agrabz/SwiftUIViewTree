@@ -62,7 +62,7 @@ private extension TreeContainer {
             return []
         }
 
-        let result = mirror.children.map { child in
+        let result = mirror.children.enumerated().map { (index, child) in
             let childMirror = Mirror(reflecting: child.value)
 
             var childValue = "\(child.value)"
@@ -77,10 +77,10 @@ private extension TreeContainer {
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
                     value: childValue,
-                    //                displayStyle: String(describing: childMirror.displayStyle),
-                    //                subjectType: "\(childMirror.subjectType)",
-                    //                superclassMirror: String(describing: childMirror.superclassMirror),
-                    //                mirrorDescription: childMirror.description,
+                                    displayStyle: String(describing: childMirror.displayStyle),
+                                    subjectType: "\(childMirror.subjectType)",
+                                    superclassMirror: String(describing: childMirror.superclassMirror),
+                                    mirrorDescription: "\(index)",
                     isParent: childMirror.children.count > 0
                 )
             ) // as Any? see type(of:) docs
