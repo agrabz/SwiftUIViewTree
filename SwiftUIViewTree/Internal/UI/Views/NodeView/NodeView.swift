@@ -1,29 +1,6 @@
 import SwiftUI
 
-final class NodeViewModel {
-    let colors: [Color] = [
-        .purple.opacity(0.8),
-        .red.opacity(0.8),
-        .yellow.opacity(0.8),
-        .green.opacity(0.8),
-    ]
-
-    private var currentIndex = 0
-
-    func backgroundColor() -> Color {
-        let backgroundColor = colors.safeGetElement(at: currentIndex % colors.count) ?? colors[0]
-        currentIndex += 1
-        return backgroundColor
-    }
-}
-
-struct NodeView: View, Equatable {
-    static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-        lhs.node.label == rhs.node.label &&
-        lhs.node.type == rhs.node.type &&
-        lhs.node.value == rhs.node.value
-    }
-
+struct NodeView: View {
     @State private var viewModel = NodeViewModel()
     @Binding var node: TreeNode
 
@@ -51,12 +28,20 @@ struct NodeView: View, Equatable {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background(viewModel.backgroundColor())
+        .background(viewModel.getBackgroundColor())
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.black, lineWidth: 0.5)
         }
         .padding(.all, 8)
+    }
+}
+
+extension NodeView: Equatable {
+    static func == (lhs: NodeView, rhs: NodeView) -> Bool {
+        lhs.node.label == rhs.node.label &&
+        lhs.node.type == rhs.node.type &&
+        lhs.node.value == rhs.node.value
     }
 }
