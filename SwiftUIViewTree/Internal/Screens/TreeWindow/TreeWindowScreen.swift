@@ -1,10 +1,16 @@
 import SwiftUI
 
+extension EnvironmentValues {
+    @Entry var treeCoordinator = TreeCoordinator.shared
+}
+
 struct TreeWindowScreen<Content: View>: View {
-    @State private var coordinator = TreeCoordinator.shared //TODO: Environment if works
+    @Environment(\.treeCoordinator) private var coordinator: TreeCoordinator
     let originalContent: Content
 
     var body: some View {
+        @Bindable var coordinator = self.coordinator //TODO: Weird: https://www.swiftjectivec.com/getting-bindings-from-environment-swiftui/
+
         GeometryReader { geometry in
             HStack {
                 originalContent

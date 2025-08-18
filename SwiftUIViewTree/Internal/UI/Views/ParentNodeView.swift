@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ParentNodeView: View {
+    @Environment(\.treeCoordinator) var treeCoordinator: TreeCoordinator
     @Binding var parentNode: TreeNode
 
     var body: some View {
@@ -11,7 +12,7 @@ struct ParentNodeView: View {
             [parentNode.id: anchor]
         }
         .onTapGesture {
-            TreeCoordinator.shared.popover = .node(self.parentNode)
+            treeCoordinator.popover = .node(self.parentNode)
         }
     }
 }
