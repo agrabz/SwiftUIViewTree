@@ -1,7 +1,7 @@
 import Foundation
 
 @Observable
-final class TreeNode: Equatable {
+final class TreeNode: Equatable { //TODO: it should depend on Node type not individual strings, but for that the diff applying should be more granular
     let type: String
     let label: String
     var value: String
