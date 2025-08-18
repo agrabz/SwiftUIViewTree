@@ -7,7 +7,7 @@ struct ContentView: View {
         Button {
             asd.toggle()
         } label: {
-            Text("Hello, world!")
+            Text(asd ? "Yo what?" : "Hello, world!")
                 .font(.largeTitle)
                 .bold(asd ? true : false)
         }
