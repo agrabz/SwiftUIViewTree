@@ -1,13 +1,17 @@
 import SwiftUI
 
 struct TreeView: View {
-    let tree: Tree
+    @Binding var tree: Tree
 
     var body: some View {
         VStack {
-            ParentNodeView(parentNode: tree.parentNode)
+            ParentNodeView(
+                parentNode: $tree.parentNode
+            )
 
-            ChildrenNodeView(children: tree.children)
+            ChildrenNodeView(
+                children: $tree.children
+            )
         }
     }
 }

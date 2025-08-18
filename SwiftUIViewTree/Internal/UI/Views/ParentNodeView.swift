@@ -1,17 +1,15 @@
 import SwiftUI
 
-struct ParentNodeView: View {
+struct ParentNodeView: View { //TODO: having this layer makes the scrolling and zooming more laggy. maybe because of the popover?
     @State private var isPopoverPresented = false
-    let parentNode: TreeNode
+    @Binding var parentNode: TreeNode
 
     var body: some View {
-        Button { //TODO: there's a performance issue here (the more you're zoomed in the worse), every time the button is tapped, the whole view is redrawn
+        Button {
             isPopoverPresented.toggle()
         } label: {
             NodeView(
-                label: parentNode.label,
-                type: parentNode.type,
-                value: String(parentNode.value.prefix(20)), // A memory address is being changed in one of the first parents, but with the prefix approach it never gets redrawn, so it is not visible in the UI.
+                node: $parentNode
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                 [parentNode.id: anchor]

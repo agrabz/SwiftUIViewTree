@@ -17,9 +17,11 @@ struct TreeWindowScreen<Content: View>: View {
                             ViewTreeTraversalProgressView()
                         case .treeComputed(let computedUIState):
                             ZStack {
-                                ScrollableZoomableTreeView(tree: computedUIState.treeBreakDownOfOriginalContent)
-                                    .disabled(TreeContainer.shared.isRecomputing)
-                                    .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
+                                ScrollableZoomableTreeView(
+                                    tree: computedUIState.treeBreakDownOfOriginalContent
+                                )
+                                .disabled(TreeContainer.shared.isRecomputing)
+                                .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
 
                                 if TreeContainer.shared.isRecomputing {
                                     ViewTreeTraversalProgressView()

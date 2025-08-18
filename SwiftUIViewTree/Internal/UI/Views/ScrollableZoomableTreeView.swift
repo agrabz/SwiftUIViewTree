@@ -6,14 +6,14 @@ struct ScrollableZoomableTreeView: View {
     @State private var itemsViewSize: CGSize = .zero
     @State private var scrollViewSize: CGSize = .zero
     @State private var hasScrolledToCenter: Bool = false
-    let tree: Tree
+    @State var tree: Tree
 
     var body: some View {
         GeometryReader { scrollProxy in
             ScrollViewReader { scrollViewReader in
                 ScrollView([.vertical, .horizontal]) {
                     ZStack {
-                        TreeView(tree: tree)
+                        TreeView(tree: $tree)
                             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                                 LinesView(
                                     parentTree: self.tree,

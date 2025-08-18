@@ -1,15 +1,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var asd = false
+    @State var isTapped = false
 
     var body: some View {
         Button {
-            asd.toggle()
+            isTapped.toggle()
         } label: {
-            Text("Hello, world!")
+            Text(isTapped ? "Yo what?" : "Hello, world!")
                 .font(.largeTitle)
-                .bold(asd ? true : false)
+                .bold(isTapped ? true : false)
         }
 //        .printViewTree()
 //        .renderViewTree(maxDepth: 3)
