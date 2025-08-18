@@ -11,7 +11,7 @@ struct TreeWindowScreen<Content: View>: View {
                     .disabled(TreeContainer.shared.isRecomputing)
                     .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
 
-                NavigationStack {
+                NavigationStack { //TODO: might not be needed anymore, was added originally to support navigation in the tree, namely .popover, but now menu is used. removing this will cause a weird look during the initial computation
                     switch TreeContainer.shared.uiState {
                         case .computingTree:
                             ViewTreeTraversalProgressView()
