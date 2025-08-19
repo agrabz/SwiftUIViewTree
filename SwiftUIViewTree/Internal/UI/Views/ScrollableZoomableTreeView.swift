@@ -52,6 +52,7 @@ struct ScrollableZoomableTreeView: View {
                                 }
                             )
                             // Hidden anchor at center
+                        Color.clear
                             .id("centerAnchor") //is this at all then needed? can't we just use the sizes below?
                             .position(x: itemsViewSize.width / 2, y: itemsViewSize.height / 2)
                     }
