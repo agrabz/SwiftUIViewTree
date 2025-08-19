@@ -50,7 +50,7 @@ struct ScrollableZoomableTreeView: View {
                                                 currentZoom = value.magnification - 1
                                             }
                                             .onEnded { value in
-                                                totalZoom += currentZoom
+                                                totalZoom += (value.magnification - 1)
                                                 currentZoom = 0
                                             }
                 )
