@@ -1,21 +1,35 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var isTapped = false
-
     var body: some View {
-        Button {
-            isTapped.toggle()
-        } label: {
-            Text(isTapped ? "Yo what?" : "Hello, world!")
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text("Hello, world!")
                 .font(.largeTitle)
-                .bold(isTapped ? true : false)
+                .bold()
         }
-//        .printViewTree()
-//        .renderViewTree(maxDepth: 3)
-        .renderViewTree()
+        .renderViewTree() // <--
     }
 }
+
+//struct ContentView: View {
+//    @State var isTapped = false
+//
+//    var body: some View {
+//        Button {
+//            isTapped.toggle()
+//        } label: {
+//            Text(isTapped ? "Yo what?" : "Hello, world!")
+//                .font(.largeTitle)
+//                .bold(isTapped ? true : false)
+//        }
+////        .printViewTree()
+////        .renderViewTree(maxDepth: 3)
+//        .renderViewTree()
+//    }
+//}
 
 #Preview {
     ContentView()
