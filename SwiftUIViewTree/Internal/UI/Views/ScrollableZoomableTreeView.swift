@@ -1,11 +1,10 @@
 import SwiftUI
 
 struct ScrollableZoomableTreeView: View {
+//    @GestureState private var magnifyBy = 1.0
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = 1.0
-    @State private var itemsViewSize: CGSize = .zero
-    @State private var scrollViewSize: CGSize = .zero
-    @State private var hasScrolledToCenter: Bool = false
+    @State private var scaleAnchor: UnitPoint = .center
     @State var tree: Tree
 
     init(tree: Tree) {
@@ -23,7 +22,7 @@ struct ScrollableZoomableTreeView: View {
                         nodeCenters: nodeCenters
                     )
                 }
-                .scaleEffect(max(totalZoom + currentZoom, 0.1)) // Prevent flipping by clamping scale
+                .scaleEffect(max(totalZoom + currentZoom, 0.1), anchor: scaleAnchor) // Prevent flipping by clamping scale
                 .background(
                     LinearGradient(
                         gradient:
@@ -38,10 +37,22 @@ struct ScrollableZoomableTreeView: View {
                     )
                 )
                 .simultaneousGesture(
-                    StatefulMagnifyGesture(
-                        currentZoom: $currentZoom,
-                        totalZoom: $totalZoom
-                    )
+                    //                    StatefulMagnifyGesture(
+                    //                        currentZoom: $currentZoom,
+                    //                        totalZoom: $totalZoom
+                    //                    )
+                    MagnifyGesture()
+//                        .updating($magnifyBy) { value, state, _ in
+//                            state = value.magnification
+//                        }
+                                            .onChanged { value in
+                                                scaleAnchor = value.startAnchor
+                                                currentZoom = value.magnification - 1
+                                            }
+                                            .onEnded { value in
+                                                totalZoom += currentZoom
+                                                currentZoom = 0
+                                            }
                 )
         }
         .onAppear {
