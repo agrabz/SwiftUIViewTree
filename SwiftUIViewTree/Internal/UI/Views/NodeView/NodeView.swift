@@ -34,6 +34,7 @@ struct NodeView: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.black, lineWidth: 0.5)
         }
+        .frame(width: 200, height: 200)
         .padding(.all, 8)
     }
 }
