@@ -15,31 +15,37 @@ struct ScrollableZoomableTreeView: View {
     }
 
     var body: some View {
-        TreeView(tree: $tree)
-            .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
-                LinesView(
-                    parentTree: self.tree,
-                    nodeCenters: nodeCenters
+        ScrollView([.horizontal, .vertical]) {
+            TreeView(tree: $tree)
+                .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
+                    LinesView(
+                        parentTree: self.tree,
+                        nodeCenters: nodeCenters
+                    )
+                }
+                .scaleEffect(max(totalZoom + currentZoom, 0.1)) // Prevent flipping by clamping scale
+                .background(
+                    LinearGradient(
+                        gradient:
+                            Gradient(
+                                colors: [
+                                    .blue,
+                                    .teal
+                                ]
+                            ),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
                 )
-            }
-            .background(
-                LinearGradient(
-                    gradient:
-                        Gradient(
-                            colors: [
-                                .blue,
-                                .teal
-                            ]
-                        ),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
+                .simultaneousGesture(
+                    StatefulMagnifyGesture(
+                        currentZoom: $currentZoom,
+                        totalZoom: $totalZoom
+                    )
                 )
-            )
-            .scaleEffect(max(totalZoom + currentZoom, 0.1)) // Prevent flipping by clamping scale
-                                                            //                            .gesture()
-        
-            .onAppear {
-                print("Appear: \(Date())")
-            }
+        }
+        .onAppear {
+            print("Appear: \(Date())")
+        }
     }
 }
