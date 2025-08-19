@@ -18,7 +18,7 @@ struct ScrollableZoomableTreeView: View {
         GeometryReader { scrollProxy in
             ScrollViewReader { scrollViewReader in
                 ScrollView([.vertical, .horizontal]) {
-                    ZStack {
+                    ZStack { //ZStack is not used anymore but for some reason with it the performance is much better, so keeping it for now
                         TreeView(tree: $tree)
                             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                                 LinesView(
@@ -53,9 +53,7 @@ struct ScrollableZoomableTreeView: View {
                                                         }
                                                     )
                         // Hidden anchor at center
-                        Color.clear
-                            .frame(width: 1, height: 1)
-                            .id("centerAnchor")
+                            .id("centerAnchor") //is this at all then needed? can't we just use the sizes below?
                             .position(x: itemsViewSize.width / 2, y: itemsViewSize.height / 2)
                     }
                 }
