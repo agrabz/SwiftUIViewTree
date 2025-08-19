@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
+    @State private var treeContainer = TreeContainer.shared
+
     let originalContent: Content
 
     var body: some View {
@@ -12,9 +14,12 @@ struct TreeWindowScreen<Content: View>: View {
                     .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
 
                 NavigationStack { //TODO: might not be needed anymore, was added originally to support navigation in the tree, namely .popover, but now menu is used. removing this will cause a weird look during the initial computation
-                    switch TreeContainer.shared.uiState {
+                    switch treeContainer.uiState {
                         case .computingTree:
                             ViewTreeTraversalProgressView()
+                                .onDisappear {
+                                    print("ViewTreeTraversalProgressView disappeared at \(Date())")
+                                }
                         case .treeComputed(let computedUIState):
                             ZStack {
                                 ScrollableZoomableTreeView(
@@ -26,6 +31,9 @@ struct TreeWindowScreen<Content: View>: View {
                                 if TreeContainer.shared.isRecomputing {
                                     ViewTreeTraversalProgressView()
                                 }
+                            }
+                            .onAppear {
+                                print("ScrollableZoomableTreeView appeared at \(Date())")
                             }
                     }
                 }
