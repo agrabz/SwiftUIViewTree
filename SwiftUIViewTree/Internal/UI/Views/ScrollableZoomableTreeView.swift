@@ -27,32 +27,31 @@ struct ScrollableZoomableTreeView: View {
                                 )
                             }
                             .scaleEffect(max(totalZoom + currentZoom, 0.1)) // Prevent flipping by clamping scale
-
-                                                    .background(
-                                                        GeometryReader { itemsProxy in
-                                                            LinearGradient(
-                                                                gradient:
-                                                                    Gradient(
-                                                                        colors: [
-                                                                            .blue,
-                                                                            .teal
-                                                                        ]
-                                                                    ),
-                                                                startPoint: .topLeading,
-                                                                endPoint: .bottomTrailing
-                                                            )
-                                                                .onAppear {
-                                                                    self.itemsViewSize = itemsProxy.size
-                                                                    self.scrollViewSize = scrollProxy.size
-                                                                    self.updateInitialZoom()
-                                                                }
-                        //                                        .onChange(of: itemsProxy.size) { _, _ in
-                        //                                            self.itemsViewSize = itemsProxy.size
-                        //                                            self.updateInitialZoom()
-                        //                                        }
-                                                        }
-                                                    )
-                        // Hidden anchor at center
+                            .background(
+                                GeometryReader { itemsProxy in
+                                    LinearGradient(
+                                        gradient:
+                                            Gradient(
+                                                colors: [
+                                                    .blue,
+                                                    .teal
+                                                ]
+                                            ),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                    .onAppear {
+                                        self.itemsViewSize = itemsProxy.size
+                                        self.scrollViewSize = scrollProxy.size
+                                        self.updateInitialZoom()
+                                    }
+                                    //                                        .onChange(of: itemsProxy.size) { _, _ in
+                                    //                                            self.itemsViewSize = itemsProxy.size
+                                    //                                            self.updateInitialZoom()
+                                    //                                        }
+                                }
+                            )
+                            // Hidden anchor at center
                             .id("centerAnchor") //is this at all then needed? can't we just use the sizes below?
                             .position(x: itemsViewSize.width / 2, y: itemsViewSize.height / 2)
                     }
@@ -83,19 +82,19 @@ struct ScrollableZoomableTreeView: View {
                 totalZoom: $totalZoom
             )
         )
-//        .background(
-//            LinearGradient(
-//                gradient:
-//                    Gradient(
-//                        colors: [
-//                            .blue,
-//                            .teal
-//                        ]
-//                    ),
-//                startPoint: .topLeading,
-//                endPoint: .bottomTrailing
-//            )
-//        )
+        //        .background(
+        //            LinearGradient(
+        //                gradient:
+        //                    Gradient(
+        //                        colors: [
+        //                            .blue,
+        //                            .teal
+        //                        ]
+        //                    ),
+        //                startPoint: .topLeading,
+        //                endPoint: .bottomTrailing
+        //            )
+        //        )
     }
 
 
