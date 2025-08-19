@@ -8,11 +8,17 @@ struct ScrollableZoomableTreeView: View {
     @State private var hasScrolledToCenter: Bool = false
     @State var tree: Tree
 
+    init(tree: Tree) {
+        self._tree = State(initialValue: tree)
+
+        print("Init: \(Date())")
+    }
+
     var body: some View {
         GeometryReader { scrollProxy in
-            ScrollViewReader { scrollViewReader in
+//            ScrollViewReader { scrollViewReader in
                 ScrollView([.vertical, .horizontal]) {
-                    ZStack {
+//                    ZStack {
                         TreeView(tree: $tree)
                             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                                 LinesView(
@@ -21,40 +27,43 @@ struct ScrollableZoomableTreeView: View {
                                 )
                             }
                             .scaleEffect(max(totalZoom + currentZoom, 0.1)) // Prevent flipping by clamping scale
-                            .background(
-                                GeometryReader { itemsProxy in
-                                    Color.clear
-                                        .onAppear {
-                                            self.itemsViewSize = itemsProxy.size
-                                            self.scrollViewSize = scrollProxy.size
-                                            self.updateInitialZoom()
-                                        }
-                                        .onChange(of: itemsProxy.size) { _, _ in
-                                            self.itemsViewSize = itemsProxy.size
-                                            self.updateInitialZoom()
-                                        }
-                                }
-                            )
+//                            .background(
+//                                GeometryReader { itemsProxy in
+//                                    Color.clear
+//                                        .onAppear {
+//                                            self.itemsViewSize = itemsProxy.size
+//                                            self.scrollViewSize = scrollProxy.size
+//                                            self.updateInitialZoom()
+//                                        }
+//                                        .onChange(of: itemsProxy.size) { _, _ in
+//                                            self.itemsViewSize = itemsProxy.size
+//                                            self.updateInitialZoom()
+//                                        }
+//                                }
+//                            )
                         // Hidden anchor at center
-                        Color.clear
-                            .frame(width: 1, height: 1)
-                            .id("centerAnchor")
-                            .position(x: itemsViewSize.width / 2, y: itemsViewSize.height / 2)
-                    }
+//                        Color.clear
+//                            .frame(width: 1, height: 1)
+//                            .id("centerAnchor")
+//                            .position(x: itemsViewSize.width / 2, y: itemsViewSize.height / 2)
+//                    }
                 }
                 .onAppear {
-                    self.scrollViewSize = scrollProxy.size
+//                    self.scrollViewSize = scrollProxy.size
                     self.updateInitialZoom()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
-                    }
-                }
-                .onChange(of: itemsViewSize) { _, _ in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
-                    }
-                }
+//                    Task {
+//                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
+//                    }
+//                }
+//                .onChange(of: itemsViewSize) { _, _ in
+//                    Task {
+//                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
+//                    }
+//                }
             }
+        }
+        .onAppear {
+            print("Appear: \(Date())")
         }
         .simultaneousGesture(
             StatefulMagnifyGesture(
