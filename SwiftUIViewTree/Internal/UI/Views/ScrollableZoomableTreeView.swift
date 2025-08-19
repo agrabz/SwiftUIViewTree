@@ -38,7 +38,7 @@ struct ScrollableZoomableTreeView: View {
                 .simultaneousGesture(
                     MagnifyGesture()
                         .onChanged { value in
-                            scaleAnchor = value.startAnchor
+                            scaleAnchor = value.startAnchor #error("try to use value.startLocation instead, by converting it somehow... or just let it go for now.:)")
                             currentZoom = value.magnification - 1
                         }
                         .onEnded { value in
