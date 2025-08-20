@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct ScrollableZoomableTreeView: View {
+    private static let minimumZoom: CGFloat = 0.1
+
     @State private var currentZoom: CGFloat = 0.0
-    @State private var totalZoom: CGFloat = 1.0
-    @State private var scaleAnchor: UnitPoint = .center
+    @State private var totalZoom: CGFloat = Self.minimumZoom
     @State var tree: Tree
 
     init(tree: Tree) {
@@ -21,7 +22,7 @@ struct ScrollableZoomableTreeView: View {
                         nodeCenters: nodeCenters
                     )
                 }
-                .scaleEffect(max(totalZoom + currentZoom, 0.1), anchor: scaleAnchor) // Prevent flipping by clamping scale
+                .scaleEffect(max(totalZoom + currentZoom, Self.minimumZoom)) // Prevent flipping by clamping scale
                 .background(
                     LinearGradient(
                         gradient:
@@ -36,15 +37,10 @@ struct ScrollableZoomableTreeView: View {
                     )
                 )
                 .simultaneousGesture(
-                    MagnifyGesture()
-                        .onChanged { value in
-                            scaleAnchor = value.startAnchor #error("try to use value.startLocation instead, by converting it somehow... or just let it go for now.:)")
-                            currentZoom = value.magnification - 1
-                        }
-                        .onEnded { value in
-                            totalZoom += (value.magnification - 1)
-                            currentZoom = 0
-                        }
+                    StatefulMagnifyGesture(
+                        currentZoom: $currentZoom,
+                        totalZoom: $totalZoom
+                    )
                 )
         }
         .onAppear {
