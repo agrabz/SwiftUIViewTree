@@ -15,7 +15,7 @@ struct ScrollableZoomableTreeView: View {
                 )
             }
             .offset(offset)
-            .scaleEffect(currentZoom + totalZoom)
+            .scaleEffect(getScale())
             .background(
                 LinearGradient(
                     gradient:
@@ -38,7 +38,7 @@ struct ScrollableZoomableTreeView: View {
             .simultaneousGesture(
                 DragToScrollGesture(
                     offset: $offset,
-                    scale: currentZoom + totalZoom
+                    scale: getScale()
                 )
             )
     }
