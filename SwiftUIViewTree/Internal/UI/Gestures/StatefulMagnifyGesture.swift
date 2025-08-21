@@ -11,8 +11,18 @@ struct StatefulMagnifyGesture: Gesture {
     var body: some Gesture {
         MagnifyGesture()
             .onChanged { value in
-                withAnimation { //TODO: current zoom has to be clamped as well
-                    currentZoom = value.magnification - 1
+                withAnimation {
+                    let newlyProposedZoom = value.magnification - 1
+                    let newTotalZoom = totalZoom + newlyProposedZoom
+                    withAnimation {
+                        if newTotalZoom < Self.minZoom {
+                            currentZoom = Self.minZoom - totalZoom
+                        } else if newTotalZoom > Self.maxZoom {
+                            currentZoom = Self.maxZoom - totalZoom
+                        } else {
+                            currentZoom = value.magnification - 1
+                        }
+                    }
                 }
             }
             .onEnded { value in
