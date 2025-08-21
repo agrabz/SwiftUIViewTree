@@ -11,7 +11,7 @@ struct StatefulMagnifyGesture: Gesture {
     var body: some Gesture {
         MagnifyGesture()
             .onChanged { value in
-                withAnimation {
+                withAnimation { //TODO: current zoom has to be clamped as well
                     currentZoom = value.magnification - 1
                 }
             }
