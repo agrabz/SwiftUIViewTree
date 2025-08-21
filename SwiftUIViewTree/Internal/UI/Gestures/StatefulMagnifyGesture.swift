@@ -12,24 +12,36 @@ struct StatefulMagnifyGesture: Gesture {
         MagnifyGesture()
             .onChanged { value in
                 withAnimation {
-                    let newlyProposedZoom = value.magnification - 1
-                    let newTotalZoom = totalZoom + newlyProposedZoom
-                    withAnimation {
-                        if newTotalZoom < Self.minZoom {
-                            currentZoom = Self.minZoom - totalZoom
-                        } else if newTotalZoom > Self.maxZoom {
-                            currentZoom = Self.maxZoom - totalZoom
-                        } else {
-                            currentZoom = value.magnification - 1
-                        }
-                    }
+                    currentZoom = getClampedNewCurrentZoom(from: value)
                 }
             }
             .onEnded { value in
                 withAnimation {
-                    totalZoom = min(max(totalZoom + currentZoom, Self.minZoom), Self.maxZoom)
+                    totalZoom = getClampedTotalZoom()
                     currentZoom = Self.idleZoom
                 }
             }
+    }
+}
+
+private extension StatefulMagnifyGesture {
+    func getClampedNewCurrentZoom(from value: MagnifyGesture.Value) -> CGFloat {
+        let newlyProposedZoom = value.magnification - 1
+        let newTotalZoom = totalZoom + newlyProposedZoom
+
+        let clampedNewCurrentZoom =
+        if newTotalZoom < Self.minZoom {
+            Self.minZoom - totalZoom
+        } else if newTotalZoom > Self.maxZoom {
+            Self.maxZoom - totalZoom
+        } else {
+            newlyProposedZoom
+        }
+
+        return clampedNewCurrentZoom
+    }
+
+    func getClampedTotalZoom() -> CGFloat {
+        min(max(totalZoom + currentZoom, Self.minZoom), Self.maxZoom)
     }
 }
