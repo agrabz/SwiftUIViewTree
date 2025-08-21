@@ -18,23 +18,23 @@ struct StatefulMagnifyGesture: Gesture {
 
 struct DragyGesture: Gesture {
     @Binding var offset: CGSize
-    //slow down with the amount of currentzoom
+    //slow down with the amount of currentZoom
     var scale: CGFloat
 
     var body: some Gesture {
         DragGesture()
             .onChanged { value in
                 var newOffset = offset
-                newOffset.width += (value.translation.width / 2) / max(scale * 3, 1)
-                newOffset.height += (value.translation.height / 2) / max(scale * 3, 1)
+                newOffset.width += (value.translation.width / 2) / max(scale, 1)
+                newOffset.height += (value.translation.height / 2) / max(scale, 1)
                 withAnimation {
                     offset = newOffset
                 }
             }
             .onEnded { value in
                 var newOffset = offset
-                newOffset.width += (value.translation.width / 2) / max(scale * 3, 1)
-                newOffset.height += (value.translation.height / 2) / max(scale * 3, 1)
+                newOffset.width += (value.translation.width / 2) / max(scale, 1)
+                newOffset.height += (value.translation.height / 2) / max(scale, 1)
                 withAnimation {
                     offset = newOffset
                 }

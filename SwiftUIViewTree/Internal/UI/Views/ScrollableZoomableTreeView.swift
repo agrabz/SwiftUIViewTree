@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ScrollableZoomableTreeView: View {
-    private static let minimumZoom: CGFloat = 0.3
+    private static let minimumZoom: CGFloat = 0.1
 
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = Self.minimumZoom
@@ -22,9 +22,8 @@ struct ScrollableZoomableTreeView: View {
                         nodeCenters: nodeCenters
                     )
                 }
-                .scaleEffect(getScale()) // Prevent flipping by clamping scale
                 .offset(offset)
-                .scaleEffect(max(totalZoom + currentZoom, Self.minimumZoom)) // Prevent flipping by clamping scale
+                .scaleEffect(getScale()) // Prevent flipping by clamping scale
                 .background(
                     LinearGradient(
                         gradient:
