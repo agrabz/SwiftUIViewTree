@@ -27,6 +27,11 @@ struct DragyGesture: Gesture {
                 var newOffset = offset
                 newOffset.width += (value.translation.width / 2) / max(scale, 1)
                 newOffset.height += (value.translation.height / 2) / max(scale, 1)
+
+                newOffset.width = min(max(newOffset.width, -2000), 2000)
+                newOffset.height = min(max(newOffset.height, -1000), 1000)
+
+                print(offset)
                 withAnimation {
                     offset = newOffset
                 }
@@ -35,6 +40,12 @@ struct DragyGesture: Gesture {
                 var newOffset = offset
                 newOffset.width += (value.translation.width / 2) / max(scale, 1)
                 newOffset.height += (value.translation.height / 2) / max(scale, 1)
+
+
+                newOffset.width = min(max(newOffset.width, -2000), 2000)
+                newOffset.height = min(max(newOffset.height, -1000), 1000)
+
+                print(offset)
                 withAnimation {
                     offset = newOffset
                 }
