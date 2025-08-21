@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ScrollableZoomableTreeView: View {
-    private static let minimumZoom: CGFloat = 0.1
+    private static let minimumZoom: CGFloat = 0.3
 
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = Self.minimumZoom
@@ -22,6 +22,7 @@ struct ScrollableZoomableTreeView: View {
                         nodeCenters: nodeCenters
                     )
                 }
+                .scaleEffect(getScale()) // Prevent flipping by clamping scale
                 .offset(offset)
                 .scaleEffect(max(totalZoom + currentZoom, Self.minimumZoom)) // Prevent flipping by clamping scale
                 .background(
@@ -44,10 +45,17 @@ struct ScrollableZoomableTreeView: View {
                     )
                 )
                 .simultaneousGesture(
-                    DragyGesture(offset: $offset)
+                    DragyGesture(
+                        offset: $offset,
+                        scale: getScale()
+                    )
                 )
         .onAppear {
             print("Appear: \(Date())")
         }
+    }
+
+    func getScale() -> CGFloat {
+        max(totalZoom + currentZoom, Self.minimumZoom)
     }
 }
