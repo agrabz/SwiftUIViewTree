@@ -50,7 +50,9 @@ struct ScrollableZoomableTreeView: View {
             .gesture(magnifyGesture)
             .simultaneousGesture(dragGesture)
     }
+}
 
+private extension ScrollableZoomableTreeView {
     func getScale() -> CGFloat {
         currentZoom + totalZoom
     }
