@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct ScrollableZoomableTreeView: View {
-    private static let minimumZoom: CGFloat = 0.1
-
-    @State private var currentZoom: CGFloat = 0.0
-    @State private var totalZoom: CGFloat = Self.minimumZoom
+    @State private var currentZoom: CGFloat = StatefulMagnifyGesture.idleZoom
+    @State private var totalZoom: CGFloat = StatefulMagnifyGesture.minZoom
     @State private var offset: CGSize = .zero
     @State var tree: Tree
 
@@ -17,7 +15,7 @@ struct ScrollableZoomableTreeView: View {
                 )
             }
             .offset(offset)
-            .scaleEffect(getScale())
+            .scaleEffect(currentZoom + totalZoom)
             .background(
                 LinearGradient(
                     gradient:
@@ -40,12 +38,12 @@ struct ScrollableZoomableTreeView: View {
             .simultaneousGesture(
                 DragyGesture(
                     offset: $offset,
-                    scale: getScale()
+                    scale: currentZoom + totalZoom
                 )
             )
     }
 
     func getScale() -> CGFloat {
-        max(totalZoom + currentZoom, Self.minimumZoom)
+        currentZoom + totalZoom
     }
 }
