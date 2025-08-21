@@ -36,7 +36,7 @@ struct ScrollableZoomableTreeView: View {
                 )
             )
             .simultaneousGesture(
-                DragyGesture(
+                DragToScrollGesture(
                     offset: $offset,
                     scale: currentZoom + totalZoom
                 )
