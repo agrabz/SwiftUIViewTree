@@ -5,6 +5,7 @@ struct ScrollableZoomableTreeView: View {
 
     @State private var currentZoom: CGFloat = 0.0
     @State private var totalZoom: CGFloat = Self.minimumZoom
+    @State private var offset: CGSize = .zero
     @State var tree: Tree
 
     init(tree: Tree) {
@@ -14,7 +15,6 @@ struct ScrollableZoomableTreeView: View {
     }
 
     var body: some View {
-        ScrollView([.horizontal, .vertical]) {
             TreeView(tree: $tree)
                 .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                     LinesView(
@@ -22,6 +22,7 @@ struct ScrollableZoomableTreeView: View {
                         nodeCenters: nodeCenters
                     )
                 }
+                .offset(offset)
                 .scaleEffect(max(totalZoom + currentZoom, Self.minimumZoom)) // Prevent flipping by clamping scale
                 .background(
                     LinearGradient(
@@ -42,7 +43,9 @@ struct ScrollableZoomableTreeView: View {
                         totalZoom: $totalZoom
                     )
                 )
-        }
+                .simultaneousGesture(
+                    DragyGesture(offset: $offset)
+                )
         .onAppear {
             print("Appear: \(Date())")
         }

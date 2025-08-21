@@ -15,3 +15,27 @@ struct StatefulMagnifyGesture: Gesture {
             }
     }
 }
+
+struct DragyGesture: Gesture {
+    @Binding var offset: CGSize
+
+    var body: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                var newOffset = offset
+                newOffset.width += value.translation.width / 2
+                newOffset.height += value.translation.height / 2
+                withAnimation {
+                    offset = newOffset
+                }
+            }
+            .onEnded { value in
+                var newOffset = offset
+                newOffset.width += value.translation.width / 2
+                newOffset.height += value.translation.height / 2
+                withAnimation {
+                    offset = newOffset
+                }
+            }
+    }
+}
