@@ -50,8 +50,8 @@ struct ScrollableZoomableTreeView: View {
                 )
             )
             .frame( //by providing an explicit frame the performance of gesture attaching and readiness is improved
-                width: UIScreen.main.bounds.width * 3/4,
-                height: UIScreen.main.bounds.height * 3/4
+                width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.viewTree,
+                height: UIScreen.main.bounds.height * UIConstants.ScreenRatioOf.viewTree
             )
             .gesture(magnifyGesture)
             .simultaneousGesture(dragGesture)

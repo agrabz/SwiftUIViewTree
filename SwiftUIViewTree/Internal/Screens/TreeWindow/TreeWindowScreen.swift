@@ -9,7 +9,7 @@ struct TreeWindowScreen<Content: View>: View {
         GeometryReader { geometry in
             HStack {
                 originalContent
-                    .frame(width: geometry.size.width * 1/4)
+                    .frame(width: geometry.size.width * UIConstants.ScreenRatioOf.originalContent)
                     .disabled(TreeContainer.shared.isRecomputing)
                     .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
 
@@ -37,7 +37,7 @@ struct TreeWindowScreen<Content: View>: View {
                             }
                     }
                 }
-                .frame(width: geometry.size.width * 3/4)
+                .frame(width: geometry.size.width * UIConstants.ScreenRatioOf.viewTree)
             }
         }
     }
