@@ -32,7 +32,7 @@ You can tap on any node to see its full details.
 
 <img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-18 at 15 26 03" src="https://github.com/user-attachments/assets/6b0a344f-6996-4b23-92c0-c40cb6edd80b" />
 
-Or you can pitch to zoom:
+Or you can pinch to zoom:
 
 https://github.com/user-attachments/assets/2096aac2-7833-490b-9401-0e3b84b4db7f
 
@@ -82,8 +82,6 @@ struct ContentView: View {
 - Support for Swift Package Manager (SPM)
 
 - Add licence
-
-- Show @State changes, not just view changes
 
 - Full unit test coverage
 
