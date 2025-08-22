@@ -10,7 +10,7 @@ import SwiftUI
 //                .font(.largeTitle)
 //                .bold()
 //        }
-//        .renderViewTree() // <--
+//        .renderViewTree(of: self) // <--
 //    }
 //}
 
@@ -27,7 +27,7 @@ struct ContentView: View {
         }
 //        .printViewTree()
 //        .renderViewTree(maxDepth: 3)
-        .renderViewTree()
+        .renderViewTree(of: self)
     }
 }
 

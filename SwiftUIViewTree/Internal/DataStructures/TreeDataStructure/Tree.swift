@@ -1,9 +1,9 @@
 import Observation
 
 @Observable
-final class Tree: /*CustomStringConvertible,*/ Equatable {
+final class Tree: Equatable {
     var parentNode: TreeNode
-    var children: [Tree] // TODO: parents with only one child should be merged with their children
+    var children: [Tree]
 
     init(
         node: TreeNode,
@@ -14,6 +14,7 @@ final class Tree: /*CustomStringConvertible,*/ Equatable {
     }
 
     static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.parentNode == rhs.parentNode
+        lhs.parentNode == rhs.parentNode &&
+        lhs.children == rhs.children
     }
 }

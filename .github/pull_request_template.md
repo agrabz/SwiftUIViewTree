@@ -1,6 +1,6 @@
 # Checklist:
 
-- [ ] Performance did not regress. If it did, then it is explained above in the Decisions section.
+- [ ] Performance did not regress. If it did, then it is explained below in the Decisions section.
 - [ ] Nodes still change their colors when their values get updated.
 - [ ] Comments are only added if they are really necessary. Descriptive function and variable names are preferred.
 - [ ] Build warnings eliminated.
@@ -19,12 +19,5 @@
   <summary>iPhone Screenshots/Recordings</summary>
 
   <!-- place your iPhone screenshots here -->
-
-</details>
-
-<details>
-  <summary>iPad Screenshots/Recordings</summary>
-
-  <!-- place your iPad screenshots here -->
 
 </details>
