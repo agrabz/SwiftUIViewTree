@@ -31,7 +31,7 @@ And you can also see it in the console:
 
 ```
 🚨Changes detected
-"isActive": "Bool"
+"_value": "Bool"
 🟥Old value: "false"
 🟩New value: "true"
 ```
