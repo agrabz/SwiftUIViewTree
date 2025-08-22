@@ -20,6 +20,12 @@ struct ScrollableZoomableTreeView: View {
         )
     }
 
+    init(tree: Tree) {
+        self._tree = State(initialValue: tree)
+
+        print("ScrollableZoomableTreeView Init: \(Date())")
+    }
+
     var body: some View {
         TreeView(tree: $tree)
             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
@@ -49,6 +55,9 @@ struct ScrollableZoomableTreeView: View {
             )
             .gesture(magnifyGesture)
             .simultaneousGesture(dragGesture)
+            .onAppear {
+                print("ScrollableZoomableTreeView Appeared: \(Date())")
+            }
     }
 }
 

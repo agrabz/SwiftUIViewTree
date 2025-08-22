@@ -5,13 +5,26 @@ struct ParentNodeView: View {
     @Binding var parentNode: TreeNode
 
     var body: some View {
-//        Menu {
-//            NodeMenuContent(node: parentNode)
-//        } label: {
-            NodeView(
-                node: $parentNode
-            )
-//        }
+        NodeView(
+            node: $parentNode
+        )
+        .simultaneousGesture(
+            TapGesture()
+                .onEnded({ _ in
+                    print("""
+                            
+                            Node Details:
+                            "Type: `\(parentNode.type)`"
+                            "Label: `\(parentNode.label)`"
+                            "Value: `\(parentNode.value)`"
+                            "DisplayStyle: `\(parentNode.displayStyle)`"
+                            "SubjectType: `\(parentNode.subjectType)`"
+                            "SuperclassMirror: `\(parentNode.superclassMirror)`"
+                            "mirrorDescription: `\(parentNode.mirrorDescription)`"
+                            
+                            """)
+                })
+        )
         .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
             [parentNode.id: anchor]
         }

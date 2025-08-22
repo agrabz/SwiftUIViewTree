@@ -33,7 +33,7 @@ struct TreeWindowScreen<Content: View>: View {
                                 }
                             }
                             .onAppear {
-                                print("ScrollableZoomableTreeView appeared at \(Date())")
+                                print("ScrollableZoomableTreeView appeared from TreeWindowScreen at \(Date())")
                             }
                     }
                 }
