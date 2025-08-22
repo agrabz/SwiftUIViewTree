@@ -11,7 +11,7 @@ struct LinesView: View {
                     self.lineFromParent(
                         to: childTree,
                         in: proxy
-                    )?.stroke()
+                    )?.stroke(.black, lineWidth: 3.0)
 
                     LinesView(
                         parentTree: childTree,
