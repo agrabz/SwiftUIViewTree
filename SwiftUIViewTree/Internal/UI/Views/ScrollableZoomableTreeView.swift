@@ -68,6 +68,9 @@ struct ScrollableZoomableTreeView: View {
                 if isPerformanceLoggingEnabled {
                     print("ScrollableZoomableTreeView Appeared: \(Date())")
                 }
+
+                //TODO: without this change, or by manual zooming before the first interaction the whole tree will be re-rendered. has to be resolved, probably the problem is with the Equatable conformance of the views
+                self.offset = .init(width: 1, height: 1)
             }
     }
 }
