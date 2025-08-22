@@ -10,7 +10,7 @@ import SwiftUI
 //                .font(.largeTitle)
 //                .bold()
 //        }
-//        .renderViewTree() // <--
+//        .renderViewTree(of: self) // <--
 //    }
 //}
 
