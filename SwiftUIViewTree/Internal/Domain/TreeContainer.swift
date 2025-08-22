@@ -60,25 +60,19 @@ private extension TreeContainer {
             node: .rootNode
         )
 
-        let originalViewRootNode = getRootTreeNode(of: originalView, as: .originalView)
-        let originalViewTree = Tree(node: originalViewRootNode)
-        originalViewTree.children = convertToTreesRecursively(
-            mirror: Mirror(reflecting: originalView),
-            source: originalView,
+        let originalViewRootTree = getRootTree(
+            from: originalView,
+            as: .originalView,
             maxDepth: maxDepth
         )
+        newTree.children.append(originalViewRootTree)
 
-        newTree.children.append(originalViewTree)
-
-        let modifiedViewRootNode = getRootTreeNode(of: modifiedView, as: .modifiedView)
-        let modifiedViewTree = Tree(node: modifiedViewRootNode)
-        modifiedViewTree.children = convertToTreesRecursively(
-            mirror: Mirror(reflecting: modifiedView),
-            source: modifiedView,
+        let modifiedViewRootTree = getRootTree(
+            from: modifiedView,
+            as: .modifiedView,
             maxDepth: maxDepth
         )
-
-        newTree.children.append(modifiedViewTree)
+        newTree.children.append(modifiedViewRootTree)
 
         return newTree
     }
@@ -122,6 +116,17 @@ private extension TreeContainer {
             return childTree
         }
         return result
+    }
+
+    func getRootTree(from rootView: any View, as rootNodeType: RootNodeType, maxDepth: Int) -> Tree {
+        let rootNode = getRootTreeNode(of: rootView, as: rootNodeType)
+        let rootViewTree = Tree(node: rootNode)
+        rootViewTree.children = convertToTreesRecursively(
+            mirror: Mirror(reflecting: rootView),
+            source: rootView,
+            maxDepth: maxDepth
+        )
+        return rootViewTree
     }
 
     func getRootTreeNode(of view: any View, as rootNodeType: RootNodeType) -> TreeNode {
