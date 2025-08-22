@@ -16,25 +16,25 @@ struct ParentNodeView: View {
         NodeView(
             node: $parentNode
         )
-//        .simultaneousGesture(
-//            TapGesture()
-//                .onEnded { _ in
-//                    print(
-//                        """
-//                            
-//                        Node Details:
-//                            Label: \(parentNode.label)
-//                            Type: \(parentNode.type)
-//                            Value: \(parentNode.value)
-//                            DisplayStyle: \(parentNode.displayStyle)
-//                            SubjectType: \(parentNode.subjectType)
-//                            SuperclassMirror: \(parentNode.superclassMirror)
-//                            mirrorDescription: \(parentNode.mirrorDescription)
-//                            
-//                        """
-//                    )
-//                }
-//        )
+        .simultaneousGesture(
+            TapGesture()
+                .onEnded { _ in
+                    print(
+                        """
+                            
+                        Node Details:
+                            Label: \(parentNode.label)
+                            Type: \(parentNode.type)
+                            Value: \(parentNode.value)
+                            DisplayStyle: \(parentNode.displayStyle)
+                            SubjectType: \(parentNode.subjectType)
+                            SuperclassMirror: \(parentNode.superclassMirror)
+                            mirrorDescription: \(parentNode.mirrorDescription)
+                            
+                        """
+                    )
+                }
+        )
         .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
             [parentNode.id: anchor]
         }
