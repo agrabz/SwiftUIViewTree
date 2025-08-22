@@ -14,6 +14,7 @@ final class Tree: Equatable {
     }
 
     static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.parentNode == rhs.parentNode
+        lhs.parentNode == rhs.parentNode &&
+        lhs.children == rhs.children
     }
 }
