@@ -1,2 +1,4 @@
 
-let isPerformanceLoggingEnabled = true
+let isPerformanceLoggingEnabled = false
+
+let isViewPrintChangesEnabled = false

@@ -5,28 +5,36 @@ struct ParentNodeView: View {
     @Binding var parentNode: TreeNode
 
     var body: some View {
+
+        if parentNode.label == "modifiers" && isViewPrintChangesEnabled {
+            let _ = print()
+            let _ = print("ParentNodeView")
+            let _ = Self._printChanges()
+            let _ = print()
+        }
+
         NodeView(
             node: $parentNode
         )
-        .simultaneousGesture(
-            TapGesture()
-                .onEnded { _ in
-                    print(
-                        """
-                            
-                        Node Details:
-                            Label: \(parentNode.label)
-                            Type: \(parentNode.type)
-                            Value: \(parentNode.value)
-                            DisplayStyle: \(parentNode.displayStyle)
-                            SubjectType: \(parentNode.subjectType)
-                            SuperclassMirror: \(parentNode.superclassMirror)
-                            mirrorDescription: \(parentNode.mirrorDescription)
-                            
-                        """
-                    )
-                }
-        )
+//        .simultaneousGesture(
+//            TapGesture()
+//                .onEnded { _ in
+//                    print(
+//                        """
+//                            
+//                        Node Details:
+//                            Label: \(parentNode.label)
+//                            Type: \(parentNode.type)
+//                            Value: \(parentNode.value)
+//                            DisplayStyle: \(parentNode.displayStyle)
+//                            SubjectType: \(parentNode.subjectType)
+//                            SuperclassMirror: \(parentNode.superclassMirror)
+//                            mirrorDescription: \(parentNode.mirrorDescription)
+//                            
+//                        """
+//                    )
+//                }
+//        )
         .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
             [parentNode.id: anchor]
         }

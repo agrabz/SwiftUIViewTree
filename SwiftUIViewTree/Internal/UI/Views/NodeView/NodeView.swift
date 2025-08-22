@@ -29,6 +29,16 @@ struct NodeView: View {
     }
 
     var body: some View {
+        if node.label == "modifiers" && isViewPrintChangesEnabled {
+            let _ = print()
+            let _ = print("NodeView")
+            let _ = Self._printChanges()
+            let _ = print("----- NodeView DONE -----") //As this view is the last in the hierarchy, this helps to see when all changes have been printed
+            let _ = print()
+            let _ = print()
+            let _ = print()
+        }
+
         VStack {
             Text(self.nodeLabel)
                 .font(.headline)

@@ -29,6 +29,13 @@ struct ScrollableZoomableTreeView: View {
     }
 
     var body: some View {
+        if isViewPrintChangesEnabled {
+            let _ = print()
+            let _ = print("ScrollableZoomableTreeView")
+            let _ = Self._printChanges()
+            let _ = print()
+        }
+
         TreeView(tree: $tree)
             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                 LinesView(
