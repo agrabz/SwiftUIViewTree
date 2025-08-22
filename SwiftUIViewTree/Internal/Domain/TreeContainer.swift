@@ -22,7 +22,11 @@ final class TreeContainer {
                     }
             }
 
-            let newTree = getTreeFrom(originalView: originalView, modifiedView: modifiedView, maxDepth: maxDepth)
+            let newTree = getTreeFrom(
+                originalView: originalView,
+                modifiedView: modifiedView,
+                maxDepth: maxDepth
+            )
 
             // (Un)comment this to simulate delay in computing the tree
             try? await Task.sleep(for: .seconds(1))
