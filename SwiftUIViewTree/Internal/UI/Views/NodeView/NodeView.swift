@@ -35,6 +35,7 @@ struct NodeView: View {
                 .stroke(.black, lineWidth: 0.5)
         }
         .frame(width: 200, height: 200)
+        .frame(width: 370, height: 200)
         .padding(.all, 8)
     }
 }
