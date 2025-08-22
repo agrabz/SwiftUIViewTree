@@ -63,7 +63,7 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background(viewModel.getBackgroundColor())
+        .background(viewModel.getBackgroundColorAndLogChanges(for: self.node))
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
