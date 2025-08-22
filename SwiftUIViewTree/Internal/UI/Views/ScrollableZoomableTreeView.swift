@@ -23,7 +23,9 @@ struct ScrollableZoomableTreeView: View {
     init(tree: Tree) {
         self._tree = State(initialValue: tree)
 
-        print("ScrollableZoomableTreeView Init: \(Date())")
+        if isPerformanceLoggingEnabled {
+            print("ScrollableZoomableTreeView Init: \(Date())")
+        }
     }
 
     var body: some View {
@@ -56,7 +58,9 @@ struct ScrollableZoomableTreeView: View {
             .gesture(magnifyGesture)
             .simultaneousGesture(dragGesture)
             .onAppear {
-                print("ScrollableZoomableTreeView Appeared: \(Date())")
+                if isPerformanceLoggingEnabled {
+                    print("ScrollableZoomableTreeView Appeared: \(Date())")
+                }
             }
     }
 }
