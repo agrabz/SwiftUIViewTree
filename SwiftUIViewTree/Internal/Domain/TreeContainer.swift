@@ -91,10 +91,6 @@ private extension TreeContainer {
             return []
         }
 
-        //        print()
-        //        print(source)
-        //        print()
-
         let result = mirror.children.enumerated().map { (index, child) in
             let childMirror = Mirror(reflecting: child.value)
 
