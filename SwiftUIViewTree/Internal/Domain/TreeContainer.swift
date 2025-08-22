@@ -7,7 +7,11 @@ final class TreeContainer {
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
 
-    func computeViewTree(maxDepth: Int, source: any View) {
+    func computeViewTree(
+        maxDepth: Int,
+        originalView: any View,
+        modifiedView: any View
+    ) {
         Task {
             switch uiState {
                 case .computingTree:
@@ -22,9 +26,15 @@ final class TreeContainer {
                 node: .rootNode
             )
             newTree.children = convertToTreesRecursively(
-                mirror: Mirror(reflecting: source),
+                mirror: Mirror(reflecting: originalView),
+                source: originalView,
                 maxDepth: maxDepth
             )
+            newTree.children.append(contentsOf: convertToTreesRecursively(
+                mirror: Mirror(reflecting: modifiedView),
+                source: modifiedView,
+                maxDepth: maxDepth
+            ))
 
             // (Un)comment this to simulate delay in computing the tree
             try? await Task.sleep(for: .seconds(1))
@@ -55,12 +65,17 @@ final class TreeContainer {
 private extension TreeContainer {
     func convertToTreesRecursively( //TODO: to test, maybe it should be global function or just be somewhere else to make it usable for printViewTree?
         mirror: Mirror,
+        source: any View,
         maxDepth: Int = .max,
         currentDepth: Int = 0
     ) -> [Tree] {
         guard currentDepth < maxDepth else {
             return []
         }
+
+        //        print()
+        //        print(source)
+        //        print()
 
         let result = mirror.children.enumerated().map { (index, child) in
             let childMirror = Mirror(reflecting: child.value)
@@ -80,6 +95,7 @@ private extension TreeContainer {
             ) // as Any? see type(of:) docs
             childTree.children = convertToTreesRecursively(
                 mirror: childMirror,
+                source: source,
                 maxDepth: maxDepth,
                 currentDepth: currentDepth + 1
             )
