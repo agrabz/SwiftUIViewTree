@@ -27,6 +27,15 @@ If something got updated due to a state change it gets a new color:
 
 ![Simulator Screen Recording - iPhone 16 Pro - 2025-08-22 at 16 23 03](https://github.com/user-attachments/assets/87fba0f8-f6a2-417b-9a13-2130c51b3e70)
 
+And you can also see it in the console:
+
+```
+🚨Changes detected
+"isActive": "Bool"
+🟥Old value: "false"
+🟩New value: "true"
+```
+
 You can tap on any node to print its full details.
 
 ```
