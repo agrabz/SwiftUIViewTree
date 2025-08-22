@@ -22,55 +22,7 @@ final class TreeContainer {
                     }
             }
 
-            let originalViewMirror = Mirror(reflecting: originalView)
-
-            let originalViewRootNode = TreeNode(
-                type: "\(type(of: originalView))",
-                label: "originalView",
-                value: "\(originalView)",
-                displayStyle: "\(String(describing: originalViewMirror.displayStyle))",
-                subjectType: "\(originalViewMirror.subjectType)",
-                superclassMirror: String(describing: originalViewMirror.superclassMirror),
-                mirrorDescription: originalViewMirror.description,
-                childIndex: 0,
-                isParent: originalViewMirror.children.count > 0
-            )
-
-            let newTree = Tree(
-                node: .rootNode
-            )
-
-            newTree.children = [
-                Tree(node: originalViewRootNode)
-            ]
-
-            newTree.children[0].children = convertToTreesRecursively(
-                mirror: Mirror(reflecting: originalView),
-                source: originalView,
-                maxDepth: maxDepth
-            )
-
-            let modifiedViewMirror = Mirror(reflecting: modifiedView)
-
-            let modifiedViewRootNode = TreeNode(
-                type: "\(type(of: modifiedView))",
-                label: "modifiedView",
-                value: "\(modifiedView)",
-                displayStyle: "\(String(describing: modifiedViewMirror.displayStyle))",
-                subjectType: "\(modifiedViewMirror.subjectType)",
-                superclassMirror: String(describing: modifiedViewMirror.superclassMirror),
-                mirrorDescription: modifiedViewMirror.description,
-                childIndex: 0,
-                isParent: modifiedViewMirror.children.count > 0
-            )
-
-            newTree.children.append(Tree(node: modifiedViewRootNode))
-
-            newTree.children[1].children = convertToTreesRecursively(
-                mirror: Mirror(reflecting: modifiedView),
-                source: modifiedView,
-                maxDepth: maxDepth
-            )
+            let newTree = getTreeFrom(originalView: originalView, modifiedView: modifiedView, maxDepth: maxDepth)
 
             // (Un)comment this to simulate delay in computing the tree
             try? await Task.sleep(for: .seconds(1))
@@ -99,6 +51,38 @@ final class TreeContainer {
 }
 
 private extension TreeContainer {
+    func getTreeFrom(
+        originalView: any View,
+        modifiedView: any View,
+        maxDepth: Int
+    ) -> Tree {
+        let newTree = Tree(
+            node: .rootNode
+        )
+
+        let originalViewRootNode = getRootTreeNode(of: originalView, as: .originalView)
+
+        newTree.children.append(Tree(node: originalViewRootNode))
+
+        newTree.children[0].children = convertToTreesRecursively(
+            mirror: Mirror(reflecting: originalView),
+            source: originalView,
+            maxDepth: maxDepth
+        )
+
+        let modifiedViewRootNode = getRootTreeNode(of: modifiedView, as: .modifiedView)
+
+        newTree.children.append(Tree(node: modifiedViewRootNode))
+
+        newTree.children[1].children = convertToTreesRecursively(
+            mirror: Mirror(reflecting: modifiedView),
+            source: modifiedView,
+            maxDepth: maxDepth
+        )
+
+        return newTree
+    }
+
     func convertToTreesRecursively( //TODO: to test, maybe it should be global function or just be somewhere else to make it usable for printViewTree?
         mirror: Mirror,
         source: any View,
@@ -139,4 +123,27 @@ private extension TreeContainer {
         }
         return result
     }
+
+    func getRootTreeNode(of view: any View, as rootNodeType: RootNodeType) -> TreeNode {
+        let viewMirror = Mirror(reflecting: view)
+
+        let rootNode = TreeNode(
+            type: "\(type(of: view))",
+            label: rootNodeType.rawValue,
+            value: "\(view)",
+            displayStyle: "\(String(describing: viewMirror.displayStyle))",
+            subjectType: "\(viewMirror.subjectType)",
+            superclassMirror: String(describing: viewMirror.superclassMirror),
+            mirrorDescription: viewMirror.description,
+            childIndex: 0,
+            isParent: viewMirror.children.count > 0
+        )
+
+        return rootNode
+    }
+}
+
+enum RootNodeType: String {
+    case originalView
+    case modifiedView
 }
