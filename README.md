@@ -1,8 +1,8 @@
 # Usage
 
-Add one of the two view modifiers of this package to any of your `SwiftUI.View`s to see its full or partial view tree.
+Use `.renderViewTree(of: self)` to see the view tree visually.
 
-Use `.renderViewTree()` to see the view tree visually.
+<img width="928" height="520" alt="image" src="https://github.com/user-attachments/assets/976b6d36-cfb3-49cd-be47-14454a160bb0" />
 
 ```swift
 struct ContentView: View {
@@ -16,36 +16,39 @@ struct ContentView: View {
                 .font(.largeTitle)
                 .bold(isTapped ? true : false)
         }
-        .renderViewTree()
+        .renderViewTree(of: self) //<------
     }
 }
 ```
 
-<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-18 at 15 24 45" src="https://github.com/user-attachments/assets/ad327618-5ead-426e-a76b-8a3c49589a1d" />
-
 If something got updated due to a state change it gets a new color:
 
-https://github.com/user-attachments/assets/6531139b-8b70-4403-8d75-55aa7c255b02
+![Simulator Screen Recording - iPhone 16 Pro - 2025-08-22 at 16 22 31](https://github.com/user-attachments/assets/d36550e2-6b91-420f-be7a-6ef7850cee0f)
 
+![Simulator Screen Recording - iPhone 16 Pro - 2025-08-22 at 16 23 03](https://github.com/user-attachments/assets/87fba0f8-f6a2-417b-9a13-2130c51b3e70)
 
-You can tap on any node to see its full details.
+You can tap on any node to print its full details.
 
-<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-18 at 15 26 03" src="https://github.com/user-attachments/assets/6b0a344f-6996-4b23-92c0-c40cb6edd80b" />
+```
+Node Details:
+    Label: _value
+    Type: Bool
+    Value: true
+    DisplayStyle: nil
+    SubjectType: Bool
+    SuperclassMirror: nil
+    mirrorDescription: Mirror for Bool
+```
 
-Or you can pinch to zoom:
+You can also pinch to zoom and scroll to any direction:
 
-https://github.com/user-attachments/assets/2096aac2-7833-490b-9401-0e3b84b4db7f
-
-And obviously, also scroll to any direction:
-
-https://github.com/user-attachments/assets/c960256a-c7c6-45d5-96f3-f636733f69e5
-
+![SimulatorScreenRecording-iPhone16Pro-2025-08-22at16 18 24-ezgif com-rotate](https://github.com/user-attachments/assets/f436e600-1887-4dd1-8fa3-f3885f49d673)
 
 ## Why is this useful?
 
 One of the beauties of SwiftUI is that it hides the complexity of UI building from the developers, so one might ask "Why would I want to know the view tree of my view?"
 
-If you dealt enough with SwiftUI you could see that it sometimes produces surprises. To troubleshoot or better understand these surprises you might find this library useful.
+However this comes with a cost. SwiftUI can produce surprises in the form of unexpected redraws. To troubleshoot or better understand these surprises you might find this library useful.
 
 There are numerous articles on the web that are about this topic. I'll collect some of my favorites and reference them here as the repository matures.
 
@@ -53,9 +56,9 @@ There are numerous articles on the web that are about this topic. I'll collect s
 
 The implementation uses Swift's reflection API ([Mirror](https://developer.apple.com/documentation/swift/mirror)) **recursively**.
 
-While applying these view modifiers to your views might look attractive, it is important to be aware of its low performance with big views. 
+While applying these view modifiers to your views might look attractive, it is important to be aware of its low performance with big views, however with small or medium views it should be okay. 
 
-I'm working on its improvement, but it is suggested to use the `maxDepth` input parameter of both the `renderViewTree` and the `printViewTree` functions as below:
+For the time being you can use the `maxDepth` input parameter
 
 
 ```swift
@@ -69,13 +72,11 @@ struct ContentView: View {
                 .font(.largeTitle)
                 .bold()
         }
-        .renderViewTree(maxDepth: 2) // indicating that you only want to see 2 levels instead of the full view tree
+        .renderViewTree(of: self, maxDepth: 2) // indicating that you only want to see 2 levels instead of the full view tree
     }
 }
 
 ```
-
-<Image 5>
 
 ## Roadmap
 
@@ -85,9 +86,9 @@ struct ContentView: View {
 
 - Full unit test coverage
 
-- Performance improvements, better UX with big views. See if https://github.com/wickwirew/Runtime is better.
+- Performance improvements, better UX with really big views.
 
-- Expandable nodes
+- Expandable, collapsible branches
 
 - Closable, reopenable viewtree window
 
@@ -99,11 +100,20 @@ struct ContentView: View {
 
 - Dedicated documentation page
 
-- Merging only-childs with their parent (maybe?)
+- Explicit support for iPad and Mac.
 
 ## Alternatives
 
-To figure out the exact type of a `SwiftUI.View` you can simply change the `some View` return type of the `body` computed variable to a definitely wrong type like `String`. 
+Probably the closest alternative is using SwiftUI's built-in, documented, but still private APIs:
+
+```swift
+let _ = Self._printChanges()
+let _ = Self._logChanges()
+```
+
+As their name suggests, these APIs do not provide any UI, unlike this library.
+
+Another alternative to figure out the exact type of a `SwiftUI.View` you can simply change the `some View` return type of the `body` computed variable to a definitely wrong type like `String`. 
 
 With that you can see from the compiler error message the concrete type of your view. 
 
