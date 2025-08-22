@@ -22,19 +22,55 @@ final class TreeContainer {
                     }
             }
 
+            let originalViewMirror = Mirror(reflecting: originalView)
+
+            let originalViewRootNode = TreeNode(
+                type: "\(type(of: originalView))",
+                label: "originalView",
+                value: "\(originalView)",
+                displayStyle: "\(String(describing: originalViewMirror.displayStyle))",
+                subjectType: "\(originalViewMirror.subjectType)",
+                superclassMirror: String(describing: originalViewMirror.superclassMirror),
+                mirrorDescription: originalViewMirror.description,
+                childIndex: 0,
+                isParent: originalViewMirror.children.count > 0
+            )
+
             let newTree = Tree(
                 node: .rootNode
             )
-            newTree.children = convertToTreesRecursively(
+
+            newTree.children = [
+                Tree(node: originalViewRootNode)
+            ]
+
+            newTree.children[0].children = convertToTreesRecursively(
                 mirror: Mirror(reflecting: originalView),
                 source: originalView,
                 maxDepth: maxDepth
             )
-            newTree.children.append(contentsOf: convertToTreesRecursively(
+
+            let modifiedViewMirror = Mirror(reflecting: modifiedView)
+
+            let modifiedViewRootNode = TreeNode(
+                type: "\(type(of: modifiedView))",
+                label: "modifiedView",
+                value: "\(modifiedView)",
+                displayStyle: "\(String(describing: modifiedViewMirror.displayStyle))",
+                subjectType: "\(modifiedViewMirror.subjectType)",
+                superclassMirror: String(describing: modifiedViewMirror.superclassMirror),
+                mirrorDescription: modifiedViewMirror.description,
+                childIndex: 0,
+                isParent: modifiedViewMirror.children.count > 0
+            )
+
+            newTree.children.append(Tree(node: modifiedViewRootNode))
+
+            newTree.children[1].children = convertToTreesRecursively(
                 mirror: Mirror(reflecting: modifiedView),
                 source: modifiedView,
                 maxDepth: maxDepth
-            ))
+            )
 
             // (Un)comment this to simulate delay in computing the tree
             try? await Task.sleep(for: .seconds(1))
