@@ -61,24 +61,24 @@ private extension TreeContainer {
         )
 
         let originalViewRootNode = getRootTreeNode(of: originalView, as: .originalView)
-
-        newTree.children.append(Tree(node: originalViewRootNode))
-
-        newTree.children[0].children = convertToTreesRecursively(
+        let originalViewTree = Tree(node: originalViewRootNode)
+        originalViewTree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: originalView),
             source: originalView,
             maxDepth: maxDepth
         )
 
+        newTree.children.append(originalViewTree)
+
         let modifiedViewRootNode = getRootTreeNode(of: modifiedView, as: .modifiedView)
-
-        newTree.children.append(Tree(node: modifiedViewRootNode))
-
-        newTree.children[1].children = convertToTreesRecursively(
+        let modifiedViewTree = Tree(node: modifiedViewRootNode)
+        modifiedViewTree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: modifiedView),
             source: modifiedView,
             maxDepth: maxDepth
         )
+
+        newTree.children.append(modifiedViewTree)
 
         return newTree
     }
