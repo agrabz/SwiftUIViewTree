@@ -28,6 +28,10 @@ struct NodeView: View {
         }
     }
 
+    private var isCollapsed: Bool {
+        node.isCollapsed
+    }
+
     var body: some View {
         if node.label == "modifiers" && isViewPrintChangesEnabled {
             let _ = print()
@@ -40,9 +44,13 @@ struct NodeView: View {
         }
 
         VStack {
-            Text(self.nodeLabel)
-                .font(.headline)
-                .fontWeight(.black)
+            HStack {
+                Text(self.nodeLabel)
+                    .font(.headline)
+                    .fontWeight(.black)
+
+                Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
+            }
 
             HStack {
                 Text(self.nodeType)
@@ -71,6 +79,9 @@ struct NodeView: View {
         }
         .frame(width: 370, height: 200)
         .padding(.all, 8)
+        .onTapGesture {
+            node.isCollapsed.toggle() //TODO: tapping shouldn't cause background change
+        }
     }
 }
 
@@ -80,4 +91,22 @@ extension NodeView: Equatable {
         lhs.node.type == rhs.node.type &&
         lhs.node.value == rhs.node.value
     }
+}
+
+#Preview {
+    NodeView(
+        node: .constant(
+            .init(
+                type: "Type",
+                label: "Label",
+                value: "Value",
+                displayStyle: "DisplayStyle",
+                subjectType: "SubjectType",
+                superclassMirror: "SuperclassMirror",
+                mirrorDescription: "MirrorDescription",
+                childIndex: 0,
+                isParent: true
+            )
+        )
+    )
 }

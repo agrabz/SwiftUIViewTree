@@ -15,10 +15,12 @@ struct TreeView: View {
             ParentNodeView(
                 parentNode: $tree.parentNode
             )
-            
-            ChildrenNodeView(
-                children: $tree.children
-            )
+
+            if tree.parentNode.isCollapsed == false {
+                ChildrenNodeView(
+                    children: $tree.children
+                )
+            }
         }
     }
 }
