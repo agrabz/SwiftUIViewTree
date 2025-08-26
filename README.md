@@ -61,6 +61,8 @@ However this comes with a cost. SwiftUI can produce surprises in the form of une
 
 There are numerous articles on the web that are about this topic. I'll collect some of my favorites and reference them here as the repository matures.
 
+- [SWIFTUI THAT PAIN: REFRESH , REDRAWS, RESET— X — FILE](https://thexcodewhisperer.medium.com/swiftui-refresh-x-file-4502c98e00cd)
+
 ## Performance
 
 The implementation uses Swift's reflection API ([Mirror](https://developer.apple.com/documentation/swift/mirror)) **recursively**.
