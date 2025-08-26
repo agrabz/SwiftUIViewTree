@@ -11,8 +11,20 @@ final class NodeViewModel {
     private var currentIndex = 0
 
     private var previousNodeValue: String?
+    private var previousCollapseState: Bool?
 
     func getBackgroundColorAndLogChanges(for node: TreeNode) -> Color {
+        defer {
+            previousCollapseState = node.isCollapsed
+        }
+        guard
+            node.isCollapsed == previousCollapseState
+        else {
+#error("real changes are also effected but they shouldn't")
+            let previousIndex = currentIndex - 1
+            return colors.safeGetElement(at: previousIndex % colors.count) ?? colors[0]
+        }
+
         if previousNodeValue == nil {
             previousNodeValue = node.value
         } else if let previousNodeValue, previousNodeValue != node.value {

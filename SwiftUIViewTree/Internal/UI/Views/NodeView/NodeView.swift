@@ -71,6 +71,9 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
+        .onTapGesture {
+            node.isCollapsed.toggle() //TODO: tapping shouldn't cause background change
+        }
         .background(viewModel.getBackgroundColorAndLogChanges(for: self.node))
         .cornerRadius(20)
         .overlay {
@@ -79,9 +82,7 @@ struct NodeView: View {
         }
         .frame(width: 370, height: 200)
         .padding(.all, 8)
-        .onTapGesture {
-            node.isCollapsed.toggle() //TODO: tapping shouldn't cause background change
-        }
+
     }
 }
 
