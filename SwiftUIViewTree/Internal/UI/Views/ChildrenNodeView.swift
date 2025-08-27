@@ -16,9 +16,9 @@ struct ChildrenNodeView: View {
                 TreeView(tree: .init(get: {
                     child
                 }, set: { newValue in
-                    if let index = children.firstIndex { child in
+                    if let index = children.firstIndex(where: { child in
                         child.parentNode.id == newValue.parentNode.id
-                    } {
+                    }) {
                         children[index] = newValue
                     }
                 }))

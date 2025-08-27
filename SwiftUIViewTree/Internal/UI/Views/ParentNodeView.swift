@@ -13,30 +13,19 @@ struct ParentNodeView: View {
             let _ = print()
         }
 
-        NodeView(
-            node: $parentNode
-        )
-        .simultaneousGesture(
-            TapGesture()
-                .onEnded { _ in
-                    print(
-                        """
-                            
-                        Node Details:
-                            Label: \(parentNode.label)
-                            Type: \(parentNode.type)
-                            Value: \(parentNode.value)
-                            DisplayStyle: \(parentNode.displayStyle)
-                            SubjectType: \(parentNode.subjectType)
-                            SuperclassMirror: \(parentNode.superclassMirror)
-                            mirrorDescription: \(parentNode.mirrorDescription)
-                            
-                        """
+        NodeView(node: $parentNode)
+            .simultaneousGesture(
+                CollapseNodeGesture(
+                    node: $parentNode
+                )
+                .exclusively(
+                    before: PrintNodeDetailsGesture(
+                        node: $parentNode
                     )
-                }
-        )
-        .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-            [parentNode.id: anchor]
-        }
+                )
+            )
+            .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
+                [parentNode.id: anchor]
+            }
     }
 }

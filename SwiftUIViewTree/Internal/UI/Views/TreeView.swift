@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TreeView: View {
     @Binding var tree: Tree
+    @State private var collapsedNodesStore: CollapsedNodesStore = CollapsedNodesStore.shared
 
     var body: some View {
         if tree.parentNode.label == "modifiers" && isViewPrintChangesEnabled {
@@ -15,10 +16,12 @@ struct TreeView: View {
             ParentNodeView(
                 parentNode: $tree.parentNode
             )
-            
-            ChildrenNodeView(
-                children: $tree.children
-            )
+
+            if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
+                ChildrenNodeView(
+                    children: $tree.children
+                )
+            }
         }
     }
 }

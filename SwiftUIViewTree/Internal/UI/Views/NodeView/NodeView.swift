@@ -28,6 +28,10 @@ struct NodeView: View {
         }
     }
 
+    private var isCollapsed: Bool {
+        CollapsedNodesStore.shared.isCollapsed(nodeID: node.id)
+    }
+
     var body: some View {
         if node.label == "modifiers" && isViewPrintChangesEnabled {
             let _ = print()
@@ -40,9 +44,15 @@ struct NodeView: View {
         }
 
         VStack {
-            Text(self.nodeLabel)
-                .font(.headline)
-                .fontWeight(.black)
+            HStack {
+                Text(self.nodeLabel)
+                    .font(.headline)
+                    .fontWeight(.black)
+
+                if self.node.isParent {
+                    Image(systemName: self.isCollapsed ? "chevron.right" : "chevron.down")
+                }
+            }
 
             HStack {
                 Text(self.nodeType)
@@ -63,8 +73,15 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background(viewModel.getBackgroundColorAndLogChanges(for: self.node))
+        .background( //TODO: use onChange(of:) instead?
+            viewModel.getBackgroundColorAndLogChanges(node: node)
+        )
         .cornerRadius(20)
+        .overlay(alignment: .topTrailing) {
+            if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
+                NodeBadge(count: node.childrenCount)
+            }
+        }
         .overlay {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.black, lineWidth: 0.5)
