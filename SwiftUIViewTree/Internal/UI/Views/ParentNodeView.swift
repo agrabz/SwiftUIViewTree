@@ -17,26 +17,7 @@ struct ParentNodeView: View {
             node: $parentNode
         )
         .simultaneousGesture(
-            TapGesture()
-                .onEnded { _ in
-                    print(
-                        """
-                            
-                        Node Details:
-                            Label: \(parentNode.label)
-                            Type: \(parentNode.type)
-                            Value: \(parentNode.value)
-                            DisplayStyle: \(parentNode.displayStyle)
-                            SubjectType: \(parentNode.subjectType)
-                            SuperclassMirror: \(parentNode.superclassMirror)
-                            mirrorDescription: \(parentNode.mirrorDescription)
-                            
-                        """
-                    )
-                }
-        )
-        .simultaneousGesture(
-            LongPressGesture(minimumDuration: 0.3)
+            TapGesture(count: 2)
                 .onEnded { _ in
                     guard parentNode.isParent else { return }
 
@@ -44,6 +25,26 @@ struct ParentNodeView: View {
                         CollapsedNodesStore.shared.toggleCollapse(nodeID: parentNode.id)
                     }
                 }
+                .exclusively(
+                    before:
+                        TapGesture()
+                        .onEnded { _ in
+                            print(
+                                """
+                                    
+                                Node Details:
+                                    Label: \(parentNode.label)
+                                    Type: \(parentNode.type)
+                                    Value: \(parentNode.value)
+                                    DisplayStyle: \(parentNode.displayStyle)
+                                    SubjectType: \(parentNode.subjectType)
+                                    SuperclassMirror: \(parentNode.superclassMirror)
+                                    mirrorDescription: \(parentNode.mirrorDescription)
+                                    
+                                """
+                            )
+                        }
+                )
         )
         .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
             [parentNode.id: anchor]
