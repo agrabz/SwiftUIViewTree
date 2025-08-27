@@ -20,15 +20,6 @@ final class NodeViewModel {
             previousNodeValue = node.value
         }
 
-        if node.label == "some" && node.type == "StoredLocation<Bool>" {
-            print("here")
-        }
-
-        if node.label == "isActive" && node.type == "Bool" {
-            print("here2")
-        }
-
-//        #error("collapsing an unchanged parent will first change color then for 2nd or 3rd click collapse")
         if let previousCollapseState, previousCollapseState != CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
             let previousIndex = currentIndex - 1
             return colors.safeGetElement(at: previousIndex % colors.count) ?? colors[0]
@@ -42,7 +33,8 @@ final class NodeViewModel {
             print("🟩New value:", "\"\(node.value)\"") //TODO: values are sometimes very long. some better highlighting will be needed.
             print()
         } else if previousNodeValue == node.value {
-            print("Shouldn't be here, please report it as a bug here: https://github.com/agrabz/SwiftUIViewTree/issues") //TODO: there are already some logs like this...:)
+            let previousIndex = currentIndex - 1
+            return colors.safeGetElement(at: previousIndex % colors.count) ?? colors[0]
         }
 
         let backgroundColor = colors.safeGetElement(at: currentIndex % colors.count) ?? colors[0]
