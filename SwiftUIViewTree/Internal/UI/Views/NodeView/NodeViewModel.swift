@@ -1,11 +1,7 @@
 import SwiftUI
 
-@Observable
 final class NodeViewModel {
 
-    let node: TreeNode
-
-    @ObservationIgnored
     let colors: [Color] = [
         .purple.opacity(0.8),
         .red.opacity(0.8),
@@ -13,21 +9,14 @@ final class NodeViewModel {
         .green.opacity(0.8),
     ]
 
-    @ObservationIgnored
     private var currentIndex = 0
 
-    @ObservationIgnored
     private var previousNodeValue: String?
-    @ObservationIgnored
     private var previousCollapseState: Bool?
 
-    init(node: TreeNode) {
-        self.node = node
-    }
-
-    func getBackgroundColorAndLogChanges() -> Color {
+    func getBackgroundColorAndLogChanges(node: TreeNode) -> Color {
         defer {
-            previousCollapseState = node.isCollapsed
+            previousCollapseState = CollapsedNodesStore.shared.isCollapsed(nodeID: node.id)
             previousNodeValue = node.value
         }
 
@@ -40,7 +29,7 @@ final class NodeViewModel {
         }
 
 //        #error("collapsing an unchanged parent will first change color then for 2nd or 3rd click collapse")
-        if let previousCollapseState, previousCollapseState != node.isCollapsed {
+        if let previousCollapseState, previousCollapseState != CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
             let previousIndex = currentIndex - 1
             return colors.safeGetElement(at: previousIndex % colors.count) ?? colors[0]
         }

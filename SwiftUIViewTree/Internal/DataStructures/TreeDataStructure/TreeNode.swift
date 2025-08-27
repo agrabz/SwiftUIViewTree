@@ -11,7 +11,7 @@ final class TreeNode: Equatable {
     let mirrorDescription: String
     let childIndex: Int //If <unknown> label is used for multiple nodes, then we need to distinguish them by index. It may need a more stable differentiator.
     let isParent: Bool
-    var isCollapsed = false //TODO: or some SwiftUI .preference or Envrionment?
+//    var isCollapsed = false //TODO: or some SwiftUI .preference or Envrionment?
 
     // Everything except the `value`, because its change, does not mean that the node has changed and thus that the NodeView should be updated.
     var id: String {
