@@ -43,71 +43,69 @@ struct NodeView: View {
             let _ = print()
         }
 
-        ZStack {
-            VStack {
-                HStack {
-                    Text(self.nodeLabel)
-                        .font(.headline)
-                        .fontWeight(.black)
+        VStack {
+            HStack {
+                Text(self.nodeLabel)
+                    .font(.headline)
+                    .fontWeight(.black)
 
-                    if self.node.isParent {
-                        Image(systemName: self.isCollapsed ? "chevron.right" : "chevron.down")
-                    }
-                }
-
-                HStack {
-                    Text(self.nodeType)
-                        .font(.caption)
-                        .bold()
-                    Text(self.nodeValue)
-                        .font(.caption)
-                        .fontDesign(.monospaced)
-                        .italic()
-                }
-                .padding(.all, 8)
-                .background(.white)
-                .cornerRadius(20)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(.black, lineWidth: 0.5)
+                if self.node.isParent {
+                    Image(systemName: self.isCollapsed ? "chevron.right" : "chevron.down")
                 }
             }
-            .foregroundStyle(.black)
+
+            HStack {
+                Text(self.nodeType)
+                    .font(.caption)
+                    .bold()
+                Text(self.nodeValue)
+                    .font(.caption)
+                    .fontDesign(.monospaced)
+                    .italic()
+            }
             .padding(.all, 8)
-            //TODO: use onChange(of:) instead?
-            .onLongPressGesture {
-                guard node.isParent else { return }
-                withAnimation {
-                    CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
-                }
-            }
-            .background(
-                viewModel.getBackgroundColorAndLogChanges(node: node)
-            )
+            .background(.white)
             .cornerRadius(20)
-            .overlay(alignment: .topTrailing) {
-                if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
-                    Text("\(node.childrenCount)")
-                        .bold()
-                        .frame(width: 16, height: 16)
-                        .font(.body)
-                        .foregroundColor(.black)
-                        .padding(8.0)
-                        .background(.red)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .offset(
-                            x: 8,
-                            y: -8
-                        )
-                }
-            }
             .overlay {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(.black, lineWidth: 0.5)
             }
-            .frame(width: 370, height: 200)
-            .padding(.all, 8)
         }
+        .foregroundStyle(.black)
+        .padding(.all, 8)
+        //TODO: use onChange(of:) instead?
+        .onLongPressGesture {
+            guard node.isParent else { return }
+            withAnimation {
+                CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
+            }
+        }
+        .background(
+            viewModel.getBackgroundColorAndLogChanges(node: node)
+        )
+        .cornerRadius(20)
+        .overlay(alignment: .topTrailing) {
+            if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
+                Text("\(node.childrenCount)")
+                    .bold()
+                    .frame(width: 16, height: 16)
+                    .font(.body)
+                    .foregroundColor(.black)
+                    .padding(8.0)
+                    .background(.red)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .offset(
+                        x: 8,
+                        y: -8
+                    )
+            }
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(.black, lineWidth: 0.5)
+        }
+        .frame(width: 370, height: 200)
+        .padding(.all, 8)
     }
 }
 
