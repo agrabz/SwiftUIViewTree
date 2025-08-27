@@ -16,26 +16,22 @@ final class NodeViewModel {
     func getBackgroundColorAndLogChanges(for node: TreeNode) -> Color {
         defer {
             previousCollapseState = node.isCollapsed
+            previousNodeValue = node.value
         }
-        guard
-            node.isCollapsed == previousCollapseState
-        else {
-#error("real changes are also effected but they shouldn't")
+
+        if let previousCollapseState, previousCollapseState != node.isCollapsed {
             let previousIndex = currentIndex - 1
             return colors.safeGetElement(at: previousIndex % colors.count) ?? colors[0]
         }
 
-        if previousNodeValue == nil {
-            previousNodeValue = node.value
-        } else if let previousNodeValue, previousNodeValue != node.value {
+        if let previousNodeValue, previousNodeValue != node.value {
             print()
             print("🚨Changes detected")
             print("\"\(node.label)\":", "\"\(node.type)\"")
             print("🟥Old value:", "\"\(previousNodeValue)\"")
             print("🟩New value:", "\"\(node.value)\"") //TODO: values are sometimes very long. some better highlighting will be needed.
             print()
-            self.previousNodeValue = node.value
-        } else {
+        } else if previousNodeValue == node.value {
             print("Shouldn't be here, please report it as a bug here: https://github.com/agrabz/SwiftUIViewTree/issues") //TODO: there are already some logs like this...:)
         }
 
