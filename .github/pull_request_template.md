@@ -7,7 +7,7 @@
 - [ ] Build warnings eliminated.
 
 # Description
-<!-- Please insert a meaningful description for the reviewers also screenshots when applicable. -->
+Please insert a meaningful description for the reviewers also screenshots when applicable.
 
 ## Decisions
 <!--- The decisions that has been taken or considered to implement this change --->
