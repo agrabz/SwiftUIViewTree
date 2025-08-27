@@ -98,9 +98,3 @@ extension NodeView: Equatable {
         lhs.node.value == rhs.node.value
     }
 }
-
-#Preview {
-    NodeView(
-        node: .constant(.rootNode)
-    )
-}
