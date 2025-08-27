@@ -73,12 +73,6 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .onLongPressGesture {
-            guard node.isParent else { return }
-            withAnimation {
-                CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
-            }
-        }
         .background( //TODO: use onChange(of:) instead?
             viewModel.getBackgroundColorAndLogChanges(node: node)
         )

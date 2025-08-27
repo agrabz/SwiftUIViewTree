@@ -35,6 +35,16 @@ struct ParentNodeView: View {
                     )
                 }
         )
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.3)
+                .onEnded { _ in
+                    guard parentNode.isParent else { return }
+
+                    withAnimation {
+                        CollapsedNodesStore.shared.toggleCollapse(nodeID: parentNode.id)
+                    }
+                }
+        )
         .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
             [parentNode.id: anchor]
         }
