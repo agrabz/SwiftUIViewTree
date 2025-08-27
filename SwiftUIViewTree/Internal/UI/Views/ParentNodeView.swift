@@ -13,41 +13,39 @@ struct ParentNodeView: View {
             let _ = print()
         }
 
-        NodeView(
-            node: $parentNode
-        )
-        .simultaneousGesture(
-            TapGesture(count: 2)
-                .onEnded { _ in
-                    guard parentNode.isParent else { return }
+        NodeView(node: $parentNode)
+            .simultaneousGesture(
+                TapGesture(count: 2)
+                    .onEnded { _ in
+                        guard parentNode.isParent else { return }
 
-                    withAnimation {
-                        CollapsedNodesStore.shared.toggleCollapse(nodeID: parentNode.id)
-                    }
-                }
-                .exclusively(
-                    before:
-                        TapGesture()
-                        .onEnded { _ in
-                            print(
-                                """
-                                    
-                                Node Details:
-                                    Label: \(parentNode.label)
-                                    Type: \(parentNode.type)
-                                    Value: \(parentNode.value)
-                                    DisplayStyle: \(parentNode.displayStyle)
-                                    SubjectType: \(parentNode.subjectType)
-                                    SuperclassMirror: \(parentNode.superclassMirror)
-                                    mirrorDescription: \(parentNode.mirrorDescription)
-                                    
-                                """
-                            )
+                        withAnimation {
+                            CollapsedNodesStore.shared.toggleCollapse(nodeID: parentNode.id)
                         }
-                )
-        )
-        .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
-            [parentNode.id: anchor]
-        }
+                    }
+                    .exclusively(
+                        before:
+                            TapGesture()
+                            .onEnded { _ in
+                                print(
+                                    """
+                                        
+                                    Node Details:
+                                        Label: \(parentNode.label)
+                                        Type: \(parentNode.type)
+                                        Value: \(parentNode.value)
+                                        DisplayStyle: \(parentNode.displayStyle)
+                                        SubjectType: \(parentNode.subjectType)
+                                        SuperclassMirror: \(parentNode.superclassMirror)
+                                        mirrorDescription: \(parentNode.mirrorDescription)
+                                        
+                                    """
+                                )
+                            }
+                    )
+            )
+            .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
+                [parentNode.id: anchor]
+            }
     }
 }
