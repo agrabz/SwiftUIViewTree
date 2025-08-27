@@ -30,7 +30,7 @@ final class TreeNode: Equatable {
         superclassMirror: String,
         mirrorDescription: String,
         childIndex: Int,
-        childrenCount: Int,
+        childrenCount: Int
     ) {
         self.type = type
         self.label = label

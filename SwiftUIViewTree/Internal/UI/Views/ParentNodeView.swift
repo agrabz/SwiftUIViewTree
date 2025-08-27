@@ -15,34 +15,14 @@ struct ParentNodeView: View {
 
         NodeView(node: $parentNode)
             .simultaneousGesture(
-                TapGesture(count: 2)
-                    .onEnded { _ in
-                        guard parentNode.isParent else { return }
-
-                        withAnimation {
-                            CollapsedNodesStore.shared.toggleCollapse(nodeID: parentNode.id)
-                        }
-                    }
-                    .exclusively(
-                        before:
-                            TapGesture()
-                            .onEnded { _ in
-                                print(
-                                    """
-                                        
-                                    Node Details:
-                                        Label: \(parentNode.label)
-                                        Type: \(parentNode.type)
-                                        Value: \(parentNode.value)
-                                        DisplayStyle: \(parentNode.displayStyle)
-                                        SubjectType: \(parentNode.subjectType)
-                                        SuperclassMirror: \(parentNode.superclassMirror)
-                                        mirrorDescription: \(parentNode.mirrorDescription)
-                                        
-                                    """
-                                )
-                            }
+                CollapseNodeGesture(
+                    node: $parentNode
+                )
+                .exclusively(
+                    before: PrintNodeDetailsGesture(
+                        node: $parentNode
                     )
+                )
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                 [parentNode.id: anchor]
