@@ -104,7 +104,8 @@ private extension TreeContainer {
                     superclassMirror: String(describing: childMirror.superclassMirror),
                     mirrorDescription: childMirror.description,
                     childIndex: index,
-                    isParent: childMirror.children.count > 0
+                    isParent: childMirror.children.count > 0,
+                    childrenCount: childMirror.children.count
                 )
             ) // as Any? see type(of:) docs
             childTree.children = convertToTreesRecursively(
@@ -141,7 +142,8 @@ private extension TreeContainer {
             superclassMirror: String(describing: viewMirror.superclassMirror),
             mirrorDescription: viewMirror.description,
             childIndex: 0,
-            isParent: viewMirror.children.count > 0
+            isParent: viewMirror.children.count > 0,
+            childrenCount: viewMirror.children.count
         )
 
         return rootNode

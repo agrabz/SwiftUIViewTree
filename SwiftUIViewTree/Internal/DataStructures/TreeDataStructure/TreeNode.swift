@@ -11,6 +11,7 @@ final class TreeNode: Equatable {
     let mirrorDescription: String
     let childIndex: Int //If <unknown> label is used for multiple nodes, then we need to distinguish them by index. It may need a more stable differentiator.
     let isParent: Bool
+    let childrenCount: Int
 //    var isCollapsed = false //TODO: or some SwiftUI .preference or Envrionment?
 
     // Everything except the `value`, because its change, does not mean that the node has changed and thus that the NodeView should be updated.
@@ -27,7 +28,8 @@ final class TreeNode: Equatable {
         superclassMirror: String,
         mirrorDescription: String,
         childIndex: Int,
-        isParent: Bool
+        isParent: Bool,
+        childrenCount: Int,
     ) {
         self.type = type
         self.label = label
@@ -38,6 +40,7 @@ final class TreeNode: Equatable {
         self.mirrorDescription = mirrorDescription
         self.childIndex = childIndex
         self.isParent = isParent
+        self.childrenCount = childrenCount
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
@@ -58,6 +61,7 @@ extension TreeNode {
         superclassMirror: "Root node",
         mirrorDescription: "Root node",
         childIndex: 0,
-        isParent: true
+        isParent: true,
+        childrenCount: 2 //modifiedView+originalView
     )
 }

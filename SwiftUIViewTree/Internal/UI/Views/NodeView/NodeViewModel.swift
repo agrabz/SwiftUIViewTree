@@ -20,9 +20,8 @@ final class NodeViewModel {
             previousNodeValue = node.value
         }
 
-        if let previousCollapseState, previousCollapseState != CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
-            let previousIndex = currentIndex - 1
-            return colors.safeGetElement(at: previousIndex % colors.count) ?? colors[0]
+        if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
+            return .gray.opacity(0.8)
         }
 
         if let previousNodeValue, previousNodeValue != node.value {
