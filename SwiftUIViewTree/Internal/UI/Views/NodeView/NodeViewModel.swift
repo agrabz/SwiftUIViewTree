@@ -12,11 +12,9 @@ final class NodeViewModel {
     private var currentIndex = 0
 
     private var previousNodeValue: String?
-    private var previousCollapseState: Bool?
 
     func getBackgroundColorAndLogChanges(node: TreeNode) -> Color {
         defer {
-            previousCollapseState = CollapsedNodesStore.shared.isCollapsed(nodeID: node.id)
             previousNodeValue = node.value
         }
 

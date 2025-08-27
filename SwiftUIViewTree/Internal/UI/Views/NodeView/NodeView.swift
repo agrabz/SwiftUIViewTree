@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct NodeView: View {
-    @State var viewModel = NodeViewModel()
-    @Bindable var node: TreeNode
+    @State private var viewModel = NodeViewModel()
+    @Binding var node: TreeNode
 
     private var nodeLabel: String {
         if node.label.count > 20 {
@@ -121,7 +121,6 @@ extension NodeView: Equatable {
 
 #Preview {
     NodeView(
-        viewModel: .init(),
-        node: .rootNode
+        node: .constant(.rootNode)
     )
 }

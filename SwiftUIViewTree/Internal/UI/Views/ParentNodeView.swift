@@ -14,7 +14,7 @@ struct ParentNodeView: View {
         }
 
         NodeView(
-                node: parentNode
+            node: $parentNode
         )
         .simultaneousGesture(
             TapGesture()
