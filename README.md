@@ -53,6 +53,11 @@ You can also pinch to zoom and scroll to any direction:
 
 ![SimulatorScreenRecording-iPhone16Pro-2025-08-22at16 18 24-ezgif com-rotate](https://github.com/user-attachments/assets/f436e600-1887-4dd1-8fa3-f3885f49d673)
 
+If certain parts of the tree are redundant for you, then you can collapse and later reopen them:
+
+![fixed-4](https://github.com/user-attachments/assets/5d156e71-f1c9-497f-9d4c-21f2830b1317)
+
+
 ## Why is this useful?
 
 One of the beauties of SwiftUI is that it hides the complexity of UI building from the developers, so one might ask "Why would I want to know the view tree of my view?"
