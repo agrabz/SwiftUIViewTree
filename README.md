@@ -55,7 +55,7 @@ You can also pinch to zoom and scroll to any direction:
 
 If certain parts of the tree are redundant for you, then you can collapse and later reopen them:
 
-![fixed-4](https://github.com/user-attachments/assets/5d156e71-f1c9-497f-9d4c-21f2830b1317)
+![fixed-5](https://github.com/user-attachments/assets/0c4ccb9a-e04f-4b03-aacf-43a4f1e523ad)
 
 
 ## Why is this useful?
