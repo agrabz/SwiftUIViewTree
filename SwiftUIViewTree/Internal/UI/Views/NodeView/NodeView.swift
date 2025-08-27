@@ -1,39 +1,39 @@
 import SwiftUI
 
 struct NodeView: View {
-    @State private var viewModel = NodeViewModel()
-    @Binding var node: TreeNode
+    @State var viewModel: NodeViewModel
+//    @Bindable var node: TreeNode
 
     private var nodeLabel: String {
-        if node.label.count > 20 {
-            String(node.label.prefix(20)) + "..."
+        if viewModel.node.label.count > 20 {
+            String(viewModel.node.label.prefix(20)) + "..."
         } else {
-            node.label
+            viewModel.node.label
         }
     }
 
     private var nodeType: String {
-        if node.type.count > 20 {
-            String(node.type.prefix(20)) + "..."
+        if viewModel.node.type.count > 20 {
+            String(viewModel.node.type.prefix(20)) + "..."
         } else {
-            node.type
+            viewModel.node.type
         }
     }
 
     private var nodeValue: String {
-        if node.value.count > 20 {
-            String(node.value.prefix(20)) + "..."
+        if viewModel.node.value.count > 20 {
+            String(viewModel.node.value.prefix(20)) + "..."
         } else {
-            node.value
+            viewModel.node.value
         }
     }
 
     private var isCollapsed: Bool {
-        node.isCollapsed
+        viewModel.node.isCollapsed
     }
 
     var body: some View {
-        if node.label == "modifiers" && isViewPrintChangesEnabled {
+        if viewModel.node.label == "modifiers" && isViewPrintChangesEnabled {
             let _ = print()
             let _ = print("NodeView")
             let _ = Self._printChanges()
@@ -49,7 +49,7 @@ struct NodeView: View {
                     .font(.headline)
                     .fontWeight(.black)
 
-                Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
+                Image(systemName: self.isCollapsed ? "chevron.right" : "chevron.down")
             }
 
             HStack {
@@ -71,10 +71,15 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .onTapGesture {
-            node.isCollapsed.toggle() //TODO: tapping shouldn't cause background change
+        //TODO: use onChange(of:) instead?
+        .onLongPressGesture {
+            withAnimation {
+                viewModel.node.isCollapsed.toggle()
+            }
         }
-        .background(viewModel.getBackgroundColorAndLogChanges(for: self.node))
+        .background(
+            viewModel.getBackgroundColorAndLogChanges()
+        )
         .cornerRadius(20)
         .overlay {
             RoundedRectangle(cornerRadius: 20)
@@ -88,26 +93,28 @@ struct NodeView: View {
 
 extension NodeView: Equatable {
     static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-        lhs.node.label == rhs.node.label &&
-        lhs.node.type == rhs.node.type &&
-        lhs.node.value == rhs.node.value
+        lhs.viewModel.node.label == rhs.viewModel.node.label &&
+        lhs.viewModel.node.type == rhs.viewModel.node.type &&
+        lhs.viewModel.node.value == rhs.viewModel.node.value
     }
 }
 
 #Preview {
     NodeView(
-        node: .constant(
-            .init(
-                type: "Type",
-                label: "Label",
-                value: "Value",
-                displayStyle: "DisplayStyle",
-                subjectType: "SubjectType",
-                superclassMirror: "SuperclassMirror",
-                mirrorDescription: "MirrorDescription",
-                childIndex: 0,
-                isParent: true
-            )
+        viewModel: .init(
+            node: /*.constant(*/
+                .init(
+                    type: "Type",
+                    label: "Label",
+                    value: "Value",
+                    displayStyle: "DisplayStyle",
+                    subjectType: "SubjectType",
+                    superclassMirror: "SuperclassMirror",
+                    mirrorDescription: "MirrorDescription",
+                    childIndex: 0,
+                    isParent: true
+                )
+            //        )
         )
     )
 }
