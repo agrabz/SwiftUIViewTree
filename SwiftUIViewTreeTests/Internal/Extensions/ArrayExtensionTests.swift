@@ -23,5 +23,23 @@ struct ArrayExtensionTests {
         //THEN
         #expect(result != nil)
     }
+
+    @Test(
+        arguments: [
+            -1,
+            5,
+            6,
+        ]
+    )
+    func isNil(safeIndex: Int) async throws {
+        //GIVEN
+        let array = [1, 2, 3, 4, 5]
+
+        //WHEN
+        let result = array.safeGetElement(at: safeIndex)
+
+        //THEN
+        #expect(result == nil)
+    }
 }
 
