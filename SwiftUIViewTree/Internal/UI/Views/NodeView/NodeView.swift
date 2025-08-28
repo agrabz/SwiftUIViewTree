@@ -78,7 +78,7 @@ struct NodeView: View {
         )
         .cornerRadius(20)
         .overlay(alignment: .topTrailing) {
-            if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
+            if isCollapsed {
                 NodeBadge(count: node.childrenCount)
             }
         }
@@ -88,13 +88,5 @@ struct NodeView: View {
         }
         .frame(width: 370, height: 200)
         .padding(.all, 8)
-    }
-}
-
-extension NodeView: Equatable {
-    static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-        lhs.node.label == rhs.node.label &&
-        lhs.node.type == rhs.node.type &&
-        lhs.node.value == rhs.node.value
     }
 }

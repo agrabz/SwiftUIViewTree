@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct TreeView: View {
+    @State private var collapsedNodesStore = CollapsedNodesStore.shared
+
     @Binding var tree: Tree
-    @State private var collapsedNodesStore: CollapsedNodesStore = CollapsedNodesStore.shared
 
     var body: some View {
         if tree.parentNode.label == "modifiers" && isViewPrintChangesEnabled {
