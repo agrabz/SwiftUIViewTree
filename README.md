@@ -136,6 +136,8 @@ struct ContentView: View {
 
 - Explicit support for iPad and Mac.
 
+- CI to run before every PR
+
 # Alternatives
 
 Probably the closest alternative is using SwiftUI's built-in, documented, but still private APIs:
