@@ -74,6 +74,10 @@ Node Details:
     mirrorDescription: Mirror for Bool
 ```
 
+## Swift 6 Support
+
+The solution is fully compatible with Swift 6.
+
 # Why is this useful?
 
 SwiftUI can produce unexpected updates that are hard to troubleshoot with the tools provided by Apple.
@@ -117,8 +121,6 @@ struct ContentView: View {
 - Add licence
 
 - Full unit test coverage
-
-- Swift 6 support
 
 - Performance improvements, better UX with really big views.
 
