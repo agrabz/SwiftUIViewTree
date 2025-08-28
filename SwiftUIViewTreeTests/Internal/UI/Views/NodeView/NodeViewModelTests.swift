@@ -15,7 +15,7 @@ struct NodeViewModelTests {
     func initialColor() async throws {
         //GIVEN
         let nodeViewModel = NodeViewModel()
-        var mock = TreeNode.createMock()
+        let mock = TreeNode.createMock()
 
         //WHEN
         let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
@@ -42,5 +42,21 @@ struct NodeViewModelTests {
             //THEN
             #expect(colorAfterCollapsing == UIConstants.Color.collapsedNodeBackground)
         }
+    }
+
+    @Test
+    func colorAfterNoChange() async throws {
+        //GIVEN
+        let nodeViewModel = NodeViewModel()
+        let mock = TreeNode.createMock()
+
+        let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+        #expect(firstColor == nodeViewModel.colors.first)
+
+        //WHEN
+        let colorAfterNoChange = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+
+        //THEN
+        #expect(colorAfterNoChange == firstColor)
     }
 }
