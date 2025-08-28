@@ -59,4 +59,21 @@ struct NodeViewModelTests {
         //THEN
         #expect(colorAfterNoChange == firstColor)
     }
+
+    @Test
+    func colorAfterValueChange() async throws {
+        //GIVEN
+        let nodeViewModel = NodeViewModel()
+        let mock1 = TreeNode.createMock()
+
+        let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock1)
+        #expect(firstColor == nodeViewModel.colors.first)
+
+        //WHEN
+        let mock2 = TreeNode.createMock(value: "new value")
+        let colorAfterValueChange = nodeViewModel.getBackgroundColorAndLogChanges(node: mock2)
+
+        //THEN
+        #expect(colorAfterValueChange == firstColor)
+    }
 }
