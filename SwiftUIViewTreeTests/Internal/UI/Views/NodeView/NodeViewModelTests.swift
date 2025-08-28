@@ -78,6 +78,24 @@ struct NodeViewModelTests {
     }
 
     @Test
+    func colorAfter_FirstNoChange_ThenStillNoChange() async throws {
+        //GIVEN
+        let nodeViewModel = NodeViewModel()
+        let mock = TreeNode.createMock()
+
+        let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+        #expect(firstColor == nodeViewModel.colors.first)
+        let colorAfterNoChange = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+        #expect(colorAfterNoChange == firstColor)
+
+        //WHEN
+        let colorAfterStillNoChange = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+
+        //THEN
+        #expect(colorAfterStillNoChange == colorAfterNoChange)
+    }
+
+    @Test
     func colorAfter_FirstNoChange_ThenValueChange() async throws {
         //GIVEN
         let nodeViewModel = NodeViewModel()
