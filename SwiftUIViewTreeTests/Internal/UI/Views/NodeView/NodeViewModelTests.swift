@@ -4,13 +4,7 @@ import Testing
 
 @Suite
 struct NodeViewModelTests {
-
-    /// To test:
-    /// initial color
-    /// collapsing and expanding nodes
-    /// new color when different value
-    /// no color change when same value
-
+    //TODO: printing should be testable
     @Test
     func initialColor() async throws {
         //GIVEN
