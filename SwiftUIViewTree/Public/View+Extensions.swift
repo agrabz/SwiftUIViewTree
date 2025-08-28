@@ -16,6 +16,7 @@ public extension View {
     //    }
 
     //TODO: documentation
+    //TODO: maxDepth must be greater than 1
     func renderViewTree(of originalView: any View, maxDepth: Int = .max) -> some View {
         TreeContainer.shared.computeViewTree(
             maxDepth: maxDepth,
