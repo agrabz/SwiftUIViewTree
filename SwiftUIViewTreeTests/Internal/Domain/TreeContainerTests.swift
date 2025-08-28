@@ -36,6 +36,7 @@ struct TreeContainerTests {
             originalView: originalView,
             modifiedView: modifiedView
         )
+        #expect(treeContainer.isRecomputing == false)
         try? await Task.sleep(for: .seconds(2))
 
         //THEN
@@ -49,5 +50,51 @@ struct TreeContainerTests {
         #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
         #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id == "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
         #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
+    }
+
+    @Test
+    func computeViewTree_NonFirstTime() async {
+        //GIVEN
+        let treeContainer = TreeContainer()
+
+        let originalView = Text("Hello, World!")
+        let modifiedView = Text("Hello, World!").bold()
+
+        treeContainer.computeViewTree(
+            maxDepth: .max,
+            originalView: originalView,
+            modifiedView: modifiedView
+        )
+        #expect(treeContainer.isRecomputing == false)
+        try? await Task.sleep(for: .seconds(2))
+
+        #expect(treeContainer.isRecomputing == false)
+        guard case .treeComputed = treeContainer.uiState else {
+            Issue.record("Unexpected state after computing the tree \(treeContainer.uiState)")
+            return
+        }
+
+        //WHEN
+        treeContainer.computeViewTree(
+            maxDepth: .max,
+            originalView: originalView,
+            modifiedView: modifiedView
+        )
+        //THEN
+        #expect(treeContainer.isRecomputing == true)
+
+        try? await Task.sleep(for: .seconds(2))
+        #expect(treeContainer.isRecomputing == false)
+
+        guard case .treeComputed(let computedUIState) = treeContainer.uiState else {
+            Issue.record("Unexpected state after computing the tree \(treeContainer.uiState)")
+            return
+        }
+
+        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id == "originalView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
+        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id == "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
+
     }
 }
