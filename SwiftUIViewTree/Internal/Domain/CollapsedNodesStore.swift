@@ -4,12 +4,11 @@ import Synchronization
 
 @Observable
 final class CollapsedNodesStore: Sendable {
-    static let shared = CollapsedNodesStore()
-    private init() {}
+    @TaskLocal static var shared = CollapsedNodesStore()
 
     private let _collapsedNodeIDs = Mutex<Set<String>>([])
 
-    var collapsedNodeIDs: Set<String> {
+    private var collapsedNodeIDs: Set<String> {
         get {
             self.access(keyPath: \.collapsedNodeIDs)
             return _collapsedNodeIDs.withLock { set in
