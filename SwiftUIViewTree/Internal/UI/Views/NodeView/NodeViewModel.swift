@@ -19,7 +19,7 @@ final class NodeViewModel {
         }
 
         if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
-            return .gray.opacity(0.8)
+            return UIConstants.Color.collapsedNodeBackground
         }
 
         if let previousNodeValue, previousNodeValue != node.value {

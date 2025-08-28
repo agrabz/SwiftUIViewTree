@@ -1,0 +1,46 @@
+
+@testable import SwiftUIViewTree
+import Testing
+
+@Suite
+struct NodeViewModelTests {
+
+    /// To test:
+    /// initial color
+    /// collapsing and expanding nodes
+    /// new color when different value
+    /// no color change when same value
+
+    @Test
+    func initialColor() async throws {
+        //GIVEN
+        let nodeViewModel = NodeViewModel()
+        var mock = TreeNode.createMock()
+
+        //WHEN
+        let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+
+        //THEN
+        #expect(firstColor == nodeViewModel.colors.first)
+    }
+
+    @Test
+    func collapsedIsGray() async throws {
+        CollapsedNodesStore.$shared.withValue(.init()) {
+            //GIVEN
+            let nodeViewModel = NodeViewModel()
+            let mock = TreeNode.createMock()
+
+            let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+            #expect(firstColor == nodeViewModel.colors.first)
+
+            //WHEN
+            CollapsedNodesStore.shared.toggleCollapse(nodeID: mock.id)
+
+            let colorAfterCollapsing = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+
+            //THEN
+            #expect(colorAfterCollapsing == UIConstants.Color.collapsedNodeBackground)
+        }
+    }
+}

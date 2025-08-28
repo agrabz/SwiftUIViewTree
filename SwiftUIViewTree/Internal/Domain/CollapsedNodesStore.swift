@@ -28,6 +28,7 @@ final class CollapsedNodesStore: Sendable {
         collapsedNodeIDs.contains(nodeID)
     }
 
+    //TODO: String should only be the ID of the node, check again that conf talk about this.
     func toggleCollapse(nodeID: String) {
         if isCollapsed(nodeID: nodeID) {
             collapsedNodeIDs.remove(nodeID)
