@@ -1,10 +1,11 @@
 
+import Foundation
 @testable import SwiftUIViewTree
 
 extension TreeNode {
     static func createMock(
         type: String = "type",
-        label: String = "label",
+        label: String = UUID().uuidString, // To make sure that mocks are different
         value: String = "value",
         displayStyle: String = "displayStyle",
         subjectType: String = "subjectType",
