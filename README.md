@@ -1,6 +1,6 @@
 # Usage
 
-Use `.renderViewTree(of: self)` to see the view tree visually.
+Use `.renderViewTree(of: self)` to see the view tree visually next to your original view.
 
 <img width="928" height="520" alt="image" src="https://github.com/user-attachments/assets/976b6d36-cfb3-49cd-be47-14454a160bb0" />
 
@@ -21,11 +21,17 @@ struct ContentView: View {
 }
 ```
 
+# Features
+
+## Node color change on updates
+
 If something got updated due to a state change it gets a new color:
 
-![Simulator Screen Recording - iPhone 16 Pro - 2025-08-22 at 16 22 31](https://github.com/user-attachments/assets/d36550e2-6b91-420f-be7a-6ef7850cee0f)
+![fixed-6](https://github.com/user-attachments/assets/211e8183-a862-4966-92b2-97ea98cd2acc)
 
-![Simulator Screen Recording - iPhone 16 Pro - 2025-08-22 at 16 23 03](https://github.com/user-attachments/assets/87fba0f8-f6a2-417b-9a13-2130c51b3e70)
+![fixed-7](https://github.com/user-attachments/assets/55294e33-0915-4e3a-8de4-1ef5a17a4d92)
+
+## Change printing to the console
 
 And you can also see it in the console:
 
@@ -35,6 +41,25 @@ And you can also see it in the console:
 🟥Old value: "false"
 🟩New value: "true"
 ```
+
+## Pinch to zoom and scroll
+
+You can also pinch to zoom and scroll to any direction:
+
+![SimulatorScreenRecording-iPhone16Pro-2025-08-22at16 18 24-ezgif com-rotate](https://github.com/user-attachments/assets/f436e600-1887-4dd1-8fa3-f3885f49d673)
+
+## Collapse and re-expand
+
+If certain parts of the tree are redundant for you, then you can double tap to collapse and later reopen them:
+
+![fixed-5](https://github.com/user-attachments/assets/0c4ccb9a-e04f-4b03-aacf-43a4f1e523ad)
+
+A collapsed node is always gray and a badge indicates how many direct children it has:
+
+<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-28 at 11 04 57" src="https://github.com/user-attachments/assets/457309b8-4b26-4a82-9f3a-c181ed502bad" />
+
+
+## See full reflection details
 
 You can tap on any node to print its full details.
 
@@ -49,26 +74,17 @@ Node Details:
     mirrorDescription: Mirror for Bool
 ```
 
-You can also pinch to zoom and scroll to any direction:
+# Why is this useful?
 
-![SimulatorScreenRecording-iPhone16Pro-2025-08-22at16 18 24-ezgif com-rotate](https://github.com/user-attachments/assets/f436e600-1887-4dd1-8fa3-f3885f49d673)
+SwiftUI can produce unexpected updates that are hard to troubleshoot with the tools provided by Apple.
 
-If certain parts of the tree are redundant for you, then you can collapse and later reopen them:
-
-![fixed-5](https://github.com/user-attachments/assets/0c4ccb9a-e04f-4b03-aacf-43a4f1e523ad)
-
-
-## Why is this useful?
-
-One of the beauties of SwiftUI is that it hides the complexity of UI building from the developers, so one might ask "Why would I want to know the view tree of my view?"
-
-However this comes with a cost. SwiftUI can produce surprises in the form of unexpected redraws. To troubleshoot or better understand these surprises you might find this library useful.
+To troubleshoot and better understand the surprises of SwiftUI you might find this library useful.
 
 There are numerous articles on the web that are about this topic. I'll collect some of my favorites and reference them here as the repository matures.
 
 - [SWIFTUI THAT PAIN: REFRESH , REDRAWS, RESET— X — FILE](https://thexcodewhisperer.medium.com/swiftui-refresh-x-file-4502c98e00cd)
 
-## Performance
+# Performance
 
 The implementation uses Swift's reflection API ([Mirror](https://developer.apple.com/documentation/swift/mirror)) **recursively**.
 
@@ -94,7 +110,7 @@ struct ContentView: View {
 
 ```
 
-## Roadmap
+# Roadmap
 
 - Support for Swift Package Manager (SPM)
 
@@ -102,9 +118,9 @@ struct ContentView: View {
 
 - Full unit test coverage
 
-- Performance improvements, better UX with really big views.
+- Swift 6 support
 
-- Expandable, collapsible branches
+- Performance improvements, better UX with really big views.
 
 - Closable, reopenable viewtree window
 
@@ -118,7 +134,7 @@ struct ContentView: View {
 
 - Explicit support for iPad and Mac.
 
-## Alternatives
+# Alternatives
 
 Probably the closest alternative is using SwiftUI's built-in, documented, but still private APIs:
 
@@ -176,11 +192,11 @@ What's worse is that figuring that out is not as straightforward as it was in th
 
 2. You don't see all the details that are made visible by this package. For example all the properties of the types.
 
-## Support
+# Support
 
 If you face any problems, or have any feature request please feel free to open an Issue.
 
-## Contribution
+# Contribution
 
 While I'm not new to open source development, I'm new to being the author of a library. Any help is welcome, please feel free to open PRs.
 
