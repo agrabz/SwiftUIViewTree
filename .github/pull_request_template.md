@@ -14,7 +14,7 @@ Please insert a meaningful description for the reviewers also screenshots when a
 
 
 # Screenshot/Demos
-<!-- If make sense, please add screenshots or screen recordings to help the reviewers understand the changes better. -->
+If make sense, please add screenshots or screen recordings to help the reviewers understand the changes better.
 
 <details>
   <summary>iPhone Screenshots/Recordings</summary>

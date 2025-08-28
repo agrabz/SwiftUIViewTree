@@ -1,12 +1,29 @@
 
 import Foundation
+import Synchronization
 
 @Observable
-final class CollapsedNodesStore {
+final class CollapsedNodesStore: Sendable {
     static let shared = CollapsedNodesStore()
     private init() {}
 
-    var collapsedNodeIDs: Set<String> = []
+    private let _collapsedNodeIDs = Mutex<Set<String>>([])
+
+    var collapsedNodeIDs: Set<String> {
+        get {
+            self.access(keyPath: \.collapsedNodeIDs)
+            return _collapsedNodeIDs.withLock { set in
+                set
+            }
+        }
+        set {
+            self.withMutation(keyPath: \.collapsedNodeIDs) {
+                _collapsedNodeIDs.withLock { set in
+                    set = newValue
+                }
+            }
+        }
+    }
 
     func isCollapsed(nodeID: String) -> Bool {
         collapsedNodeIDs.contains(nodeID)
@@ -18,9 +35,5 @@ final class CollapsedNodesStore {
         } else {
             collapsedNodeIDs.insert(nodeID)
         }
-    }
-
-    func clear() {
-        collapsedNodeIDs.removeAll()
     }
 }

@@ -1,10 +1,10 @@
 import Foundation
 
 @Observable
-final class TreeNode: Equatable {
-    var type: String
-    var label: String
-    var value: String
+final class TreeNode: Sendable, Equatable {
+    let type: String
+    let label: String
+    let value: String
     let displayStyle: String
     let subjectType: String
     let superclassMirror: String
