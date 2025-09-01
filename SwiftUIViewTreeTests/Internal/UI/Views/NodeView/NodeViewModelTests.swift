@@ -129,8 +129,6 @@ struct NodeViewModelTests {
         #expect(colorAfter_Second_ValueChange == nodeViewModel.colors.safeGetElement(at: 2))
     }
 
-    //TODO: maybe test when all colors are used up and it starts from beginning again?
-
     @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
     func printAfterValueChange() {
         //GIVEN

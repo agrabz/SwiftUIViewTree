@@ -37,7 +37,7 @@ struct TreeContainerTests {
             modifiedView: modifiedView
         )
         #expect(treeContainer.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(2))
+        try? await Task.sleep(for: .seconds(TreeContainer.waitTimeInSeconds + 0.5))
 
         //THEN
         #expect(treeContainer.isRecomputing == false)
@@ -66,7 +66,7 @@ struct TreeContainerTests {
             modifiedView: modifiedView
         )
         #expect(treeContainer.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(2))
+        try? await Task.sleep(for: .seconds(TreeContainer.waitTimeInSeconds + 0.5))
 
         #expect(treeContainer.isRecomputing == false)
         guard case .treeComputed = treeContainer.uiState else {
@@ -81,10 +81,10 @@ struct TreeContainerTests {
             modifiedView: modifiedView
         )
         //THEN
-        try? await Task.sleep(for: .seconds(0.2))
+        try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
         #expect(treeContainer.isRecomputing == true)
 
-        try? await Task.sleep(for: .seconds(2))
+        try? await Task.sleep(for: .seconds(TreeContainer.waitTimeInSeconds + 0.5))
         #expect(treeContainer.isRecomputing == false)
 
         guard case .treeComputed(let computedUIState) = treeContainer.uiState else {
@@ -92,9 +92,19 @@ struct TreeContainerTests {
             return
         }
 
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id == .init(rawValue: "originalView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2"))
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id == .init(rawValue: "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2"))
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
+        #expect(
+            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id ==
+                .init(rawValue: "originalView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+        )
+        #expect( // More thorough test doesn't seem to be justified
+            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0
+        )
+        #expect(
+            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id ==
+                .init(rawValue: "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+        )
+        #expect( // More thorough test doesn't seem to be justified
+            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0
+        )
     }
 }
