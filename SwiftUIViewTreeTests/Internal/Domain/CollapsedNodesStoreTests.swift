@@ -2,7 +2,7 @@
 @testable import SwiftUIViewTree
 import Testing
 
-@Suite(.viewTree)
+@Suite(.viewTree())
 struct CollapsedNodesStoreTests { //TODO: use a test trait instead
     @Test
     func isCollapsed_True() async throws {

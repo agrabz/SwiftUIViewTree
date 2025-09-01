@@ -18,7 +18,7 @@ struct NodeViewModelTests {
         #expect(firstColor == nodeViewModel.colors.first)
     }
 
-    @Test(.viewTree)
+    @Test(.viewTree())
     func collapsedIsGray() async throws {
         //GIVEN
         let nodeViewModel = NodeViewModel()
@@ -131,4 +131,24 @@ struct NodeViewModelTests {
     }
 
     //TODO: maybe test when all colors are used up and it starts from beginning again?
+
+    @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
+    func printAfterValueChange() {
+        //GIVEN
+        let nodeViewModel = NodeViewModel()
+        let mock1 = TreeNode.createMock()
+
+        _ = nodeViewModel.getBackgroundColorAndLogChanges(node: mock1)
+
+        //WHEN
+        let mock2 = TreeNode.createMock(value: "new value")
+        _ = nodeViewModel.getBackgroundColorAndLogChanges(node: mock2)
+
+        //THEN
+        guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
+            Issue.record("Unexpected non-spy: \(ViewTreeLogger.shared)")
+            return
+        }
+        #expect(spyViewTreeLogger.hasBeenCalled)
+    }
 }
