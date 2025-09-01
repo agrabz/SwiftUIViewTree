@@ -24,8 +24,8 @@ struct LinesView: View {
 }
 
 private extension LinesView {
-    func pointFor(nodeID: String, in proxy: GeometryProxy) -> CGPoint? { //TODO: to test?
-        guard let anchor = nodeCenters[nodeID] else { return nil }
+    func pointFor(nodeID: TreeNode.ID, in proxy: GeometryProxy) -> CGPoint? { //TODO: to test?
+        guard let anchor = nodeCenters[nodeID.rawValue] else { return nil }
         return proxy[anchor]
     }
 
