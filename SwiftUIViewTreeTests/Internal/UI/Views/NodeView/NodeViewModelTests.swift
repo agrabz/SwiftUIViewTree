@@ -18,24 +18,22 @@ struct NodeViewModelTests {
         #expect(firstColor == nodeViewModel.colors.first)
     }
 
-    @Test
+    @Test(.viewTree)
     func collapsedIsGray() async throws {
-        CollapsedNodesStore.$shared.withValue(.init()) {
-            //GIVEN
-            let nodeViewModel = NodeViewModel()
-            let mock = TreeNode.createMock()
-
-            let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
-            #expect(firstColor == nodeViewModel.colors.first)
-
-            //WHEN
-            CollapsedNodesStore.shared.toggleCollapse(nodeID: mock.id)
-
-            let colorAfterCollapsing = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
-
-            //THEN
-            #expect(colorAfterCollapsing == UIConstants.Color.collapsedNodeBackground)
-        }
+        //GIVEN
+        let nodeViewModel = NodeViewModel()
+        let mock = TreeNode.createMock()
+        
+        let firstColor = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+        #expect(firstColor == nodeViewModel.colors.first)
+        
+        //WHEN
+        CollapsedNodesStore.shared.toggleCollapse(nodeID: mock.id)
+        
+        let colorAfterCollapsing = nodeViewModel.getBackgroundColorAndLogChanges(node: mock)
+        
+        //THEN
+        #expect(colorAfterCollapsing == UIConstants.Color.collapsedNodeBackground)
     }
 
     @Test
