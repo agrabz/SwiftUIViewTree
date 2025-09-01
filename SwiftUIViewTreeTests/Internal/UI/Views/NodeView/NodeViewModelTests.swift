@@ -4,7 +4,6 @@ import Testing
 
 @Suite
 struct NodeViewModelTests {
-    //TODO: printing should be testable
     @Test
     func initialColor() async throws {
         //GIVEN

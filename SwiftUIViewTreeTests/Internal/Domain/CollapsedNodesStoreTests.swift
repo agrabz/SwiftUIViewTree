@@ -3,7 +3,7 @@
 import Testing
 
 @Suite(.viewTree())
-struct CollapsedNodesStoreTests { //TODO: use a test trait instead
+struct CollapsedNodesStoreTests {
     @Test
     func isCollapsed_True() async throws {
         //GIVEN
