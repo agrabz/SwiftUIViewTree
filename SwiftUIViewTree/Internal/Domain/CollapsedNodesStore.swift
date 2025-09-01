@@ -2,10 +2,9 @@
 import Foundation
 import Synchronization
 
-@MainActor
 @Observable
 final class CollapsedNodesStore: Sendable {
-    static var shared = CollapsedNodesStore()
+    @TaskLocal static var shared = CollapsedNodesStore()
 
     private let _collapsedNodeIDs = Mutex<Set<String>>([])
 

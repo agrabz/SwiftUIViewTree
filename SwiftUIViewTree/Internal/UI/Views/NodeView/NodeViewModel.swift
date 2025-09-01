@@ -1,6 +1,5 @@
 import SwiftUI
 
-@MainActor
 final class NodeViewModel {
 
     let colors: [Color] = [
