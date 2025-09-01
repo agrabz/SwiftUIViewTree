@@ -81,6 +81,7 @@ struct TreeContainerTests {
             modifiedView: modifiedView
         )
         //THEN
+        try? await Task.sleep(for: .seconds(0.2))
         #expect(treeContainer.isRecomputing == true)
 
         try? await Task.sleep(for: .seconds(2))
