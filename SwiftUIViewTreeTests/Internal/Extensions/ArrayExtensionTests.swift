@@ -31,12 +31,12 @@ struct ArrayExtensionTests {
             6,
         ]
     )
-    func isNil(safeIndex: Int) async throws {
+    func isNil(unsafeIndex: Int) async throws {
         //GIVEN
         let array = [1, 2, 3, 4, 5]
 
         //WHEN
-        let result = array.safeGetElement(at: safeIndex)
+        let result = array.safeGetElement(at: unsafeIndex)
 
         //THEN
         #expect(result == nil)
