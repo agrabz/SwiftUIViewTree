@@ -5,9 +5,9 @@
       location = "group:TestPlan.xctestplan">
    </FileRef>
    <FileRef
-      location = "absolute:/Users/I332442/Documents/Xcode/SwiftUIViewTree/DemoApp/DemoApp.xcodeproj">
+      location = "group:DemoApp/DemoApp.xcodeproj">
    </FileRef>
    <FileRef
-      location = "container:../..">
+      location = "container:SwiftUIViewTree">
    </FileRef>
 </Workspace>

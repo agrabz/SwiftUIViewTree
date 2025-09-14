@@ -1,20 +1,15 @@
 {
   "configurations" : [
     {
-      "id" : "17CDBBF2-3908-40C0-9DD6-D54C232B6786",
-      "name" : "Test Scheme Action",
+      "id" : "057AC4F4-564E-4932-837F-8C7CB4D3F403",
+      "name" : "Configuration 1",
       "options" : {
 
       }
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false,
-    "targetForVariableExpansion" : {
-      "containerPath" : "container:DemoApp.xcodeproj",
-      "identifier" : "0B3BCCEE2E775BD500233FA3",
-      "name" : "DemoApp"
-    }
+
   },
   "testTargets" : [
     {
