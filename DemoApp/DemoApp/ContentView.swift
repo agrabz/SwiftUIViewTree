@@ -1,4 +1,6 @@
+
 import SwiftUI
+import SwiftUIViewTree
 
 //struct ContentView: View {
 //    var body: some View {
@@ -7,10 +9,9 @@ import SwiftUI
 //                .imageScale(.large)
 //                .foregroundStyle(.tint)
 //            Text("Hello, world!")
-//                .font(.largeTitle)
-//                .bold()
 //        }
-//        .renderViewTree(of: self) // <--
+//        .padding()
+//        .renderViewTree(of: self)
 //    }
 //}
 
@@ -25,11 +26,10 @@ struct ContentView: View {
                 .font(.largeTitle)
                 .bold(isTapped ? true : false)
         }
-//        .printViewTree()
-//        .renderViewTree(maxDepth: 3)
         .renderViewTree(of: self)
     }
 }
+
 
 #Preview {
     ContentView()

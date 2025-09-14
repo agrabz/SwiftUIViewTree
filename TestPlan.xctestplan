@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "057AC4F4-564E-4932-837F-8C7CB4D3F403",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/SwiftUIViewTree",
+        "identifier" : "SwiftUIViewTreeTests",
+        "name" : "SwiftUIViewTreeTests"
+      }
+    }
+  ],
+  "version" : 1
+}

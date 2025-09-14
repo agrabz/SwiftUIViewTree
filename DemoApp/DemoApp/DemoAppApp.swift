@@ -1,7 +1,8 @@
+
 import SwiftUI
 
 @main
-struct SwiftUIViewTreeApp: App {
+struct DemoAppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
