@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B3BCD232E775D1000233FA3 /* SwiftUIViewTreeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B3BCD222E775D1000233FA3 /* SwiftUIViewTreeKit */; };
+		0B3BCD262E77605500233FA3 /* SwiftUIViewTree in Frameworks */ = {isa = PBXBuildFile; productRef = 0B3BCD252E77605500233FA3 /* SwiftUIViewTree */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B3BCD232E775D1000233FA3 /* SwiftUIViewTreeKit in Frameworks */,
+				0B3BCD262E77605500233FA3 /* SwiftUIViewTree in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = DemoApp;
 			packageProductDependencies = (
-				0B3BCD222E775D1000233FA3 /* SwiftUIViewTreeKit */,
+				0B3BCD252E77605500233FA3 /* SwiftUIViewTree */,
 			);
 			productName = DemoApp;
 			productReference = 0B3BCCEF2E775BD500233FA3 /* DemoApp.app */;
@@ -101,7 +101,7 @@
 			mainGroup = 0B3BCCE62E775BD500233FA3;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				0B3BCD212E775D1000233FA3 /* XCLocalSwiftPackageReference "../SwiftUIViewTreeKit" */,
+				0B3BCD242E77605500233FA3 /* XCLocalSwiftPackageReference "../SwiftUIViewTree" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B3BCCF02E775BD500233FA3 /* Products */;
@@ -331,16 +331,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		0B3BCD212E775D1000233FA3 /* XCLocalSwiftPackageReference "../SwiftUIViewTreeKit" */ = {
+		0B3BCD242E77605500233FA3 /* XCLocalSwiftPackageReference "../SwiftUIViewTree" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../SwiftUIViewTreeKit;
+			relativePath = ../SwiftUIViewTree;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0B3BCD222E775D1000233FA3 /* SwiftUIViewTreeKit */ = {
+		0B3BCD252E77605500233FA3 /* SwiftUIViewTree */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIViewTreeKit;
+			productName = SwiftUIViewTree;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

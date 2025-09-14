@@ -1,10 +1,10 @@
 
-@testable import SwiftUIViewTreeKit
+@testable import SwiftUIViewTree
 
 final class SpyViewTreeLogger: ViewTreeLoggerProtocol {
     nonisolated(unsafe) var hasBeenCalled = false
 
-    func logChangesOf(node: SwiftUIViewTreeKit.TreeNode, previousNodeValue: String) {
+    func logChangesOf(node: SwiftUIViewTree.TreeNode, previousNodeValue: String) {
         hasBeenCalled = true
     }
 }

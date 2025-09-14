@@ -1,5 +1,5 @@
 
-@testable import SwiftUIViewTreeKit
+@testable import SwiftUIViewTree
 import Testing
 
 @Suite(.viewTree())

@@ -1,6 +1,6 @@
 
 import Testing
-@testable import SwiftUIViewTreeKit
+@testable import SwiftUIViewTree
 
 struct ViewTreeTrait: TestTrait, SuiteTrait, TestScoping {
 

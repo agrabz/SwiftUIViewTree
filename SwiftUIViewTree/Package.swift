@@ -4,21 +4,21 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftUIViewTreeKit",
+    name: "SwiftUIViewTree",
     platforms: [
         .iOS(.v18),
     ],
     products: [
         .library(
-            name: "SwiftUIViewTreeKit",
-            targets: ["SwiftUIViewTreeKit"]),
+            name: "SwiftUIViewTree",
+            targets: ["SwiftUIViewTree"]),
     ],
     targets: [
         .target(
-            name: "SwiftUIViewTreeKit"),
+            name: "SwiftUIViewTree"),
         .testTarget(
-            name: "SwiftUIViewTreeKitTests",
-            dependencies: ["SwiftUIViewTreeKit"]
+            name: "SwiftUIViewTreeTests",
+            dependencies: ["SwiftUIViewTree"]
         ),
     ]
 )

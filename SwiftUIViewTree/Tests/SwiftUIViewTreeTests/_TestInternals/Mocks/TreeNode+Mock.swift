@@ -1,6 +1,6 @@
 
 import Foundation
-@testable import SwiftUIViewTreeKit
+@testable import SwiftUIViewTree
 
 extension TreeNode {
     static func createMock(
