@@ -116,11 +116,7 @@ struct ContentView: View {
 
 # Roadmap
 
-- Support for Swift Package Manager (SPM)
-
 - Add licence
-
-- Full unit test coverage
 
 - Performance improvements, better UX with really big views.
 
