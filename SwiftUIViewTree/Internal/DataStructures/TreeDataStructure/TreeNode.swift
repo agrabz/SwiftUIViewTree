@@ -2,6 +2,10 @@ import Foundation
 
 @Observable
 final class TreeNode: Sendable, Equatable {
+    struct ID: Hashable {
+        let rawValue: String
+    }
+
     let type: String
     let label: String
     let value: String
@@ -17,8 +21,8 @@ final class TreeNode: Sendable, Equatable {
     }
 
     // Everything except the `value`, because its change, does not mean that the node has changed and thus that the NodeView should be updated.
-    var id: String {
-        "\(label)-\(type)-\(displayStyle)-\(subjectType)-\(superclassMirror)-\(mirrorDescription)-\(childIndex)-\(childrenCount)"
+    var id: TreeNode.ID {
+        ID(rawValue: "\(label)-\(type)-\(displayStyle)-\(subjectType)-\(superclassMirror)-\(mirrorDescription)-\(childIndex)-\(childrenCount)")
     }
 
     init(

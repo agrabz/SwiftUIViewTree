@@ -4,6 +4,8 @@ import SwiftUI
 @Observable
 final class TreeContainer {
     static var shared: TreeContainer = .init()
+    // Change this value to simulate longer/shorter computation times
+    static let waitTimeInSeconds = 1.0
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
 
@@ -12,6 +14,7 @@ final class TreeContainer {
         originalView: any View,
         modifiedView: any View
     ) {
+        //TODO: review if this Task can be placed somewhere else, so we might not need the sleep below?
         Task {
             switch uiState {
                 case .computingTree:
@@ -28,8 +31,8 @@ final class TreeContainer {
                 maxDepth: maxDepth
             )
 
-            // (Un)comment this to simulate delay in computing the tree
-            try? await Task.sleep(for: .seconds(1))
+            //TODO: without this delay, the view doesn't update properly in some cases (small-medium views only?)
+            try? await Task.sleep(for: .seconds(Self.waitTimeInSeconds))
 
             withAnimation {
                 isRecomputing = false

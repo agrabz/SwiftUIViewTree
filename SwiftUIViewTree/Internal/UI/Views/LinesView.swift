@@ -2,7 +2,7 @@ import SwiftUI
 
 struct LinesView: View {
     let parentTree: Tree
-    let nodeCenters: [String: Anchor<CGPoint>] //TODO: ID collision can happen with this setup so we'd need something else like position in tree or parent ID
+    let nodeCenters: [TreeNode.ID: Anchor<CGPoint>] //TODO: ID collision can happen with this setup so we'd need something else like position in tree or parent ID
 
    var body: some View {
         GeometryReader { proxy in
@@ -24,7 +24,7 @@ struct LinesView: View {
 }
 
 private extension LinesView {
-    func pointFor(nodeID: String, in proxy: GeometryProxy) -> CGPoint? { //TODO: to test?
+    func pointFor(nodeID: TreeNode.ID, in proxy: GeometryProxy) -> CGPoint? { //TODO: to test?
         guard let anchor = nodeCenters[nodeID] else { return nil }
         return proxy[anchor]
     }

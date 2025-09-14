@@ -19,16 +19,14 @@ final class NodeViewModel {
         }
 
         if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
-            return .gray.opacity(0.8)
+            return UIConstants.Color.collapsedNodeBackground
         }
 
         if let previousNodeValue, previousNodeValue != node.value {
-            print()
-            print("🚨Changes detected")
-            print("\"\(node.label)\":", "\"\(node.type)\"")
-            print("🟥Old value:", "\"\(previousNodeValue)\"")
-            print("🟩New value:", "\"\(node.value)\"") //TODO: values are sometimes very long. some better highlighting will be needed.
-            print()
+            ViewTreeLogger.shared.logChangesOf(
+                node: node,
+                previousNodeValue: previousNodeValue
+            )
         } else if previousNodeValue == node.value {
             let previousIndex = currentIndex - 1
             return colors.safeGetElement(at: previousIndex % colors.count) ?? colors[0]
