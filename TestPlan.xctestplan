@@ -1,0 +1,55 @@
+{
+  "configurations" : [
+    {
+      "id" : "FFAC43B4-CEC3-4070-880F-8B625FBBC7DB",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "enabled" : false,
+        "key" : "OS_ACTIVITY_MODE",
+        "value" : "default"
+      },
+      {
+        "enabled" : false,
+        "key" : "IDELogRedirectionPolicy",
+        "value" : "stdioToOSLog"
+      },
+      {
+        "enabled" : false,
+        "key" : "OS_LOG_DEBUG",
+        "value" : "2"
+      },
+      {
+        "enabled" : false,
+        "key" : "OS_ACTIVITY_DT_MODE",
+        "value" : "YES"
+      },
+      {
+        "enabled" : false,
+        "key" : "SWIFTUI_ENABLELOGGING",
+        "value" : "1"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SwiftUIViewTree.xcodeproj",
+      "identifier" : "0B5F315A2E375EDE004EA743",
+      "name" : "SwiftUIViewTree"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:SwiftUIViewTreeKit",
+        "identifier" : "SwiftUIViewTreeKitTests",
+        "name" : "SwiftUIViewTreeKitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

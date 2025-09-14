@@ -13,6 +13,7 @@
 /* Begin PBXFileReference section */
 		0B5F315B2E375EDE004EA743 /* SwiftUIViewTree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIViewTree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B7778412E77597800638E39 /* SwiftUIViewTreeKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftUIViewTreeKit; sourceTree = "<group>"; };
+		0B7778452E775B1800638E39 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,6 +39,7 @@
 		0B5F31522E375EDE004EA743 = {
 			isa = PBXGroup;
 			children = (
+				0B7778452E775B1800638E39 /* TestPlan.xctestplan */,
 				0B7778412E77597800638E39 /* SwiftUIViewTreeKit */,
 				0B5F315D2E375EDE004EA743 /* SwiftUIViewTree */,
 				0B5F315C2E375EDE004EA743 /* Products */,
