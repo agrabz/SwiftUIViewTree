@@ -1,6 +1,6 @@
 
 import SwiftUI
-@testable import SwiftUIViewTree
+@testable import SwiftUIViewTreeKit
 import Testing
 
 @MainActor
