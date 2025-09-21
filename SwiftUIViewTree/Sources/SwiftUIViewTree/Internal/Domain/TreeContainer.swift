@@ -9,6 +9,10 @@ struct NodeSerialNumberCounter {
             return _nodeSerialNumberCounter
         }
     }
+
+    mutating func reset() {
+        _nodeSerialNumberCounter = 0
+    }
 }
 
 @MainActor
@@ -75,6 +79,8 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
         modifiedView: any View,
         maxDepth: Int
     ) -> Tree {
+        nodeSerialNumberCounter.reset()
+
         let newTree = Tree(
             node: .rootNode
         )

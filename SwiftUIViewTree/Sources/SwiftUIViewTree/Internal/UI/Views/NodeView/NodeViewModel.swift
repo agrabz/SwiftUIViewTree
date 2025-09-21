@@ -18,9 +18,9 @@ final class NodeViewModel {
             previousNodeValue = node.value
         }
 
-        if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
-            return UIConstants.Color.collapsedNodeBackground
-        }
+//        if CollapsedNodesStore.shared.isCollapsed(nodeID: node.id) {
+//            return UIConstants.Color.collapsedNodeBackground
+//        }
 
         if let previousNodeValue, previousNodeValue != node.value {
             ViewTreeLogger.shared.logChangesOf(

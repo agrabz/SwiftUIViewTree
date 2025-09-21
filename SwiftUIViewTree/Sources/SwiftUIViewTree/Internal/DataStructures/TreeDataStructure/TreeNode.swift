@@ -30,8 +30,9 @@ struct LinkedColor {
     }
 }
 
+@MainActor
 @Observable
-final class TreeNode: @unchecked Sendable, Equatable {
+final class TreeNode: @unchecked Sendable, @MainActor Equatable {
     struct ID: Hashable {
         let rawValue: Int
     }
@@ -51,15 +52,18 @@ final class TreeNode: @unchecked Sendable, Equatable {
     let childrenCount: Int
 
     @ObservationIgnored
-    private var oldValue: String = ""
+    private var oldValue: String {
+        TreeNodeMemoizer.shared.getValueOfNodeWith(serialNumber: serialNumber) ?? ""
+    }
     @ObservationIgnored
     private var oldBackgroundColor: Color = .purple.opacity(0.8)
     var backgroundColor: Color {
         guard value != oldValue else {
+            print("   __same: \(label) \(type) -->\(value)")
             return oldBackgroundColor
         }
+        print("NEW: \(label) \(type) -->\(value)")
 
-        oldValue = value
         oldBackgroundColor = availableColors.getNextColor()
         return oldBackgroundColor
     }
@@ -96,6 +100,8 @@ final class TreeNode: @unchecked Sendable, Equatable {
         self.serialNumber = serialNumber
 
         print(serialNumber)
+
+        TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
@@ -119,4 +125,21 @@ extension TreeNode {
         childrenCount: 0, //is actually 2 (modifiedView+originalView) but collapsing the root node does not make sense
         serialNumber: -1
     )
+}
+
+@MainActor
+final class TreeNodeMemoizer {
+    static let shared = TreeNodeMemoizer()
+
+    private var memo: [Int: String] = [:]
+
+    func registerNode(serialNumber: Int, value: String) {
+        if memo[serialNumber] == nil {
+            memo[serialNumber] = value
+        }
+    }
+
+    func getValueOfNodeWith(serialNumber: Int) -> String? {
+        memo[serialNumber]
+    }
 }

@@ -1,7 +1,8 @@
 import Observation
 
+@MainActor
 @Observable
-final class Tree: Equatable {
+final class Tree: @MainActor Equatable {
     var parentNode: TreeNode
     var children: [Tree]
 
