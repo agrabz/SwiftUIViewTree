@@ -10,6 +10,8 @@ struct LinkedColorList {
     ]
     private var currentIndex = 0
 
+
+    #error("Only the first update works properly, then only a subset of the changed nodes get a new color. Need to figure out why. Check NodeVM for reference.")
     mutating func getNextColor() -> Color {
         currentIndex += 1
         guard let color = colors.safeGetElement(at: currentIndex % colors.count) else {
