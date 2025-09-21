@@ -1,14 +1,47 @@
 import Foundation
+import SwiftUI
+
+struct LinkedColorList {
+    private let colors: [Color] = [
+        .purple.opacity(0.8),
+        .red.opacity(0.8),
+        .yellow.opacity(0.8),
+        .green.opacity(0.8),
+    ]
+    private var currentIndex = 0
+
+    mutating func getNextColor() -> Color {
+        guard let color = colors.safeGetElement(at: currentIndex % colors.count) else {
+            return .purple.opacity(0.8)
+        }
+        currentIndex += 1
+        return color
+    }
+}
+
+struct LinkedColor {
+    let color: Color
+    var _next: [LinkedColor]
+    var next: LinkedColor {
+        if _next.isEmpty {
+            return self
+        }
+        return _next[0]
+    }
+}
 
 @Observable
-final class TreeNode: Sendable, Equatable {
+final class TreeNode: @unchecked Sendable, Equatable {
     struct ID: Hashable {
         let rawValue: String
     }
 
+    @ObservationIgnored
+    private var availableColors = LinkedColorList()
+
     let type: String
     let label: String
-    let value: String
+    let value: String //TODO: var
     let serialNumber: Int
     let displayStyle: String
     let subjectType: String
@@ -16,6 +49,20 @@ final class TreeNode: Sendable, Equatable {
     let mirrorDescription: String
     let childIndex: Int //If <unknown> label is used for multiple nodes, then we need to distinguish them by index. It may need a more stable differentiator.
     let childrenCount: Int
+
+    @ObservationIgnored
+    private var oldValue: String = ""
+    @ObservationIgnored
+    private var oldBackgroundColor: Color = .purple.opacity(0.8)
+    var backgroundColor: Color {
+        guard value != oldValue else {
+            return oldBackgroundColor
+        }
+
+        oldValue = value
+        oldBackgroundColor = availableColors.getNextColor()
+        return oldBackgroundColor
+    }
 
     var isParent: Bool {
         childrenCount > 0
