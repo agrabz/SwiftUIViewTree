@@ -11,12 +11,12 @@ struct LinkedColorList {
     private var currentIndex = 0
 
     mutating func getNextColor() -> Color {
+        currentIndex += 1
         guard let color = colors.safeGetElement(at: currentIndex % colors.count) else {
             print("no new color")
             return .purple.opacity(0.8)
         }
         print("yes new color")
-        currentIndex += 1
         return color
     }
 }
