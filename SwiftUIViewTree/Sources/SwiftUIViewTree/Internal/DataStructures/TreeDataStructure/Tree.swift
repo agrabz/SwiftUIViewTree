@@ -3,6 +3,20 @@ import Observation
 @MainActor
 @Observable
 final class Tree: @MainActor Equatable {
+
+    subscript(serialNumber: Int) -> TreeNode? {
+        if parentNode.serialNumber == serialNumber {
+            return parentNode
+        } else {
+            for child in children {
+                if let found = child[serialNumber] {
+                    return found
+                }
+            }
+            return nil
+        }
+    }
+
     var parentNode: TreeNode
     var children: [Tree]
 

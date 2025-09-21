@@ -12,8 +12,10 @@ struct LinkedColorList {
 
     mutating func getNextColor() -> Color {
         guard let color = colors.safeGetElement(at: currentIndex % colors.count) else {
+            print("no new color")
             return .purple.opacity(0.8)
         }
+        print("yes new color")
         currentIndex += 1
         return color
     }
@@ -42,7 +44,7 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
 
     let type: String
     let label: String
-    let value: String //TODO: var
+    var value: String //TODO: var
     let serialNumber: Int
     let displayStyle: String
     let subjectType: String
@@ -59,10 +61,10 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
     private var oldBackgroundColor: Color = .purple.opacity(0.8)
     var backgroundColor: Color {
         guard value != oldValue else {
-            print("   __same: \(label) \(type) -->\(value)")
+//            print("   __same: \(label) \(type) -->\(value)")
             return oldBackgroundColor
         }
-        print("NEW: \(label) \(type) -->\(value)")
+        print("____COLORNEW: \(label) \(type) -->\(value)")
 
         oldBackgroundColor = availableColors.getNextColor()
         return oldBackgroundColor
@@ -102,6 +104,14 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         print(serialNumber)
 
         TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
+
+        guard value != oldValue else {
+//            print("   __not changed: \(label) \(type) -->\(value)")
+            return
+        }
+        print("!!IS CHANGED: \(label) \(type) -->\(value)")
+        TreeNodeMemoizer.shared.registerChangedNode(self)
+
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
@@ -132,6 +142,7 @@ final class TreeNodeMemoizer {
     static let shared = TreeNodeMemoizer()
 
     private var memo: [Int: String] = [:]
+    private var allChanges = [TreeNode]()
 
     func registerNode(serialNumber: Int, value: String) {
         if memo[serialNumber] == nil {
@@ -141,5 +152,16 @@ final class TreeNodeMemoizer {
 
     func getValueOfNodeWith(serialNumber: Int) -> String? {
         memo[serialNumber]
+    }
+
+
+    //TODO: ehh
+    func registerChangedNode(_ node: TreeNode) {
+        allChanges.append(node)
+    }
+
+    //TODO: ehh
+    func getAllChanges() -> [TreeNode] {
+        allChanges
     }
 }
