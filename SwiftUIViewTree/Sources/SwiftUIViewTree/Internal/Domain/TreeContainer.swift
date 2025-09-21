@@ -1,6 +1,17 @@
 import SwiftUI
 
 @MainActor
+struct NodeSerialNumberCounter {
+    private var _nodeSerialNumberCounter = 0
+    var counter: Int {
+        mutating get {
+            _nodeSerialNumberCounter += 1
+            return _nodeSerialNumberCounter
+        }
+    }
+}
+
+@MainActor
 @Observable
 final class TreeContainer {
     static var shared: TreeContainer = .init()
@@ -8,7 +19,7 @@ final class TreeContainer {
     static let waitTimeInSeconds = 1.0
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
-    private(set) var nodeSerialNumberCounter = 0
+    private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
     func computeViewTree(
         maxDepth: Int,
@@ -58,7 +69,7 @@ final class TreeContainer {
     }
 }
 
-private extension TreeContainer {
+private extension TreeContainer { //TODO: semantically this is not a TreeContainer responsibility, rather a TreeBuilder or similar
     func getTreeFrom(
         originalView: any View,
         modifiedView: any View,
@@ -109,12 +120,9 @@ private extension TreeContainer {
                     mirrorDescription: childMirror.description,
                     childIndex: index,
                     childrenCount: childMirror.children.count,
-                    serialNumber: nodeSerialNumberCounter
+                    serialNumber: nodeSerialNumberCounter.counter
                 )
             ) // as Any? see type(of:) docs
-
-            nodeSerialNumberCounter += 1
-
             childTree.children = convertToTreesRecursively(
                 mirror: childMirror,
                 source: source,
