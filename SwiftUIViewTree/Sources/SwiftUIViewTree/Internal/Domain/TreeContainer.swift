@@ -8,6 +8,7 @@ final class TreeContainer {
     static let waitTimeInSeconds = 1.0
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
+    private(set) var nodeSerialNumberCounter = 0
 
     func computeViewTree(
         maxDepth: Int,
@@ -107,9 +108,13 @@ private extension TreeContainer {
                     superclassMirror: String(describing: childMirror.superclassMirror),
                     mirrorDescription: childMirror.description,
                     childIndex: index,
-                    childrenCount: childMirror.children.count
+                    childrenCount: childMirror.children.count,
+                    serialNumber: nodeSerialNumberCounter
                 )
             ) // as Any? see type(of:) docs
+
+            nodeSerialNumberCounter += 1
+
             childTree.children = convertToTreesRecursively(
                 mirror: childMirror,
                 source: source,
@@ -144,7 +149,8 @@ private extension TreeContainer {
             superclassMirror: String(describing: viewMirror.superclassMirror),
             mirrorDescription: viewMirror.description,
             childIndex: 0,
-            childrenCount: viewMirror.children.count
+            childrenCount: viewMirror.children.count,
+            serialNumber: -1
         )
 
         return rootNode

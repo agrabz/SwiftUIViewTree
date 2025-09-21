@@ -9,6 +9,7 @@ final class TreeNode: Sendable, Equatable {
     let type: String
     let label: String
     let value: String
+    let serialNumber: Int
     let displayStyle: String
     let subjectType: String
     let superclassMirror: String
@@ -34,7 +35,8 @@ final class TreeNode: Sendable, Equatable {
         superclassMirror: String,
         mirrorDescription: String,
         childIndex: Int,
-        childrenCount: Int
+        childrenCount: Int,
+        serialNumber: Int
     ) {
         self.type = type
         self.label = label
@@ -45,6 +47,9 @@ final class TreeNode: Sendable, Equatable {
         self.mirrorDescription = mirrorDescription
         self.childIndex = childIndex
         self.childrenCount = childrenCount
+        self.serialNumber = serialNumber
+
+        print(serialNumber)
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
@@ -65,6 +70,7 @@ extension TreeNode {
         superclassMirror: "Root node",
         mirrorDescription: "Root node",
         childIndex: 0,
-        childrenCount: 0 //is actually 2 (modifiedView+originalView) but collapsing the root node does not make sense
+        childrenCount: 0, //is actually 2 (modifiedView+originalView) but collapsing the root node does not make sense
+        serialNumber: -1
     )
 }
