@@ -158,7 +158,7 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
             mirrorDescription: viewMirror.description,
             childIndex: 0,
             childrenCount: viewMirror.children.count,
-            serialNumber: -1
+            serialNumber: rootNodeType.serialNumber
         )
 
         return rootNode
@@ -168,4 +168,13 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
 enum RootNodeType: String {
     case originalView
     case modifiedView
+
+    var serialNumber: Int {
+        switch self {
+            case .originalView:
+                -2
+            case .modifiedView:
+                -3
+        }
+    }
 }

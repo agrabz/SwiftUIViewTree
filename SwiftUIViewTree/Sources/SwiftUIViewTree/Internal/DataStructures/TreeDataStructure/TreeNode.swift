@@ -33,7 +33,7 @@ struct LinkedColor {
 @Observable
 final class TreeNode: @unchecked Sendable, Equatable {
     struct ID: Hashable {
-        let rawValue: String
+        let rawValue: Int
     }
 
     @ObservationIgnored
@@ -68,9 +68,8 @@ final class TreeNode: @unchecked Sendable, Equatable {
         childrenCount > 0
     }
 
-    // Everything except the `value`, because its change, does not mean that the node has changed and thus that the NodeView should be updated.
     var id: TreeNode.ID {
-        ID(rawValue: "\(label)-\(type)-\(displayStyle)-\(subjectType)-\(superclassMirror)-\(mirrorDescription)-\(childIndex)-\(childrenCount)")
+        ID(rawValue: serialNumber)
     }
 
     init(
