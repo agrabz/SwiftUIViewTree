@@ -68,6 +68,8 @@ final class TreeContainer {
                         computedUIState
                             .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value
                     }
+
+                    TreeNodeMemoizer.shared.clearAllChanges()
 //                    computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
 //                    withAnimation(.easeInOut(duration: 1)) {
 //                        self.uiState = .treeComputed(computedUIState) //replace only what's needed, better diffing

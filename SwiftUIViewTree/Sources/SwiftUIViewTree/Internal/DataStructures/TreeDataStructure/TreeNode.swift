@@ -8,10 +8,8 @@ struct LinkedColorList {
         .yellow.opacity(0.8),
         .green.opacity(0.8),
     ]
-    private var currentIndex = 0
+    private var currentIndex = -1
 
-
-    #error("Only the first update works properly, then only a subset of the changed nodes get a new color. Need to figure out why. Check NodeVM for reference.")
     mutating func getNextColor() -> Color {
         currentIndex += 1
         guard let color = colors.safeGetElement(at: currentIndex % colors.count) else {
@@ -60,14 +58,8 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         TreeNodeMemoizer.shared.getValueOfNodeWith(serialNumber: serialNumber) ?? ""
     }
     @ObservationIgnored
-    private var oldBackgroundColor: Color = .purple.opacity(0.8)
+    private var oldBackgroundColor: Color = .clear
     var backgroundColor: Color {
-        guard value != oldValue else {
-//            print("   __same: \(label) \(type) -->\(value)")
-            return oldBackgroundColor
-        }
-        print("____COLORNEW: \(label) \(type) -->\(value)")
-
         oldBackgroundColor = availableColors.getNextColor()
         return oldBackgroundColor
     }
@@ -105,21 +97,20 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
 
         print(serialNumber)
 
+        if label == "_value" {
+            print(label)
+        }
+
         TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
 
         guard value != oldValue else {
-//            print("   __not changed: \(label) \(type) -->\(value)")
             return
         }
-        print("!!IS CHANGED: \(label) \(type) -->\(value)")
-        TreeNodeMemoizer.shared.registerChangedNode(self)
 
+        TreeNodeMemoizer.shared.registerChangedNode(self)
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
-        if lhs.value == rhs.value { // Without this check the initial isRecomputing would result in a complete tree color change. This is not clear. Probaly something with the Equatable conformances throughout the project.
-            return false
-        }
         return lhs.id == rhs.id
     }
 }
@@ -160,10 +151,15 @@ final class TreeNodeMemoizer {
     //TODO: ehh
     func registerChangedNode(_ node: TreeNode) {
         allChanges.append(node)
+        memo[node.serialNumber] = node.value
     }
 
     //TODO: ehh
     func getAllChanges() -> [TreeNode] {
         allChanges
+    }
+
+    func clearAllChanges() {
+        allChanges.removeAll()
     }
 }
