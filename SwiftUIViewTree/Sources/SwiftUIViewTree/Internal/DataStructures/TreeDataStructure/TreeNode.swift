@@ -53,6 +53,15 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
     @ObservationIgnored
     private var oldBackgroundColor: Color = .clear
     var backgroundColor: Color {
+        if label == "_value" {
+            print("asdsa")
+        }
+        guard TreeNodeMemoizer.shared.isNodeChanged(serialNumber: self.serialNumber) else {
+            if oldBackgroundColor == .clear {
+                oldBackgroundColor = availableColors.getNextColor()
+            }
+            return oldBackgroundColor
+        }
         oldBackgroundColor = availableColors.getNextColor()
         return oldBackgroundColor
     }
@@ -83,6 +92,11 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         if label == "_value" {
             print(label)
         }
+
+        already changed nodes are changed again on collapsing
+        collapsed are not gray
+
+        TreeNodeMemoizer.shared.clearChangesOf(self)
 
         TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
 
@@ -137,7 +151,16 @@ final class TreeNodeMemoizer {
         allChanges
     }
 
-    func clearAllChanges() {
-        allChanges.removeAll()
+    func isNodeChanged(serialNumber: Int) -> Bool {
+        allChanges.contains { $0.serialNumber == serialNumber }
     }
+
+    func clearChangesOf(_ node: TreeNode) {
+        allChanges.removeAll { $0.serialNumber == node.serialNumber }
+    }
+//        for change in allChanges {
+//            memo[change.serialNumber] = change.value
+//        }
+//        allChanges.removeAll()
+//    }
 }
