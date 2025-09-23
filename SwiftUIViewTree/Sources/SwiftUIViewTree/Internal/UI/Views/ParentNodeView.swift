@@ -18,11 +18,6 @@ struct ParentNodeView: View {
                 CollapseNodeGesture(
                     node: $parentNode
                 )
-                .exclusively(
-                    before: PrintNodeDetailsGesture(
-                        node: $parentNode
-                    )
-                )
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                 [parentNode.id: anchor]

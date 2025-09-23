@@ -126,13 +126,8 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
                     value: "\(child.value)",
-                    displayStyle: String(describing: childMirror.displayStyle),
-                    subjectType: "\(childMirror.subjectType)",
-                    superclassMirror: String(describing: childMirror.superclassMirror),
-                    mirrorDescription: childMirror.description,
-                    childIndex: index,
-                    childrenCount: childMirror.children.count,
-                    serialNumber: nodeSerialNumberCounter.counter
+                    serialNumber: nodeSerialNumberCounter.counter,
+                    childrenCount: childMirror.children.count
                 )
             ) // as Any? see type(of:) docs
             childTree.children = convertToTreesRecursively(
@@ -164,13 +159,8 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
             type: "\(type(of: view))",
             label: rootNodeType.rawValue,
             value: "\(view)",
-            displayStyle: "\(String(describing: viewMirror.displayStyle))",
-            subjectType: "\(viewMirror.subjectType)",
-            superclassMirror: String(describing: viewMirror.superclassMirror),
-            mirrorDescription: viewMirror.description,
-            childIndex: 0,
-            childrenCount: viewMirror.children.count,
-            serialNumber: rootNodeType.serialNumber
+            serialNumber: rootNodeType.serialNumber,
+            childrenCount: viewMirror.children.count
         )
 
         return rootNode

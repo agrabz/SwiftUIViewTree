@@ -13,10 +13,8 @@ struct LinkedColorList {
     mutating func getNextColor() -> Color {
         currentIndex += 1
         guard let color = colors.safeGetElement(at: currentIndex % colors.count) else {
-            print("no new color")
             return .purple.opacity(0.8)
         }
-        print("yes new color")
         return color
     }
 }
@@ -44,13 +42,8 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
 
     let type: String
     let label: String
-    var value: String //TODO: var
+    var value: String
     let serialNumber: Int
-    let displayStyle: String
-    let subjectType: String
-    let superclassMirror: String
-    let mirrorDescription: String
-    let childIndex: Int //If <unknown> label is used for multiple nodes, then we need to distinguish them by index. It may need a more stable differentiator.
     let childrenCount: Int
 
     @ObservationIgnored
@@ -76,24 +69,14 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         type: String,
         label: String,
         value: String,
-        displayStyle: String,
-        subjectType: String,
-        superclassMirror: String,
-        mirrorDescription: String,
-        childIndex: Int,
-        childrenCount: Int,
-        serialNumber: Int
+        serialNumber: Int,
+        childrenCount: Int
     ) {
         self.type = type
         self.label = label
         self.value = value
-        self.displayStyle = displayStyle
-        self.subjectType = subjectType
-        self.superclassMirror = superclassMirror
-        self.mirrorDescription = mirrorDescription
-        self.childIndex = childIndex
-        self.childrenCount = childrenCount
         self.serialNumber = serialNumber
+        self.childrenCount = childrenCount
 
         print(serialNumber)
 
@@ -120,13 +103,8 @@ extension TreeNode {
         type: "Root node",
         label: "Root node",
         value: "Root node",
-        displayStyle: "Root node",
-        subjectType: "Root node",
-        superclassMirror: "Root node",
-        mirrorDescription: "Root node",
-        childIndex: 0,
-        childrenCount: 0, //is actually 2 (modifiedView+originalView) but collapsing the root node does not make sense
-        serialNumber: -1
+        serialNumber: -1,
+        childrenCount: 0 //is actually 2 (modifiedView+originalView) but collapsing the root node does not make sense
     )
 }
 
