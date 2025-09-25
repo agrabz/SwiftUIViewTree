@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct NodeView: View {
-    @State private var viewModel = NodeViewModel()
     @Binding var node: TreeNode
 
     private var nodeLabel: String {
