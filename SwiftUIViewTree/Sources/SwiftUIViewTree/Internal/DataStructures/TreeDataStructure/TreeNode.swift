@@ -56,12 +56,18 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         if label == "_value" {
             print("asdsa")
         }
+
+        if CollapsedNodesStore.shared.isCollapsed(nodeID: id) {
+            return UIConstants.Color.collapsedNodeBackground
+        }
+
         guard TreeNodeMemoizer.shared.isNodeChanged(serialNumber: self.serialNumber) else {
             if oldBackgroundColor == .clear {
                 oldBackgroundColor = availableColors.getNextColor()
             }
             return oldBackgroundColor
         }
+
         oldBackgroundColor = availableColors.getNextColor()
         return oldBackgroundColor
     }
@@ -93,8 +99,8 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
             print(label)
         }
 
-        already changed nodes are changed again on collapsing
-        collapsed are not gray
+//        already changed nodes are changed again on collapsing
+//        collapsed are not gray
 
         TreeNodeMemoizer.shared.clearChangesOf(self)
 
