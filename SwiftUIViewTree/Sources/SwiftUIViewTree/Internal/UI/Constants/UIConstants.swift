@@ -10,5 +10,6 @@ enum UIConstants {
 
     enum Color {
         static let collapsedNodeBackground = SwiftUI.Color.gray.opacity(0.8)
+        static let initialNodeBackground = SwiftUI.Color.clear
     }
 }

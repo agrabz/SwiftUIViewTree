@@ -22,7 +22,7 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         TreeNodeMemoizer.shared.getRegisteredValueOfNodeWith(serialNumber: serialNumber) ?? ""
     }
     @ObservationIgnored
-    private var oldBackgroundColor: Color = .clear
+    private var oldBackgroundColor = UIConstants.Color.initialNodeBackground
     var backgroundColor: Color {
         if label == "_value" {
             print("asdsa")
@@ -33,7 +33,7 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         }
 
         guard TreeNodeMemoizer.shared.isNodeChanged(serialNumber: self.serialNumber) else {
-            if oldBackgroundColor == .clear {
+            if oldBackgroundColor == UIConstants.Color.initialNodeBackground {
                 oldBackgroundColor = availableColors.getNextColor()
             }
             return oldBackgroundColor
