@@ -3,14 +3,21 @@ import SwiftUI
 import SwiftUIViewTree
 
 //struct ContentView: View {
+//    @State var isTapped = false
+//
 //    var body: some View {
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-//            Text("Hello, world!")
+//        Button {
+//            isTapped.toggle()
+//        } label: {
+//            VStack {
+//                Image(systemName: "globe")
+//                    .imageScale(.large)
+//                    .foregroundStyle(.tint)
+//                Text(isTapped ? "Yo what?" : "Hello, world!")
+//                    .bold(isTapped ? true : false)
+//            }
+//            .padding()
 //        }
-//        .padding()
 //        .renderViewTree(of: self)
 //    }
 //}
