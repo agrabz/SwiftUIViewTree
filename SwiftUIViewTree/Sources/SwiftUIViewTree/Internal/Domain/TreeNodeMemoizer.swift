@@ -6,9 +6,11 @@ final class TreeNodeMemoizer {
     private var memo: [Int: String] = [:]
     private(set) var allChangedNodes = [TreeNode]()
 
-    func registerNode(serialNumber: Int, value: String) {
+    func registerNode(serialNumber: Int, value: String) throws {
         if memo[serialNumber] == nil {
             memo[serialNumber] = value
+        } else {
+            throw TreeNodeMemoizer.Error.nodeIsAlreadyRegistered
         }
     }
 
@@ -27,5 +29,11 @@ final class TreeNodeMemoizer {
 
     func removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: Int) {
         allChangedNodes.removeAll { $0.serialNumber == serialNumberOfNodeToRemove }
+    }
+}
+
+extension TreeNodeMemoizer {
+    enum Error: Swift.Error {
+        case nodeIsAlreadyRegistered
     }
 }

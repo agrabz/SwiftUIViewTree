@@ -68,10 +68,12 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
             print(label)
         }
 
-        TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
-
-        if value != oldValue {
-            TreeNodeMemoizer.shared.registerChangedNode(self)
+        do {
+            try TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
+        } catch {
+            if value != oldValue {
+                TreeNodeMemoizer.shared.registerChangedNode(self)
+            }
         }
     }
 
