@@ -7,6 +7,10 @@ struct LinkedColorList {
         .red.opacity(0.8),
         .yellow.opacity(0.8),
         .green.opacity(0.8),
+        .orange.opacity(0.8),
+        .pink.opacity(0.8),
+        .mint.opacity(0.8),
+        .indigo.opacity(0.8)
     ]
     private var currentIndex = -1
 
@@ -16,17 +20,6 @@ struct LinkedColorList {
             return .purple.opacity(0.8)
         }
         return color
-    }
-}
-
-struct LinkedColor {
-    let color: Color
-    var _next: [LinkedColor]
-    var next: LinkedColor {
-        if _next.isEmpty {
-            return self
-        }
-        return _next[0]
     }
 }
 
@@ -120,35 +113,4 @@ extension TreeNode {
         serialNumber: -1,
         childrenCount: 0 //is actually 2 (modifiedView+originalView) but collapsing the root node does not make sense
     )
-}
-
-@MainActor
-final class TreeNodeMemoizer {
-    static let shared = TreeNodeMemoizer()
-
-    private var memo: [Int: String] = [:]
-    private(set) var allChangedNodes = [TreeNode]()
-
-    func registerNode(serialNumber: Int, value: String) {
-        if memo[serialNumber] == nil {
-            memo[serialNumber] = value
-        }
-    }
-
-    func getRegisteredValueOfNodeWith(serialNumber: Int) -> String? {
-        memo[serialNumber]
-    }
-
-    func registerChangedNode(_ node: TreeNode) {
-        allChangedNodes.append(node)
-        memo[node.serialNumber] = node.value
-    }
-
-    func isNodeChanged(serialNumber: Int) -> Bool {
-        allChangedNodes.contains { $0.serialNumber == serialNumber }
-    }
-
-    func removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: Int) {
-        allChangedNodes.removeAll { $0.serialNumber == serialNumberOfNodeToRemove }
-    }
 }
