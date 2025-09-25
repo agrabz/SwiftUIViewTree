@@ -48,7 +48,7 @@ final class TreeContainer {
             )
 
             //TODO: without this delay, the view doesn't update properly in some cases (small-medium views only?)
-            try? await Task.sleep(for: .seconds(Self.waitTimeInSeconds))
+//            try? await Task.sleep(for: .seconds(Self.waitTimeInSeconds))
 
             withAnimation {
                 isRecomputing = false
@@ -64,18 +64,12 @@ final class TreeContainer {
                         )
                     }
                 case .treeComputed(let computedUIState):
-                    for changedValue in TreeNodeMemoizer.shared.getAllChanges() {
+                    for changedValue in TreeNodeMemoizer.shared.allChangedNodes {
                         withAnimation {
                             computedUIState
                                 .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value
                         }
                     }
-
-//                    TreeNodeMemoizer.shared.clearAllChanges()
-//                    computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
-//                    withAnimation(.easeInOut(duration: 1)) {
-//                        self.uiState = .treeComputed(computedUIState) //replace only what's needed, better diffing
-//                    }
             }
         }
     }

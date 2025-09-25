@@ -69,7 +69,7 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         }
 
         oldBackgroundColor = availableColors.getNextColor()
-        TreeNodeMemoizer.shared.clearChangesOfNodeWith(serialNumber: serialNumber)
+        TreeNodeMemoizer.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: serialNumber)
         return oldBackgroundColor
     }
 
@@ -127,7 +127,7 @@ final class TreeNodeMemoizer {
     static let shared = TreeNodeMemoizer()
 
     private var memo: [Int: String] = [:]
-    private var allChanges = [TreeNode]()
+    private(set) var allChangedNodes = [TreeNode]()
 
     func registerNode(serialNumber: Int, value: String) {
         if memo[serialNumber] == nil {
@@ -139,28 +139,16 @@ final class TreeNodeMemoizer {
         memo[serialNumber]
     }
 
-
-    //TODO: ehh
     func registerChangedNode(_ node: TreeNode) {
-        allChanges.append(node)
+        allChangedNodes.append(node)
         memo[node.serialNumber] = node.value
     }
 
-    //TODO: ehh
-    func getAllChanges() -> [TreeNode] {
-        allChanges
-    }
-
     func isNodeChanged(serialNumber: Int) -> Bool {
-        allChanges.contains { $0.serialNumber == serialNumber }
+        allChangedNodes.contains { $0.serialNumber == serialNumber }
     }
 
-    func clearChangesOfNodeWith(serialNumber: Int) {
-        allChanges.removeAll { $0.serialNumber == serialNumber }
+    func removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: Int) {
+        allChangedNodes.removeAll { $0.serialNumber == serialNumberOfNodeToRemove }
     }
-//        for change in allChanges {
-//            memo[change.serialNumber] = change.value
-//        }
-//        allChanges.removeAll()
-//    }
 }
