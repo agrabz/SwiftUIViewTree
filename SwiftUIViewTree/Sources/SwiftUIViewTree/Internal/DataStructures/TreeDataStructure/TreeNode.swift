@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class TreeNode: @unchecked Sendable, @MainActor Equatable {
+final class TreeNode: @unchecked Sendable, @MainActor Equatable { //TODO: no unchecked
     struct ID: Hashable {
         let rawValue: Int
     }
@@ -14,7 +14,7 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
     let type: String
     let label: String
     var value: String
-    let serialNumber: Int
+    let serialNumber: Int //TODO: maybe could be just ID, and a comment would explain its nature
     let childrenCount: Int
 
     @ObservationIgnored
