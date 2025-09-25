@@ -48,7 +48,7 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
 
     @ObservationIgnored
     private var oldValue: String {
-        TreeNodeMemoizer.shared.getValueOfNodeWith(serialNumber: serialNumber) ?? ""
+        TreeNodeMemoizer.shared.getRegisteredValueOfNodeWith(serialNumber: serialNumber) ?? ""
     }
     @ObservationIgnored
     private var oldBackgroundColor: Color = .clear
@@ -69,6 +69,7 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         }
 
         oldBackgroundColor = availableColors.getNextColor()
+        TreeNodeMemoizer.shared.clearChangesOfNodeWith(serialNumber: serialNumber)
         return oldBackgroundColor
     }
 
@@ -99,18 +100,11 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
             print(label)
         }
 
-//        already changed nodes are changed again on collapsing
-//        collapsed are not gray
-
-        TreeNodeMemoizer.shared.clearChangesOf(self)
-
         TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
 
-        guard value != oldValue else {
-            return
+        if value != oldValue {
+            TreeNodeMemoizer.shared.registerChangedNode(self)
         }
-
-        TreeNodeMemoizer.shared.registerChangedNode(self)
     }
 
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
@@ -141,7 +135,7 @@ final class TreeNodeMemoizer {
         }
     }
 
-    func getValueOfNodeWith(serialNumber: Int) -> String? {
+    func getRegisteredValueOfNodeWith(serialNumber: Int) -> String? {
         memo[serialNumber]
     }
 
@@ -161,8 +155,8 @@ final class TreeNodeMemoizer {
         allChanges.contains { $0.serialNumber == serialNumber }
     }
 
-    func clearChangesOf(_ node: TreeNode) {
-        allChanges.removeAll { $0.serialNumber == node.serialNumber }
+    func clearChangesOfNodeWith(serialNumber: Int) {
+        allChanges.removeAll { $0.serialNumber == serialNumber }
     }
 //        for change in allChanges {
 //            memo[change.serialNumber] = change.value
