@@ -3,7 +3,7 @@ import SwiftUI
 
 struct LinkedColorList {
     private let colors: [Color] = [
-        .purple.opacity(0.8),
+        UIConstants.Color.initialNodeBackground,
         .red.opacity(0.8),
         .yellow.opacity(0.8),
         .green.opacity(0.8),
@@ -12,7 +12,7 @@ struct LinkedColorList {
         .mint.opacity(0.8),
         .indigo.opacity(0.8)
     ]
-    private var currentIndex = -1
+    private var currentIndex = 0
 
     mutating func getNextColor() -> Color {
         currentIndex += 1

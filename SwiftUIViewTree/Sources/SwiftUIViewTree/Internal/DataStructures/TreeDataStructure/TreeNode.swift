@@ -33,9 +33,6 @@ final class TreeNode: @unchecked Sendable, @MainActor Equatable {
         }
 
         guard TreeNodeMemoizer.shared.isNodeChanged(serialNumber: self.serialNumber) else {
-            if oldBackgroundColor == UIConstants.Color.initialNodeBackground {
-                oldBackgroundColor = availableColors.getNextColor()
-            }
             return oldBackgroundColor
         }
 
