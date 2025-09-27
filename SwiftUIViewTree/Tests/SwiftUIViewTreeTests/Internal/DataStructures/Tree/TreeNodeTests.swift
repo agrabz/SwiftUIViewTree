@@ -12,7 +12,7 @@ struct TreeNodeTests {
             //GIVEN
             let node = TreeNode.createMock()
             //WHEN
-            let registeredValue = TreeNodeMemoizer.shared.getRegisteredValueOfNodeWith(
+            let registeredValue = TreeNodeRegistry.shared.getRegisteredValueOfNodeWith(
                 serialNumber: node.serialNumber
             )
             //THEN
@@ -40,7 +40,7 @@ struct TreeNodeTests {
             )
 
             //THEN
-            #expect(TreeNodeMemoizer.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == false)
+            #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == false)
         }
 
         @Test
@@ -67,15 +67,8 @@ struct TreeNodeTests {
             )
 
             //THEN
-            #expect(TreeNodeMemoizer.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == true)
+            #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == true)
         }
-//        do {
-//            try TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
-//        } catch {
-//            if value != oldValue {
-//                TreeNodeMemoizer.shared.registerChangedNode(self)
-//            }
-//        }
     }
 
     @MainActor
@@ -129,12 +122,12 @@ struct TreeNodeTests {
             //GIVEN
             let node = TreeNode.createMock()
             node.value = "new value"
-            TreeNodeMemoizer.shared.registerChangedNode(node)
+            TreeNodeRegistry.shared.registerChangedNode(node)
             //WHEN
             let result = node.backgroundColor
             //THEN
             #expect(result == LinkedColorList().colors.safeGetElement(at: 1))
-            #expect(TreeNodeMemoizer.shared.allChangedNodes.contains(where: { $0.id == node.id }) == false)
+            #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.id == node.id }) == false)
         }
     }
 }

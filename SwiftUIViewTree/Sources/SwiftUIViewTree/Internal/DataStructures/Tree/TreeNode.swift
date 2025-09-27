@@ -27,7 +27,7 @@ final class TreeNode: Sendable {
 
     @ObservationIgnored
     private var oldValue: String {
-        TreeNodeMemoizer.shared.getRegisteredValueOfNodeWith(serialNumber: serialNumber) ?? ""
+        TreeNodeRegistry.shared.getRegisteredValueOfNodeWith(serialNumber: serialNumber) ?? ""
     }
     @ObservationIgnored
     private var oldBackgroundColor = UIConstants.Color.initialNodeBackground
@@ -36,12 +36,12 @@ final class TreeNode: Sendable {
             return UIConstants.Color.collapsedNodeBackground
         }
 
-        guard TreeNodeMemoizer.shared.isNodeChanged(serialNumber: self.serialNumber) else {
+        guard TreeNodeRegistry.shared.isNodeChanged(serialNumber: self.serialNumber) else {
             return oldBackgroundColor
         }
 
         oldBackgroundColor = availableColors.getNextColor()
-        TreeNodeMemoizer.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: serialNumber)
+        TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: serialNumber)
         return oldBackgroundColor
     }
 
@@ -59,10 +59,10 @@ final class TreeNode: Sendable {
         self.childrenCount = childrenCount
 
         do {
-            try TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
+            try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
             if value != oldValue {
-                TreeNodeMemoizer.shared.registerChangedNode(self)
+                TreeNodeRegistry.shared.registerChangedNode(self)
             }
         }
     }

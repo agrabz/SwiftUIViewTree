@@ -1,26 +1,26 @@
 
 @MainActor
-final class TreeNodeMemoizer {
-    static let shared = TreeNodeMemoizer()
+final class TreeNodeRegistry {
+    static let shared = TreeNodeRegistry()
 
-    private var memo: [Int: String] = [:]
+    private var registry: [Int: String] = [:]
     private(set) var allChangedNodes = [TreeNode]()
 
     func registerNode(serialNumber: Int, value: String) throws {
-        if memo[serialNumber] == nil {
-            memo[serialNumber] = value
+        if registry[serialNumber] == nil {
+            registry[serialNumber] = value
         } else {
-            throw TreeNodeMemoizer.Error.nodeIsAlreadyRegistered
+            throw TreeNodeRegistry.Error.nodeIsAlreadyRegistered
         }
     }
 
     func getRegisteredValueOfNodeWith(serialNumber: Int) -> String? {
-        memo[serialNumber]
+        registry[serialNumber]
     }
 
     func registerChangedNode(_ node: TreeNode) {
         allChangedNodes.append(node)
-        memo[node.serialNumber] = node.value
+        registry[node.serialNumber] = node.value
     }
 
     func isNodeChanged(serialNumber: Int) -> Bool {
@@ -32,7 +32,7 @@ final class TreeNodeMemoizer {
     }
 }
 
-extension TreeNodeMemoizer {
+extension TreeNodeRegistry {
     enum Error: Swift.Error {
         case nodeIsAlreadyRegistered
     }

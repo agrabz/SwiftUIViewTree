@@ -49,7 +49,7 @@ final class TreeContainer {
                         )
                     }
                 case .treeComputed(let computedUIState):
-                    for changedValue in TreeNodeMemoizer.shared.allChangedNodes {
+                    for changedValue in TreeNodeRegistry.shared.allChangedNodes {
                         withAnimation {
                             computedUIState
                                 .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value

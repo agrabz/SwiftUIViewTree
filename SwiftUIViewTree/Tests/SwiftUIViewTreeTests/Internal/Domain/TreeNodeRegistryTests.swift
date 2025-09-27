@@ -4,11 +4,11 @@ import Testing
 
 @MainActor
 @Suite
-struct TreeNodeMemoizerTests {
+struct TreeNodeRegistryTests {
     @Test
     func registerNode_NotYetRegisteredNode() throws {
         //GIVEN
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
 
         //WHEN
         try sut.registerNode(serialNumber: 1, value: "value")
@@ -23,12 +23,12 @@ struct TreeNodeMemoizerTests {
         let serialNumber = 1
         let value = "value"
 
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
         try sut.registerNode(serialNumber: serialNumber, value: value)
 
         #expect(
             //THEN
-            throws: TreeNodeMemoizer.Error.nodeIsAlreadyRegistered) {
+            throws: TreeNodeRegistry.Error.nodeIsAlreadyRegistered) {
                 //WHEN
                 try sut.registerNode(serialNumber: serialNumber, value: value)
             }
@@ -39,7 +39,7 @@ struct TreeNodeMemoizerTests {
         //GIVEN
         let serialNumber = 1
         let value = "value"
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
         try sut.registerNode(serialNumber: serialNumber, value: value)
 
         //WHEN
@@ -54,7 +54,7 @@ struct TreeNodeMemoizerTests {
     @Test
     func getRegisteredValueOfNodeWith_NoRegistration() throws {
         //GIVEN
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
 
         //WHEN
         let registeredValue = sut.getRegisteredValueOfNodeWith(
@@ -69,7 +69,7 @@ struct TreeNodeMemoizerTests {
     func registerChangedNode() throws {
         //GIVEN
         let node = TreeNode.createMock()
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
         try sut.registerNode(serialNumber: node.serialNumber, value: node.value)
 
         //WHEN
@@ -86,7 +86,7 @@ struct TreeNodeMemoizerTests {
     func isNodeChanged_True() async throws {
         //GIVEN
         let node = TreeNode.createMock()
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
         try sut.registerNode(serialNumber: node.serialNumber, value: node.value)
 
         let newValue = "new value"
@@ -107,7 +107,7 @@ struct TreeNodeMemoizerTests {
     func isNodeChanged_False() async throws {
         //GIVEN
         let node = TreeNode.createMock()
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
         try sut.registerNode(serialNumber: node.serialNumber, value: node.value)
 
         #expect(sut.allChangedNodes.contains { $0.serialNumber == node.serialNumber } == false)
@@ -124,7 +124,7 @@ struct TreeNodeMemoizerTests {
     func removeNodeFromAllChangedNodes() throws {
         //GIVEN
         let node = TreeNode.createMock()
-        let sut = TreeNodeMemoizer()
+        let sut = TreeNodeRegistry()
         sut.registerChangedNode(node)
 
         //WHEN
