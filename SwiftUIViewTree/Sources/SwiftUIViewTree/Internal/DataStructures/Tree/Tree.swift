@@ -3,6 +3,16 @@ import Observation
 @MainActor
 @Observable
 final class Tree {
+    var parentNode: TreeNode
+    var children: [Tree]
+
+    init(
+        node: TreeNode,
+        children: [Tree] = []
+    ) {
+        self.parentNode = node
+        self.children = children
+    }
 
     subscript(serialNumber: Int) -> TreeNode? {
         if parentNode.serialNumber == serialNumber {
@@ -15,16 +25,5 @@ final class Tree {
             }
             return nil
         }
-    }
-
-    var parentNode: TreeNode
-    var children: [Tree]
-
-    init(
-        node: TreeNode,
-        children: [Tree] = []
-    ) {
-        self.parentNode = node
-        self.children = children
     }
 }
