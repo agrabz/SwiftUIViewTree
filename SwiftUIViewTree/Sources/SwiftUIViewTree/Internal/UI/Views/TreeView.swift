@@ -22,6 +22,7 @@ struct TreeView: View {
                 ChildrenNodeView(
                     children: $tree.children
                 )
+                .fixedSize()
             }
         }
     }
