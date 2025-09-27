@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class TreeNode: Sendable, @MainActor Equatable {
+final class TreeNode: Sendable {
     struct ID: Hashable {
         let rawValue: Int
     }
@@ -65,10 +65,6 @@ final class TreeNode: Sendable, @MainActor Equatable {
                 TreeNodeMemoizer.shared.registerChangedNode(self)
             }
         }
-    }
-
-    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
-        return lhs.id == rhs.id
     }
 }
 

@@ -16,7 +16,7 @@ struct TreeTests {
 
         //THEN
         #expect(foundNode != nil)
-        #expect(foundNode == node)
+        #expect(foundNode?.id == node.id)
     }
 
     @Test
@@ -30,19 +30,6 @@ struct TreeTests {
 
         //THEN
         #expect(foundNode == nil)
-        #expect(foundNode != node)
+        #expect(foundNode?.id != node.id)
     }
 }
-
-//subscript(serialNumber: Int) -> TreeNode? {
-//    if parentNode.serialNumber == serialNumber {
-//        return parentNode
-//    } else {
-//        for child in children {
-//            if let found = child[serialNumber] {
-//                return found
-//            }
-//        }
-//        return nil
-//    }
-//}
