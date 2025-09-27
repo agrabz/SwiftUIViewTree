@@ -64,19 +64,4 @@ struct TreeNodeTests {
             #expect(TreeNodeMemoizer.shared.allChangedNodes.contains(where: { $0.id == node.id }) == false)
         }
     }
-
-//    var backgroundColor: Color {
-//        if CollapsedNodesStore.shared.isCollapsed(nodeID: id) {
-//            return UIConstants.Color.collapsedNodeBackground
-//        }
-//
-//        guard TreeNodeMemoizer.shared.isNodeChanged(serialNumber: self.serialNumber) else {
-//            return oldBackgroundColor
-//        }
-//
-//        oldBackgroundColor = availableColors.getNextColor()
-//        TreeNodeMemoizer.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: serialNumber)
-//        return oldBackgroundColor
-//    }
 }
-
