@@ -46,10 +46,25 @@ struct TreeContainerTests {
             return
         }
 
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id == .init(rawValue: "originalView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2"))
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id == .init(rawValue: "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2"))
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
+        #expect(
+            computedUIState.treeBreakDownOfOriginalContent.parentNode.id == .init(
+                rawValue: TreeNode.rootNode.serialNumber
+            )
+        )
+
+        #expect(
+            computedUIState.treeBreakDownOfOriginalContent.children
+                .safeGetElement(at: 0)?.parentNode.id == .init(
+                    rawValue: RootNodeType.originalView.serialNumber
+                )
+        )
+
+        #expect(
+            computedUIState.treeBreakDownOfOriginalContent.children
+                .safeGetElement(at: 1)?.parentNode.id == .init(
+                    rawValue: RootNodeType.modifiedView.serialNumber
+                )
+        )
     }
 
     @Test
@@ -82,7 +97,7 @@ struct TreeContainerTests {
         )
         //THEN
         try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
-        #expect(treeContainer.isRecomputing == true)
+        #expect(treeContainer.isRecomputing == true) // if the delay is turned off this expectation might fail, and in that case this test doesn't make sense anymore
 
         try? await Task.sleep(for: .seconds(TreeContainer.waitTimeInSeconds + 0.5))
         #expect(treeContainer.isRecomputing == false)
@@ -93,18 +108,23 @@ struct TreeContainerTests {
         }
 
         #expect(
-            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id ==
-                .init(rawValue: "originalView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+            computedUIState.treeBreakDownOfOriginalContent.parentNode.id == .init(
+                rawValue: TreeNode.rootNode.serialNumber
+            )
         )
-        #expect( // More thorough test doesn't seem to be justified
-            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0
-        )
+
         #expect(
-            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id ==
-                .init(rawValue: "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+            computedUIState.treeBreakDownOfOriginalContent.children
+                .safeGetElement(at: 0)?.parentNode.id == .init(
+                    rawValue: RootNodeType.originalView.serialNumber
+                )
         )
-        #expect( // More thorough test doesn't seem to be justified
-            computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0
+
+        #expect(
+            computedUIState.treeBreakDownOfOriginalContent.children
+                .safeGetElement(at: 1)?.parentNode.id == .init(
+                    rawValue: RootNodeType.modifiedView.serialNumber
+                )
         )
     }
 }

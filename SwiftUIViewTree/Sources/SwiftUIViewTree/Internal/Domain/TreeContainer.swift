@@ -8,6 +8,7 @@ final class TreeContainer {
     static let waitTimeInSeconds = 1.0
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
+    private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
     func computeViewTree(
         maxDepth: Int,
@@ -48,21 +49,25 @@ final class TreeContainer {
                         )
                     }
                 case .treeComputed(let computedUIState):
-                    computedUIState.treeBreakDownOfOriginalContent.children = newTree.children //once this change is done, the whole view gets recalculated which takes significant time. Caching? Different tree implementation - expandable nodes?
-                    withAnimation(.easeInOut(duration: 1)) {
-                        self.uiState = .treeComputed(computedUIState) //replace only what's needed, better diffing
+                    for changedValue in TreeNodeRegistry.shared.allChangedNodes {
+                        withAnimation {
+                            computedUIState
+                                .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value
+                        }
                     }
             }
         }
     }
 }
 
-private extension TreeContainer {
+private extension TreeContainer { //TODO: semantically this is not a TreeContainer responsibility, rather a TreeBuilder or similar
     func getTreeFrom(
         originalView: any View,
         modifiedView: any View,
         maxDepth: Int
     ) -> Tree {
+        nodeSerialNumberCounter.reset()
+
         let newTree = Tree(
             node: .rootNode
         )
@@ -102,11 +107,7 @@ private extension TreeContainer {
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
                     value: "\(child.value)",
-                    displayStyle: String(describing: childMirror.displayStyle),
-                    subjectType: "\(childMirror.subjectType)",
-                    superclassMirror: String(describing: childMirror.superclassMirror),
-                    mirrorDescription: childMirror.description,
-                    childIndex: index,
+                    serialNumber: nodeSerialNumberCounter.counter,
                     childrenCount: childMirror.children.count
                 )
             ) // as Any? see type(of:) docs
@@ -139,11 +140,7 @@ private extension TreeContainer {
             type: "\(type(of: view))",
             label: rootNodeType.rawValue,
             value: "\(view)",
-            displayStyle: "\(String(describing: viewMirror.displayStyle))",
-            subjectType: "\(viewMirror.subjectType)",
-            superclassMirror: String(describing: viewMirror.superclassMirror),
-            mirrorDescription: viewMirror.description,
-            childIndex: 0,
+            serialNumber: rootNodeType.serialNumber,
             childrenCount: viewMirror.children.count
         )
 
@@ -154,4 +151,13 @@ private extension TreeContainer {
 enum RootNodeType: String {
     case originalView
     case modifiedView
+
+    var serialNumber: Int {
+        switch self {
+            case .originalView:
+                -2
+            case .modifiedView:
+                -3
+        }
+    }
 }

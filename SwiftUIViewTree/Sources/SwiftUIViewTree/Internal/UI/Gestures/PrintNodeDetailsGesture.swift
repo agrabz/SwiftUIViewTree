@@ -14,11 +14,7 @@ struct PrintNodeDetailsGesture: Gesture {
                         Label: \(node.label)
                         Type: \(node.type)
                         Value: \(node.value)
-                        DisplayStyle: \(node.displayStyle)
-                        SubjectType: \(node.subjectType)
-                        SuperclassMirror: \(node.superclassMirror)
-                        mirrorDescription: \(node.mirrorDescription)
-                        
+
                     """
                 )
             }

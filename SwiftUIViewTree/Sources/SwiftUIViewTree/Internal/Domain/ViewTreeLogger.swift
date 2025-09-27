@@ -14,6 +14,7 @@ struct ViewTreeLogger: ViewTreeLoggerProtocol {
     }
 }
 
+@MainActor
 protocol ViewTreeLoggerProtocol: Sendable {
     func logChangesOf(node: TreeNode, previousNodeValue: String)
 }

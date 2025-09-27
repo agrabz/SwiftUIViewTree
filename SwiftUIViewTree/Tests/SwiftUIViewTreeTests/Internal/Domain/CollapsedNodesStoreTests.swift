@@ -2,6 +2,7 @@
 @testable import SwiftUIViewTree
 import Testing
 
+@MainActor
 @Suite(.viewTree())
 struct CollapsedNodesStoreTests {
     @Test

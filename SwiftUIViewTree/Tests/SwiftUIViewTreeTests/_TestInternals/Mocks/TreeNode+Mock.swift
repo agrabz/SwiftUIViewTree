@@ -7,22 +7,14 @@ extension TreeNode {
         type: String = "type",
         label: String = UUID().uuidString, // To make sure that mocks are different
         value: String = "value",
-        displayStyle: String = "displayStyle",
-        subjectType: String = "subjectType",
-        superclassMirror: String = "superclassMirror",
-        mirrorDescription: String = "mirrorDescription",
-        childIndex: Int = 0,
+        serialNumber: Int = Int.random(in: 0...1_000_000),
         childrenCount: Int = 0
     ) -> TreeNode {
         self.init(
             type: type,
             label: label,
             value: value,
-            displayStyle: displayStyle,
-            subjectType: subjectType,
-            superclassMirror: superclassMirror,
-            mirrorDescription: mirrorDescription,
-            childIndex: childIndex,
+            serialNumber: serialNumber,
             childrenCount: childrenCount
         )
     }
