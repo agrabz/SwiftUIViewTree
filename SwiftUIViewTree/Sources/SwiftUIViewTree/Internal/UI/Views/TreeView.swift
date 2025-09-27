@@ -23,6 +23,7 @@ struct TreeView: View {
                     children: $tree.children
                 )
                 .fixedSize()
+                #error("this is effing great but the background color acts weird - not present until some collapses? then performance is again little worse?")
             }
         }
     }
