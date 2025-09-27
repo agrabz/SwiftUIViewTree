@@ -6,6 +6,79 @@ import Testing
 @Suite
 struct TreeNodeTests {
     @MainActor
+    struct Init {
+        @Test
+        func getsRegistered_First() {
+            //GIVEN
+            let node = TreeNode.createMock()
+            //WHEN
+            let registeredValue = TreeNodeMemoizer.shared.getRegisteredValueOfNodeWith(
+                serialNumber: node.serialNumber
+            )
+            //THEN
+            #expect(registeredValue == node.value)
+        }
+
+        @Test
+        func getsRegistered_Twice_ThereIs_NO_ValueChange() {
+            //GIVEN
+            let node1 = TreeNode.createMock(
+                type: "type",
+                label: "label",
+                value: "value",
+                serialNumber: 42,
+                childrenCount: 0
+            )
+
+            //WHEN
+            _ = TreeNode.createMock(
+                type: "type",
+                label: "label",
+                value: node1.value,
+                serialNumber: 42,
+                childrenCount: 0
+            )
+
+            //THEN
+            #expect(TreeNodeMemoizer.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == false)
+        }
+
+        @Test
+        func getsRegistered_Twice_There_IS_ValueChange() {
+            //GIVEN
+            let value1 = "value1"
+            let value2 = "value2"
+
+            let node1 = TreeNode.createMock(
+                type: "type",
+                label: "label",
+                value: value1,
+                serialNumber: 42,
+                childrenCount: 0
+            )
+
+            //WHEN
+            _ = TreeNode.createMock(
+                type: "type",
+                label: "label",
+                value: value2,
+                serialNumber: 42,
+                childrenCount: 0
+            )
+
+            //THEN
+            #expect(TreeNodeMemoizer.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == true)
+        }
+//        do {
+//            try TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
+//        } catch {
+//            if value != oldValue {
+//                TreeNodeMemoizer.shared.registerChangedNode(self)
+//            }
+//        }
+    }
+
+    @MainActor
     struct IsParent {
         @Test
         func `true`() async throws {
