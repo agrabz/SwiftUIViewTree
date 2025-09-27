@@ -46,9 +46,9 @@ struct TreeContainerTests {
             return
         }
 
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id == .init(rawValue: "originalView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2"))
+        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id == .init(rawValue: 1))
         #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
-        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id == .init(rawValue: "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2"))
+        #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id == .init(rawValue: 2))
         #expect(computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0) // More thorough test doesn't seem to be justified
     }
 
@@ -94,14 +94,14 @@ struct TreeContainerTests {
 
         #expect(
             computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.parentNode.id ==
-                .init(rawValue: "originalView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+                .init(rawValue: 1)
         )
         #expect( // More thorough test doesn't seem to be justified
             computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 0)?.children.count ?? 0 > 0
         )
         #expect(
             computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.parentNode.id ==
-                .init(rawValue: "modifiedView-Text-Optional(Swift.Mirror.DisplayStyle.struct)-Text-nil-Mirror for Text-0-2")
+                .init(rawValue: 2)
         )
         #expect( // More thorough test doesn't seem to be justified
             computedUIState.treeBreakDownOfOriginalContent.children.safeGetElement(at: 1)?.children.count ?? 0 > 0
