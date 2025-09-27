@@ -1,6 +1,10 @@
 import SwiftUI
 
-struct TreeView: View {
+struct TreeView: View, @MainActor Equatable {
+    static func == (lhs: TreeView, rhs: TreeView) -> Bool {
+        lhs.tree.parentNode.value == rhs.tree.parentNode.value
+    }
+
     @State private var collapsedNodesStore = CollapsedNodesStore.shared
 
     @Binding var tree: Tree
@@ -17,11 +21,13 @@ struct TreeView: View {
             ParentNodeView(
                 parentNode: $tree.parentNode
             )
+            .equatable()
 
             if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
                 ChildrenNodeView(
                     children: $tree.children
                 )
+                .equatable()
             }
         }
     }
