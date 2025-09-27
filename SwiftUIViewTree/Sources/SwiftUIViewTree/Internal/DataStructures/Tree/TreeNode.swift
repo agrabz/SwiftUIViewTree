@@ -8,14 +8,22 @@ final class TreeNode: Sendable, @MainActor Equatable {
         let rawValue: Int
     }
 
-    @ObservationIgnored
-    private var availableColors = LinkedColorList()
-
     let type: String
     let label: String
     var value: String
-    let serialNumber: Int //TODO: maybe could be just ID, and a comment would explain its nature
     let childrenCount: Int
+    let serialNumber: Int
+
+    var id: TreeNode.ID {
+        ID(rawValue: serialNumber)
+    }
+
+    var isParent: Bool {
+        childrenCount > 0
+    }
+
+    @ObservationIgnored
+    private var availableColors = LinkedColorList()
 
     @ObservationIgnored
     private var oldValue: String {
@@ -24,10 +32,6 @@ final class TreeNode: Sendable, @MainActor Equatable {
     @ObservationIgnored
     private var oldBackgroundColor = UIConstants.Color.initialNodeBackground
     var backgroundColor: Color {
-        if label == "_value" {
-            print("asdsa")
-        }
-
         if CollapsedNodesStore.shared.isCollapsed(nodeID: id) {
             return UIConstants.Color.collapsedNodeBackground
         }
@@ -39,14 +43,6 @@ final class TreeNode: Sendable, @MainActor Equatable {
         oldBackgroundColor = availableColors.getNextColor()
         TreeNodeMemoizer.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: serialNumber)
         return oldBackgroundColor
-    }
-
-    var isParent: Bool {
-        childrenCount > 0
-    }
-
-    var id: TreeNode.ID {
-        ID(rawValue: serialNumber)
     }
 
     init(
@@ -61,12 +57,6 @@ final class TreeNode: Sendable, @MainActor Equatable {
         self.value = value
         self.serialNumber = serialNumber
         self.childrenCount = childrenCount
-
-        print(serialNumber)
-
-        if label == "_value" {
-            print(label)
-        }
 
         do {
             try TreeNodeMemoizer.shared.registerNode(serialNumber: serialNumber, value: value)
