@@ -64,4 +64,24 @@ struct TreeNodeMemoizerTests {
         //THEN
         #expect(registeredValue == nil)
     }
+
+    @Test
+    func registerChangedNode() async throws {
+        //GIVEN
+        let node = TreeNode.createMock()
+        let sut = TreeNodeMemoizer()
+        try sut.registerNode(serialNumber: node.serialNumber, value: node.value)
+
+        //WHEN
+        let newValue = "new value"
+        node.value = newValue
+        sut.registerChangedNode(node)
+
+        //THEN
+        #expect(sut.allChangedNodes.contains { $0.serialNumber == node.serialNumber })
+        #expect(sut.getRegisteredValueOfNodeWith(serialNumber: node.serialNumber) == newValue)
+    }
 }
+
+//allChangedNodes.append(node)
+//memo[node.serialNumber] = node.value
