@@ -33,7 +33,7 @@ final class TreeContainer {
             )
 
             //TODO: without this delay, the view doesn't update properly in some cases (small-medium views only?)
-//            try? await Task.sleep(for: .seconds(Self.waitTimeInSeconds))
+            try? await Task.sleep(for: .seconds(Self.waitTimeInSeconds))
 
             withAnimation {
                 isRecomputing = false
