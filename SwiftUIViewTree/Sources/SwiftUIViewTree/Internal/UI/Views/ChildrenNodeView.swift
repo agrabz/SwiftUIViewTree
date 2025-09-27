@@ -13,15 +13,22 @@ struct ChildrenNodeView: View {
                     let _ = print()
                 }
 
-                TreeView(tree: .init(get: {
-                    child
-                }, set: { newValue in
-                    if let index = children.firstIndex(where: { child in
-                        child.parentNode.id == newValue.parentNode.id
-                    }) {
-                        children[index] = newValue
-                    }
-                }))
+                TreeView(
+                    tree: .init(
+                        get: {
+                            child
+                        },
+                        set: { newValue in
+                            if let index = children.firstIndex(
+                                where: { child in
+                                    child.parentNode.id == newValue.parentNode.id
+                                }
+                            ) {
+                                children[index] = newValue
+                            }
+                        }
+                    )
+                )
             }
         }
     }
