@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct LinkedColorList {
-    private let colors: [Color] = [
+    let colors: [Color] = [
         UIConstants.Color.initialNodeBackground,
         .red.opacity(0.8),
         .yellow.opacity(0.8),
