@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class TreeNode: @unchecked Sendable, @MainActor Equatable { //TODO: no unchecked
+final class TreeNode: Sendable, @MainActor Equatable {
     struct ID: Hashable {
         let rawValue: Int
     }
