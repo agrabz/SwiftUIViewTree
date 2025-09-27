@@ -1,10 +1,6 @@
 import SwiftUI
 
-struct NodeView: View, @MainActor Equatable {
-    static func == (lhs: NodeView, rhs: NodeView) -> Bool {
-        lhs.node.value == rhs.node.value
-    }
-
+struct NodeView: View {
     @Binding var node: TreeNode
 
     private var nodeLabel: String {

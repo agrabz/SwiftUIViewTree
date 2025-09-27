@@ -1,10 +1,6 @@
 import SwiftUI
 
-struct ParentNodeView: View, @MainActor Equatable {
-    static func == (lhs: ParentNodeView, rhs: ParentNodeView) -> Bool {
-        lhs.parentNode.value == rhs.parentNode.value
-    }
-
+struct ParentNodeView: View {
     @State var dummy = false //TODO: without this the first isRecomputing updates every node color, not just the ones that got a new value. there used to be another state here for navigation, hence its location
     @Binding var parentNode: TreeNode
 
@@ -18,7 +14,6 @@ struct ParentNodeView: View, @MainActor Equatable {
         }
 
         NodeView(node: $parentNode)
-            .equatable()
             .simultaneousGesture(
                 CollapseNodeGesture(
                     node: $parentNode

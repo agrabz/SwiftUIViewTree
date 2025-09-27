@@ -1,10 +1,6 @@
 import SwiftUI
 
-struct ChildrenNodeView: View, @MainActor Equatable {
-    static func == (lhs: ChildrenNodeView, rhs: ChildrenNodeView) -> Bool {
-        lhs.children.map(\.parentNode.value) == rhs.children.map(\.parentNode.value)
-    }
-
+struct ChildrenNodeView: View {
     @Binding var children: [Tree]
 
     var body: some View {
@@ -26,7 +22,6 @@ struct ChildrenNodeView: View, @MainActor Equatable {
                         children[index] = newValue
                     }
                 }))
-                .equatable()
             }
         }
     }

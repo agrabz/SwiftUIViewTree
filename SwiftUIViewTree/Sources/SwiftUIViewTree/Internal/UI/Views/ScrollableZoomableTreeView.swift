@@ -1,10 +1,6 @@
 import SwiftUI
 
-struct ScrollableZoomableTreeView: View, @MainActor Equatable {
-    static func == (lhs: ScrollableZoomableTreeView, rhs: ScrollableZoomableTreeView) -> Bool {
-        lhs.tree.parentNode.value == rhs.tree.parentNode.value
-    }
-
+struct ScrollableZoomableTreeView: View {
     @State private var currentZoom: CGFloat = StatefulMagnifyGesture.idleZoom
     @State private var totalZoom: CGFloat = StatefulMagnifyGesture.minZoom
     @State private var offset: CGSize = .zero
@@ -41,7 +37,6 @@ struct ScrollableZoomableTreeView: View, @MainActor Equatable {
         }
 
         TreeView(tree: $tree)
-            .equatable()
             .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
                 LinesView(
                     parentTree: self.tree,
