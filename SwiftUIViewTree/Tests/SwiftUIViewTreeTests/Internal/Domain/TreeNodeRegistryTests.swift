@@ -28,10 +28,11 @@ struct TreeNodeRegistryTests {
 
         #expect(
             //THEN
-            throws: TreeNodeRegistry.Error.nodeIsAlreadyRegistered) {
-                //WHEN
-                try sut.registerNode(serialNumber: serialNumber, value: value)
-            }
+            throws: TreeNodeRegistry.Error.nodeIsAlreadyRegistered
+        ) {
+            //WHEN
+            try sut.registerNode(serialNumber: serialNumber, value: value)
+        }
     }
 
     @Test
