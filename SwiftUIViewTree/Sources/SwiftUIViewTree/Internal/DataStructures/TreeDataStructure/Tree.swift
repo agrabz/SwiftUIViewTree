@@ -2,7 +2,7 @@ import Observation
 
 @MainActor
 @Observable
-final class Tree: @MainActor Equatable {
+final class Tree {
 
     subscript(serialNumber: Int) -> TreeNode? {
         if parentNode.serialNumber == serialNumber {
@@ -26,10 +26,5 @@ final class Tree: @MainActor Equatable {
     ) {
         self.parentNode = node
         self.children = children
-    }
-
-    static func == (lhs: Tree, rhs: Tree) -> Bool {
-        lhs.parentNode == rhs.parentNode &&
-        lhs.children == rhs.children
     }
 }
