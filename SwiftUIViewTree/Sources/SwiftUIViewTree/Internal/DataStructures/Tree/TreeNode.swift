@@ -62,6 +62,11 @@ final class TreeNode: Sendable {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
             if value != oldValue {
+                ViewTreeLogger.shared.logChangesOf(
+                    node: self,
+                    previousNodeValue: oldValue
+                )
+
                 TreeNodeRegistry.shared.registerChangedNode(self)
             }
         }
