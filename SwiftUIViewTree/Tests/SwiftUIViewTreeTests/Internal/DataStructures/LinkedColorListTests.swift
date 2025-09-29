@@ -2,7 +2,7 @@
 @testable import SwiftUIViewTree
 import Testing
 
-@Suite
+@Suite(.viewTree())
 struct LinkedColorListTests {
     @Test
     func getNextColor_First() async throws {

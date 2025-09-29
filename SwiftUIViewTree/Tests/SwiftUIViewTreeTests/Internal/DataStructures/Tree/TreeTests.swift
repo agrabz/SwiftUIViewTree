@@ -3,7 +3,7 @@
 import Testing
 
 @MainActor
-@Suite
+@Suite(.viewTree())
 struct TreeTests {
     @Test
     func subscript_FOUND() async throws {

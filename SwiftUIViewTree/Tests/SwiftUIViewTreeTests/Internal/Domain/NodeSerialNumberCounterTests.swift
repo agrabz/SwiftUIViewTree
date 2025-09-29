@@ -3,7 +3,7 @@
 import Testing
 
 @MainActor
-@Suite
+@Suite(.viewTree())
 struct NodeSerialNumberCounterTests {
     @Test
     func getCounter_Once() async throws {

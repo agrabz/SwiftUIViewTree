@@ -1,7 +1,7 @@
 
 @MainActor
 final class TreeNodeRegistry {
-    static let shared = TreeNodeRegistry()
+    @TaskLocal static var shared = TreeNodeRegistry()
 
     private var registry: [Int: String] = [:]
     private(set) var allChangedNodes = [TreeNode]()

@@ -4,7 +4,7 @@ import SwiftUI
 import Testing
 
 @MainActor
-@Suite
+@Suite(.viewTree())
 struct TreeWindowViewModelTests {
     @Test
     func initialState() {
