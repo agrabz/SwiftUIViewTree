@@ -36,42 +36,37 @@ struct ScrollableZoomableTreeView: View {
             let _ = print()
         }
 
-        TreeView(tree: $tree)
-            .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
-                LinesView(
-                    parentTree: self.tree,
-                    nodeCenters: nodeCenters
-                )
-            }
-            .offset(offset)
-            .scaleEffect(getScale())
-            .background(
-                LinearGradient(
-                    gradient:
-                        Gradient(
-                            colors: [
-                                .blue,
-                                .teal
-                            ]
-                        ),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
+        ZStack {
+            LinearGradient(
+                gradient:
+                    Gradient(
+                        colors: [
+                            .blue,
+                            .teal
+                        ]
+                    ),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
             )
-            .frame( //by providing an explicit frame the performance of gesture attaching and readiness is improved
-                width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.viewTree,
-                height: UIScreen.main.bounds.height * UIConstants.ScreenRatioOf.viewTree
-            )
+            .ignoresSafeArea()
             .gesture(magnifyGesture)
             .simultaneousGesture(dragGesture)
-            .onAppear {
-                if isPerformanceLoggingEnabled {
-                    print("ScrollableZoomableTreeView Appeared: \(Date())")
-                }
 
-                //TODO: without this change, or by manual zooming before the first interaction the whole tree will be re-rendered. has to be resolved, probably the problem is with the Equatable conformance of the views
-                self.offset = .init(width: 1, height: 1)
-            }
+            TreeView(tree: $tree)
+                .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
+                    LinesView(
+                        parentTree: self.tree,
+                        nodeCenters: nodeCenters
+                    )
+                }
+                .offset(offset)
+                .scaleEffect(getScale())
+                .onAppear {
+                    if isPerformanceLoggingEnabled {
+                        print("ScrollableZoomableTreeView Appeared: \(Date())")
+                    }
+                }
+        }
     }
 }
 
