@@ -69,11 +69,9 @@ If certain parts of the tree are redundant for you, then you can double tap to c
 
 https://github.com/user-attachments/assets/d20066a0-d73a-45cc-91c9-4cda23e5b082
 
-A collapsed node is always gray and a badge indicates how many *direct* children it has:
+A collapsed node is always gray and a badge indicates how many descendants it has:
 
-<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-29 at 10 51 06" src="https://github.com/user-attachments/assets/85b4747c-d24e-4a6a-af86-bdd4ccf797a2" />
-
-Note: it is in the backlog to show the sum of direct *+ indirect* children (like grandchild, great-grandchild etc.).
+<img width="919" height="514" alt="image" src="https://github.com/user-attachments/assets/0b1c51b2-bbb2-4823-b062-25c8fd3d2169" />
 
 ## Tap a node to see full details
 
@@ -118,8 +116,6 @@ There are numerous articles on the web that are about this topic. I'll collect s
 - Explicit support for iPad and Mac.
 
 - CI on PRs
-
-- Collapsed nodes to show sum of direct + indirect children
 
 - Add history of graph state to be able to track quick changes e.g. image blinking
 
