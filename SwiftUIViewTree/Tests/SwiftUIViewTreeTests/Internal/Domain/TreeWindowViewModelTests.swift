@@ -32,7 +32,6 @@ struct TreeWindowViewModelTests {
 
         //WHEN
         treeWindowViewModel.computeViewTree(
-            maxDepth: .max,
             originalView: originalView,
             modifiedView: modifiedView
         )
@@ -76,7 +75,6 @@ struct TreeWindowViewModelTests {
         let modifiedView = Text("Hello, World!").bold()
 
         treeWindowViewModel.computeViewTree(
-            maxDepth: .max,
             originalView: originalView,
             modifiedView: modifiedView
         )
@@ -91,7 +89,6 @@ struct TreeWindowViewModelTests {
 
         //WHEN
         treeWindowViewModel.computeViewTree(
-            maxDepth: .max,
             originalView: originalView,
             modifiedView: modifiedView
         )

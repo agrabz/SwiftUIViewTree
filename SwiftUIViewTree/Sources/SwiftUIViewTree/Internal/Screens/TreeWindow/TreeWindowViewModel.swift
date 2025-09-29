@@ -14,7 +14,6 @@ final class TreeWindowViewModel {
     private(set) var isRecomputing = false
 
     func computeViewTree(
-        maxDepth: Int,
         originalView: any View,
         modifiedView: any View
     ) {
@@ -31,8 +30,7 @@ final class TreeWindowViewModel {
 
             let newTree = treeBuilder.getTreeFrom(
                 originalView: originalView,
-                modifiedView: modifiedView,
-                maxDepth: maxDepth
+                modifiedView: modifiedView
             )
 
             //TODO: without this delay, the view doesn't update properly in some cases (small-medium views only?)

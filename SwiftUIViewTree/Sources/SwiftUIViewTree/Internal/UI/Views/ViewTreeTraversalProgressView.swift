@@ -9,7 +9,7 @@ struct ViewTreeTraversalProgressView: View {
                 .font(.callout)
                 .bold()
 
-            Text("It might take a while. If this takes too long, consider using `maxDepth`.")
+            Text("It might take a while.")
                 .font(.caption)
         }
         .padding()
