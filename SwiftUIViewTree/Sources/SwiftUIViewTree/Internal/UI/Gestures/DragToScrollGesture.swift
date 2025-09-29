@@ -4,16 +4,6 @@ struct DragToScrollGesture: Gesture {
     @Binding var offset: CGSize
     let scale: CGFloat
 
-    //TODO: probably these values (2000, 1000) won't be good for all use cases
-    /// The maximum horizontal offset allowed at the current scale
-    private var horizontalMaxScale: CGFloat {
-        2000 * ((scale - floor(scale)) + 1)
-    }
-    /// The maximum vertical offset allowed at the current scale
-    private var verticalMaxScale: CGFloat {
-        1000 * ((scale - floor(scale)) + 1)
-    }
-
     var body: some Gesture {
         DragGesture()
             .onChanged { value in
@@ -23,31 +13,19 @@ struct DragToScrollGesture: Gesture {
             }
             .onEnded { value in
                 withAnimation {
-                    offset = getClampedNewOffset(from: value)
+                    offset = getNewOffset(from: value)
                 }
             }
     }
 }
 
 private extension DragToScrollGesture {
+    //TODO: there used to be some clamping here but it was fragile. got deleted in commit: fae1d7469c45fbfc4ebb7eff808abee453b00e5f
     func getNewOffset(from value: DragGesture.Value) -> CGSize {
         var newOffset = self.offset
         // Scale is taken as a factor to make the dragging feel more natural when zoomed in, i.e. less sensitive.
         newOffset.width += (value.translation.width / 2) / max(self.scale, 1)
         newOffset.height += (value.translation.height / 2) / max(self.scale, 1)
-        return newOffset
-    }
-
-    func getClampedNewOffset(from value: DragGesture.Value) -> CGSize {
-        let newOffset = getNewOffset(from: value)
-        let clampedNewOffset = clampNewOffset(newOffset)
-        return clampedNewOffset
-    }
-
-    func clampNewOffset(_ newOffset: CGSize) -> CGSize {
-        var newOffset = newOffset
-        newOffset.width = min(max(newOffset.width, -horizontalMaxScale), horizontalMaxScale)
-        newOffset.height = min(max(newOffset.height, -verticalMaxScale), verticalMaxScale)
         return newOffset
     }
 }
