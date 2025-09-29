@@ -2,7 +2,9 @@
 
 Use `.renderViewTree(of: self)` to see the view tree visually next to your original view.
 
-<img width="928" height="520" alt="image" src="https://github.com/user-attachments/assets/976b6d36-cfb3-49cd-be47-14454a160bb0" />
+<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-29 at 10 39 17" src="https://github.com/user-attachments/assets/0a3396c7-c9ba-4558-8973-d20124597b18" />
+
+The screenshot above is produced by the code below:
 
 ```swift
 struct ContentView: View {
@@ -12,28 +14,45 @@ struct ContentView: View {
         Button {
             isTapped.toggle()
         } label: {
-            Text(isTapped ? "Yo what?" : "Hello, world!")
-                .font(.largeTitle)
-                .bold(isTapped ? true : false)
+            VStack {
+                Image(systemName: "globe")
+                    .imageScale(.large)
+                    .foregroundStyle(.tint)
+                Text(isTapped ? "Yo what?" : "Hello, world!")
+                    .bold(isTapped ? true : false)
+            }
+            .padding()
         }
-        .renderViewTree(of: self) //<------
+        .renderViewTree(of: self) // <--------
     }
 }
 ```
 
+Without the `.renderViewTree(of: self)` line the view would be just like:
+
+<img width="524.4" height="241.2" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-29 at 10 57 40" src="https://github.com/user-attachments/assets/31dfc7c4-ed70-4442-b0a7-984808b74607" />
+
 # Features
+
+## Pinch to zoom and scroll
+
+You can also pinch to zoom and scroll to any direction:
+
+https://github.com/user-attachments/assets/b0756ae5-9318-4f92-a82c-59788132cdbe
+
 
 ## Node color change on updates
 
 If something got updated due to a state change it gets a new color:
 
-![fixed-6](https://github.com/user-attachments/assets/211e8183-a862-4966-92b2-97ea98cd2acc)
+https://github.com/user-attachments/assets/132e4292-ad7e-4931-8324-2442e309e95a
 
-![fixed-7](https://github.com/user-attachments/assets/55294e33-0915-4e3a-8de4-1ef5a17a4d92)
+https://github.com/user-attachments/assets/78de71ea-5ea5-4dc0-bac1-98c3627c86df
 
-## Change printing to the console
 
-And you can also see it in the console:
+## Change Detection | Printing to the console
+
+When a node gets a new color you can also see it in the console:
 
 ```
 🚨Changes detected
@@ -42,36 +61,28 @@ And you can also see it in the console:
 🟩New value: "true"
 ```
 
-## Pinch to zoom and scroll
-
-You can also pinch to zoom and scroll to any direction:
-
-![SimulatorScreenRecording-iPhone16Pro-2025-08-22at16 18 24-ezgif com-rotate](https://github.com/user-attachments/assets/f436e600-1887-4dd1-8fa3-f3885f49d673)
-
-## Collapse and re-expand
+## Double tap a node to Collapse/ Expand
 
 If certain parts of the tree are redundant for you, then you can double tap to collapse and later reopen them:
 
-![fixed-5](https://github.com/user-attachments/assets/0c4ccb9a-e04f-4b03-aacf-43a4f1e523ad)
+https://github.com/user-attachments/assets/d20066a0-d73a-45cc-91c9-4cda23e5b082
 
-A collapsed node is always gray and a badge indicates how many direct children it has:
+A collapsed node is always gray and a badge indicates how many *direct* children it has:
 
-<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-08-28 at 11 04 57" src="https://github.com/user-attachments/assets/457309b8-4b26-4a82-9f3a-c181ed502bad" />
+<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-29 at 10 51 06" src="https://github.com/user-attachments/assets/85b4747c-d24e-4a6a-af86-bdd4ccf797a2" />
 
+Note: it is in the backlog to show the sum of direct *+ indirect* children (like grandchild, great-grandchild etc.).
 
-## See full reflection details
+## Tap a node to see full details
 
-You can tap on any node to print its full details.
+You might not want to zoom in always to see the details of a specific node. 
+In that case you can tap on any node to print its full details.
 
 ```
 Node Details:
     Label: _value
     Type: Bool
     Value: true
-    DisplayStyle: nil
-    SubjectType: Bool
-    SuperclassMirror: nil
-    mirrorDescription: Mirror for Bool
 ```
 
 ## Swift 6 Support
@@ -88,37 +99,9 @@ There are numerous articles on the web that are about this topic. I'll collect s
 
 - [SWIFTUI THAT PAIN: REFRESH , REDRAWS, RESET— X — FILE](https://thexcodewhisperer.medium.com/swiftui-refresh-x-file-4502c98e00cd)
 
-# Performance
-
-The implementation uses Swift's reflection API ([Mirror](https://developer.apple.com/documentation/swift/mirror)) **recursively**.
-
-While applying these view modifiers to your views might look attractive, it is important to be aware of its low performance with big views, however with small or medium views it should be okay. 
-
-For the time being you can use the `maxDepth` input parameter
-
-
-```swift
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-                .font(.largeTitle)
-                .bold()
-        }
-        .renderViewTree(of: self, maxDepth: 2) // indicating that you only want to see 2 levels instead of the full view tree
-    }
-}
-
-```
-
 # Roadmap
 
 - Add licence
-
-- Performance improvements, better UX with really big views.
 
 - Closable, reopenable viewtree window
 
@@ -132,7 +115,15 @@ struct ContentView: View {
 
 - Explicit support for iPad and Mac.
 
-- CI to run before every PR
+- CI on PRs
+
+- Collapsed nodes to show sum of direct + indirect children
+
+- Add history of graph state to be able to track quick changes e.g. image blinking
+
+- Do more tests with animations, navigations
+
+- Build a table in the documentation of tested view types - maybe
 
 # Alternatives
 
