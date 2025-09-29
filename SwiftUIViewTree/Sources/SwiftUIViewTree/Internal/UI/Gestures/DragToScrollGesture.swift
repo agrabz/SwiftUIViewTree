@@ -4,16 +4,6 @@ struct DragToScrollGesture: Gesture {
     @Binding var offset: CGSize
     let scale: CGFloat
 
-    //TODO: probably these values (2000, 1000) won't be good for all use cases
-    /// The maximum horizontal offset allowed at the current scale
-    private var horizontalMaxScale: CGFloat {
-        2000 * ((scale - floor(scale)) + 1)
-    }
-    /// The maximum vertical offset allowed at the current scale
-    private var verticalMaxScale: CGFloat {
-        1000 * ((scale - floor(scale)) + 1)
-    }
-
     var body: some Gesture {
         DragGesture()
             .onChanged { value in
