@@ -11,15 +11,16 @@ final class TreeNode: Sendable {
     let type: String
     let label: String
     var value: String
-    let childrenCount: Int
     let serialNumber: Int
+
+    var descendantCount: Int = 0
 
     var id: TreeNode.ID {
         ID(rawValue: serialNumber)
     }
 
     var isParent: Bool {
-        childrenCount > 0
+        descendantCount > 0
     }
 
     @ObservationIgnored
@@ -50,13 +51,11 @@ final class TreeNode: Sendable {
         label: String,
         value: String,
         serialNumber: Int,
-        childrenCount: Int
     ) {
         self.type = type
         self.label = label
         self.value = value
         self.serialNumber = serialNumber
-        self.childrenCount = childrenCount
 
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
@@ -79,6 +78,5 @@ extension TreeNode {
         label: "Root node",
         value: "Root node",
         serialNumber: -1,
-        childrenCount: 0 //is actually 2 (modifiedView+originalView) but collapsing the root node does not make sense
     )
 }
