@@ -65,6 +65,9 @@ struct ScrollableZoomableTreeView: View {
                     if isPerformanceLoggingEnabled {
                         print("ScrollableZoomableTreeView Appeared: \(Date())")
                     }
+
+                    //TODO: without this below tapping on nodes isn't recognized before some zooming or scrolling, only after
+                    self.offset = .init(width: 1, height: 1)
                 }
         }
     }
