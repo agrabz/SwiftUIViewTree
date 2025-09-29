@@ -36,7 +36,7 @@ struct LinkedColorListTests {
         var list = LinkedColorList()
 
         //WHEN
-        for _ in 1...list.colors.count {
+        for _ in 1...list.colors.count - 1 {
             _ = list.getNextColor()
         }
         let result = list.getNextColor()
