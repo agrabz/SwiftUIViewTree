@@ -3,7 +3,7 @@
 import Testing
 
 @MainActor
-@Suite
+@Suite(.viewTree())
 struct TreeNodeRegistryTests {
     @Test
     func registerNode_NotYetRegisteredNode() throws {

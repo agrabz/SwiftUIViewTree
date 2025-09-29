@@ -2,7 +2,7 @@
 @testable import SwiftUIViewTree
 import Testing
 
-@Suite
+@Suite(.viewTree())
 struct ArrayExtensionTests {
     @Test(
         arguments: [

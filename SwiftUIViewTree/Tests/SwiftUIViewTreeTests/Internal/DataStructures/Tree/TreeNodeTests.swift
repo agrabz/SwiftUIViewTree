@@ -3,7 +3,7 @@
 import Testing
 
 @MainActor
-@Suite
+@Suite(.viewTree())
 struct TreeNodeTests {
     @MainActor
     struct Init {
@@ -26,8 +26,7 @@ struct TreeNodeTests {
                 type: "type",
                 label: "label",
                 value: "value",
-                serialNumber: 42,
-                childrenCount: 0
+                serialNumber: 42
             )
 
             //WHEN
@@ -35,8 +34,7 @@ struct TreeNodeTests {
                 type: "type",
                 label: "label",
                 value: node1.value,
-                serialNumber: 42,
-                childrenCount: 0
+                serialNumber: 42
             )
 
             //THEN
@@ -58,8 +56,7 @@ struct TreeNodeTests {
                 type: "type",
                 label: "label",
                 value: value1,
-                serialNumber: 42,
-                childrenCount: 0
+                serialNumber: 42
             )
 
             //WHEN
@@ -67,8 +64,7 @@ struct TreeNodeTests {
                 type: "type",
                 label: "label",
                 value: value2,
-                serialNumber: 42,
-                childrenCount: 0
+                serialNumber: 42
             )
 
             //THEN
@@ -87,7 +83,8 @@ struct TreeNodeTests {
         @Test
         func `true`() async throws {
             //GIVEN
-            let parent = TreeNode.createMock(childrenCount: 2)
+            let parent = TreeNode.createMock()
+            parent.descendantCount = 2
             //WHEN
             let isParent = parent.isParent
             //THEN
@@ -97,9 +94,10 @@ struct TreeNodeTests {
         @Test
         func `false`() async throws {
             //GIVEN
-            let parent = TreeNode.createMock(childrenCount: 0)
+            let notParent = TreeNode.createMock()
+            notParent.descendantCount = 0
             //WHEN
-            let isParent = parent.isParent
+            let isParent = notParent.isParent
             //THEN
             #expect(isParent == false)
         }
