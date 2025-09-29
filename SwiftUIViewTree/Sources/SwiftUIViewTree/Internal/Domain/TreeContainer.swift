@@ -108,7 +108,6 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
                     label: child.label ?? "<unknown>",
                     value: "\(child.value)",
                     serialNumber: nodeSerialNumberCounter.counter,
-                    childrenCount: childMirror.children.count
                 )
             ) // as Any? see type(of:) docs
             childTree.children = convertToTreesRecursively(
@@ -117,9 +116,18 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
                 maxDepth: maxDepth,
                 currentDepth: currentDepth + 1
             )
+
+            childTree.parentNode.descendantCount = getDescendantCount(of: childTree)
+
             return childTree
         }
         return result
+    }
+
+    func getDescendantCount(of tree: Tree) -> Int {
+        tree.children.reduce(0) { total, child in
+            total + 1 + getDescendantCount(of: child)
+        }
     }
 
     func getRootTree(from rootView: any View, as rootNodeType: RootNodeType, maxDepth: Int) -> Tree {
@@ -134,17 +142,12 @@ private extension TreeContainer { //TODO: semantically this is not a TreeContain
     }
 
     func getRootTreeNode(of view: any View, as rootNodeType: RootNodeType) -> TreeNode {
-        let viewMirror = Mirror(reflecting: view)
-
-        let rootNode = TreeNode(
+        TreeNode(
             type: "\(type(of: view))",
             label: rootNodeType.rawValue,
             value: "\(view)",
             serialNumber: rootNodeType.serialNumber,
-            childrenCount: viewMirror.children.count
         )
-
-        return rootNode
     }
 }
 
