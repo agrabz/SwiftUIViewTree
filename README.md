@@ -1,3 +1,5 @@
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/agrabz/SwiftUIViewTree)
+
 # Usage
 
 Use `.renderViewTree(of: self)` to see the view tree visually next to your original view.
