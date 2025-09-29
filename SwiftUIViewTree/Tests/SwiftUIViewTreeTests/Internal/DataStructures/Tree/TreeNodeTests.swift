@@ -19,7 +19,7 @@ struct TreeNodeTests {
             #expect(registeredValue == node.value)
         }
 
-        @Test
+        @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
         func getsRegistered_Twice_ThereIs_NO_ValueChange() {
             //GIVEN
             let node1 = TreeNode.createMock(
@@ -41,9 +41,14 @@ struct TreeNodeTests {
 
             //THEN
             #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == false)
+            guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
+                Issue.record("ViewTreeLogger is not spy: \(ViewTreeLogger.shared)")
+                return
+            }
+            #expect(spyViewTreeLogger.hasBeenCalled == false)
         }
 
-        @Test
+        @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
         func getsRegistered_Twice_There_IS_ValueChange() {
             //GIVEN
             let value1 = "value1"
@@ -68,6 +73,12 @@ struct TreeNodeTests {
 
             //THEN
             #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == true)
+            guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
+                Issue.record("ViewTreeLogger is not spy: \(ViewTreeLogger.shared)")
+                return
+            }
+            #expect(spyViewTreeLogger.hasBeenCalled == true)
+
         }
     }
 
