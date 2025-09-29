@@ -4,13 +4,13 @@ import SwiftUI
 struct LinkedColorList {
     let colors: [Color] = [
         UIConstants.Color.initialNodeBackground,
-        .red.opacity(0.8),
-        .yellow.opacity(0.8),
-        .green.opacity(0.8),
-        .orange.opacity(0.8),
-        .pink.opacity(0.8),
-        .mint.opacity(0.8),
-        .indigo.opacity(0.8)
+        .red,
+        .yellow,
+        .green,
+        .orange,
+        .pink,
+        .mint,
+        .indigo,
     ]
     private var currentIndex = 0
 
