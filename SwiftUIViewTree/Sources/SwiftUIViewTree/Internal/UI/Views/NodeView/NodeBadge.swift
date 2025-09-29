@@ -7,7 +7,7 @@ struct NodeBadge: View {
     var body: some View {
         Text("\(count)")
             .bold()
-            .frame(width: 16, height: 16)
+            .frame(minWidth: 16, idealHeight: 16)
             .font(.body)
             .foregroundColor(.black)
             .padding(8.0)
