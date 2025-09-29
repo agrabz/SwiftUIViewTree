@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct ParentNodeView: View {
-    @State var dummy = false //TODO: without this the first isRecomputing updates every node color, not just the ones that got a new value. there used to be another state here for navigation, hence its location
     @Binding var parentNode: TreeNode
 
     var body: some View {
