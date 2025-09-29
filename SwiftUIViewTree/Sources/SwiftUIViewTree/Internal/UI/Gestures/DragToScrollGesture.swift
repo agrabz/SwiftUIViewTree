@@ -23,7 +23,7 @@ struct DragToScrollGesture: Gesture {
             }
             .onEnded { value in
                 withAnimation {
-                    offset = getClampedNewOffset(from: value)
+                    offset = getNewOffset(from: value)
                 }
             }
     }
@@ -35,19 +35,6 @@ private extension DragToScrollGesture {
         // Scale is taken as a factor to make the dragging feel more natural when zoomed in, i.e. less sensitive.
         newOffset.width += (value.translation.width / 2) / max(self.scale, 1)
         newOffset.height += (value.translation.height / 2) / max(self.scale, 1)
-        return newOffset
-    }
-
-    func getClampedNewOffset(from value: DragGesture.Value) -> CGSize {
-        let newOffset = getNewOffset(from: value)
-        let clampedNewOffset = clampNewOffset(newOffset)
-        return clampedNewOffset
-    }
-
-    func clampNewOffset(_ newOffset: CGSize) -> CGSize {
-        var newOffset = newOffset
-        newOffset.width = min(max(newOffset.width, -horizontalMaxScale), horizontalMaxScale)
-        newOffset.height = min(max(newOffset.height, -verticalMaxScale), verticalMaxScale)
         return newOffset
     }
 }
