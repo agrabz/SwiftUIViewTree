@@ -2,12 +2,14 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class TreeContainer { //TODO: TreeWindowViewModel?
-    static var shared: TreeContainer = .init()
-    // Change this value to simulate longer/shorter computation times
+final class TreeWindowViewModel {
+    /// Unlike usual view models, TreeWindowViewModel is used as a singleton, because its work is triggered before the creation of its view (TreeWindowScreen)
+    static var shared: TreeWindowViewModel = .init()
+    /// Change this value to simulate longer/shorter computation times
     static let waitTimeInSeconds = 1.0
 
     private var treeBuilder = TreeBuilder()
+
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
 

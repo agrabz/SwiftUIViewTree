@@ -5,44 +5,44 @@ import Testing
 
 @MainActor
 @Suite
-struct TreeContainerTests {
+struct TreeWindowViewModelTests {
     @Test
     func initialState() {
         //GIVEN
-        var treeContainer: TreeContainer
+        var treeWindowViewModel: TreeWindowViewModel
 
         //WHEN
-        treeContainer = TreeContainer()
+        treeWindowViewModel = TreeWindowViewModel()
 
         //THEN
-        guard case .computingTree = treeContainer.uiState else {
-            Issue.record("Unexpected initial state \(treeContainer.uiState)")
+        guard case .computingTree = treeWindowViewModel.uiState else {
+            Issue.record("Unexpected initial state \(treeWindowViewModel.uiState)")
             return
         }
-        #expect(treeContainer.isRecomputing == false)
+        #expect(treeWindowViewModel.isRecomputing == false)
     }
 
     @Test
     func computeViewTree_FirstTime() async {
         //GIVEN
-        let treeContainer = TreeContainer()
+        let treeWindowViewModel = TreeWindowViewModel()
 
         let originalView = Text("Hello, World!")
         let modifiedView = Text("Hello, World!").bold()
 
         //WHEN
-        treeContainer.computeViewTree(
+        treeWindowViewModel.computeViewTree(
             maxDepth: .max,
             originalView: originalView,
             modifiedView: modifiedView
         )
-        #expect(treeContainer.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(TreeContainer.waitTimeInSeconds + 0.5))
+        #expect(treeWindowViewModel.isRecomputing == false)
+        try? await Task.sleep(for: .seconds(TreeWindowViewModel.waitTimeInSeconds + 0.5))
 
         //THEN
-        #expect(treeContainer.isRecomputing == false)
-        guard case .treeComputed(let computedUIState) = treeContainer.uiState else {
-            Issue.record("Unexpected state after computing the tree \(treeContainer.uiState)")
+        #expect(treeWindowViewModel.isRecomputing == false)
+        guard case .treeComputed(let computedUIState) = treeWindowViewModel.uiState else {
+            Issue.record("Unexpected state after computing the tree \(treeWindowViewModel.uiState)")
             return
         }
 
@@ -70,40 +70,40 @@ struct TreeContainerTests {
     @Test
     func computeViewTree_NonFirstTime() async {
         //GIVEN
-        let treeContainer = TreeContainer()
+        let treeWindowViewModel = TreeWindowViewModel()
 
         let originalView = Text("Hello, World!")
         let modifiedView = Text("Hello, World!").bold()
 
-        treeContainer.computeViewTree(
+        treeWindowViewModel.computeViewTree(
             maxDepth: .max,
             originalView: originalView,
             modifiedView: modifiedView
         )
-        #expect(treeContainer.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(TreeContainer.waitTimeInSeconds + 0.5))
+        #expect(treeWindowViewModel.isRecomputing == false)
+        try? await Task.sleep(for: .seconds(TreeWindowViewModel.waitTimeInSeconds + 0.5))
 
-        #expect(treeContainer.isRecomputing == false)
-        guard case .treeComputed = treeContainer.uiState else {
-            Issue.record("Unexpected state after computing the tree \(treeContainer.uiState)")
+        #expect(treeWindowViewModel.isRecomputing == false)
+        guard case .treeComputed = treeWindowViewModel.uiState else {
+            Issue.record("Unexpected state after computing the tree \(treeWindowViewModel.uiState)")
             return
         }
 
         //WHEN
-        treeContainer.computeViewTree(
+        treeWindowViewModel.computeViewTree(
             maxDepth: .max,
             originalView: originalView,
             modifiedView: modifiedView
         )
         //THEN
         try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
-        #expect(treeContainer.isRecomputing == true) // if the delay is turned off this expectation might fail, and in that case this test doesn't make sense anymore
+        #expect(treeWindowViewModel.isRecomputing == true) // if the delay is turned off this expectation might fail, and in that case this test doesn't make sense anymore
 
-        try? await Task.sleep(for: .seconds(TreeContainer.waitTimeInSeconds + 0.5))
-        #expect(treeContainer.isRecomputing == false)
+        try? await Task.sleep(for: .seconds(TreeWindowViewModel.waitTimeInSeconds + 0.5))
+        #expect(treeWindowViewModel.isRecomputing == false)
 
-        guard case .treeComputed(let computedUIState) = treeContainer.uiState else {
-            Issue.record("Unexpected state after computing the tree \(treeContainer.uiState)")
+        guard case .treeComputed(let computedUIState) = treeWindowViewModel.uiState else {
+            Issue.record("Unexpected state after computing the tree \(treeWindowViewModel.uiState)")
             return
         }
 

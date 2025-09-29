@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
-    @State private var treeContainer = TreeContainer.shared
+    @State private var treeWindowViewModel = TreeWindowViewModel.shared
 
     let originalContent: Content
 
@@ -9,11 +9,11 @@ struct TreeWindowScreen<Content: View>: View {
         HStack {
             originalContent
                 .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.originalContent)
-                .disabled(TreeContainer.shared.isRecomputing)
-                .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
+                .disabled(TreeWindowViewModel.shared.isRecomputing)
+                .blur(radius: TreeWindowViewModel.shared.isRecomputing ? 2.0 : 0.0)
 
             NavigationStack { //TODO: might not be needed anymore, was added originally to support navigation in the tree, namely .popover, but now menu is used. removing this will cause a weird look during the initial computation
-                switch treeContainer.uiState {
+                switch treeWindowViewModel.uiState {
                     case .computingTree:
                         ViewTreeTraversalProgressView()
                             .onDisappear {
@@ -33,10 +33,10 @@ struct TreeWindowScreen<Content: View>: View {
                             ScrollableZoomableTreeView(
                                 tree: computedUIState.treeBreakDownOfOriginalContent
                             )
-                            .disabled(TreeContainer.shared.isRecomputing)
-                            .blur(radius: TreeContainer.shared.isRecomputing ? 2.0 : 0.0)
+                            .disabled(TreeWindowViewModel.shared.isRecomputing)
+                            .blur(radius: TreeWindowViewModel.shared.isRecomputing ? 2.0 : 0.0)
 
-                            if TreeContainer.shared.isRecomputing {
+                            if TreeWindowViewModel.shared.isRecomputing {
                                 ViewTreeTraversalProgressView()
                             }
                         }
