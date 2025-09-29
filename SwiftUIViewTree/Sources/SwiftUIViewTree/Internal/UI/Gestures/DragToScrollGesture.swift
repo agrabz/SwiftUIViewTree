@@ -30,6 +30,7 @@ struct DragToScrollGesture: Gesture {
 }
 
 private extension DragToScrollGesture {
+    //TODO: there used to be some clamping here but it was fragile. got deleted in commit: fae1d7469c45fbfc4ebb7eff808abee453b00e5f
     func getNewOffset(from value: DragGesture.Value) -> CGSize {
         var newOffset = self.offset
         // Scale is taken as a factor to make the dragging feel more natural when zoomed in, i.e. less sensitive.
