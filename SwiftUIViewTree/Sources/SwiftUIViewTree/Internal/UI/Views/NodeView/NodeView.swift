@@ -74,14 +74,14 @@ struct NodeView: View {
         .padding(.all, 8)
         .background(node.backgroundColor)
         .cornerRadius(20)
-        .overlay(alignment: .topTrailing) {
-            if isCollapsed {
-                NodeBadge(count: node.childrenCount)
-            }
-        }
         .overlay {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.black, lineWidth: 0.5)
+        }
+        .overlay(alignment: .topTrailing) {
+            if isCollapsed {
+                NodeBadge(count: node.descendantCount)
+            }
         }
         .frame(width: 370, height: 200)
         .padding(.all, 8)
