@@ -72,9 +72,7 @@ struct NodeView: View {
         }
         .foregroundStyle(.black)
         .padding(.all, 8)
-        .background( //TODO: use onChange(of:) instead?
-            node.backgroundColor
-        )
+        .background(node.backgroundColor)
         .cornerRadius(20)
         .overlay(alignment: .topTrailing) {
             if isCollapsed {
