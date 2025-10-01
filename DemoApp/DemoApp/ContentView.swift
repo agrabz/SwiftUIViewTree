@@ -6,9 +6,9 @@ struct Subview2: View {
     @Binding var isTapped: Bool
 
     var body: some View {
-        let _ = Self._printChanges()
         Text(isTapped ? "Yo what?" : "Hello, World!")
             .bold(isTapped ? true : false)
+            .notifyViewTree(of: self)
         }
 }
 
@@ -26,6 +26,7 @@ struct ContentView: View {
                     .foregroundStyle(.tint)
 
                 a
+//                    .imReRenderingMyselfAndLettingYouKnowSoYouCanUpdateTheViewTree()
             }
             .padding()
         }
