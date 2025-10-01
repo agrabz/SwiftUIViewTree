@@ -2,10 +2,21 @@
 import SwiftUI
 import SwiftUIViewTree
 
-struct ContentView: View {
-    @State var isTapped = false
+struct Subview2: View {
+    @Binding var isTapped: Bool
 
     var body: some View {
+        let _ = Self._printChanges()
+        Text(isTapped ? "Yo what?" : "Hello, World!")
+            .bold(isTapped ? true : false)
+        }
+}
+
+struct ContentView: View {
+    @State private var isTapped = false
+
+    var body: some View {
+        let a = Subview2(isTapped: $isTapped)
         Button {
             isTapped.toggle()
         } label: {
@@ -13,12 +24,12 @@ struct ContentView: View {
                 Image(systemName: "globe")
                     .imageScale(.large)
                     .foregroundStyle(.tint)
-                Text(isTapped ? "Yo what?" : "Hello, world!")
-                    .bold(isTapped ? true : false)
+
+                a
             }
             .padding()
         }
-        .renderViewTree(of: self)
+        .renderViewTree(of: a)
     }
 }
 
