@@ -57,6 +57,8 @@ final class TreeNode: Sendable {
         self.value = value
         self.serialNumber = serialNumber
 
+        print(serialNumber, type, label, value)
+
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {

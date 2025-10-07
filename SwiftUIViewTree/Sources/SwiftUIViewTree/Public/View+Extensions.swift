@@ -12,12 +12,35 @@ public extension View {
         return modifier(RenderViewTreeModifier())
     }
 
-    func notifyViewTree(of originalView: any View) -> some View {
-        return modifier(
-            NotifyViewTreeModifier(
-                originalSubView: originalView,
+    func notifyViewTreeOnRerender(of originalSubView: any View) -> some View {
+        if !IsFirst.shared.isFirst {
+            TreeWindowViewModel.shared
+                .computeSubViewChanges(
+                    originalSubView: originalSubView,
+                    modifiedSubView: self
+                )
+
+            return self
+        } else {
+            IsFirst.shared.isFirst = false
+            return self
+        }
+    }
+
+    func notifyViewTree(of originalSubView: any View) -> some View {
+        TreeWindowViewModel.shared
+            .computeSubViewChanges(
+                originalSubView: originalSubView,
                 modifiedSubView: self
             )
-        )
+
+        return self
     }
+}
+
+@MainActor
+final class IsFirst {
+    static let shared = IsFirst()
+    private init() {}
+    var isFirst = true
 }

@@ -29,6 +29,55 @@ struct TreeBuilder {
 
         return newTree
     }
+
+    func merge(fullTree: Tree, subViewTree: Tree) -> Tree {
+        /// traverse fullTree with BFS until parentNode == subViewTree.parentNode
+        let matchingSubtree = findMatchingSubtree(in: fullTree, matching: subViewTree) ?? subViewTree
+        return matchingSubtree
+    }
+
+    func findMatchingSubtree(in root: Tree, matching target: Tree) -> Tree? {
+        var queue: [Tree] = [root]
+
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+
+            // 1️⃣ Check if current node could be the root of the target subtree
+            if areSubtreesEqual(current, target) {
+                return current
+            }
+
+            // 2️⃣ Continue BFS
+            queue.append(contentsOf: current.children)
+        }
+
+        return nil
+    }
+
+    // Helper to check structural equality
+    private func areSubtreesEqual(_ lhs: Tree, _ rhs: Tree) -> Bool {
+        // Compare the nodes themselves
+        guard
+            lhs.parentNode.label == rhs.parentNode.label,
+            lhs.parentNode.type == rhs.parentNode.type
+        else {
+            return false
+        }
+
+        // Compare number of children
+        guard lhs.children.count == rhs.children.count else { return false }
+
+        // Recursively compare children one-by-one
+        for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
+            if !areSubtreesEqual(leftChild, rightChild) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+
 }
 
 private extension TreeBuilder {

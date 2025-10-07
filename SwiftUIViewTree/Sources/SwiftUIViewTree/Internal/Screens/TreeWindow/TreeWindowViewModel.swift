@@ -18,8 +18,6 @@ final class TreeWindowViewModel {
     /// Change this value to simulate longer/shorter computation times
     static let waitTimeInSeconds = 1.0
 
-    private var treeBuilder = TreeBuilder()
-
 //    private var originalView: (any View)?
 //    private var modifiedView: (any View)?
 
@@ -52,23 +50,40 @@ final class TreeWindowViewModel {
         originalSubView: any View,
         modifiedSubView: any View
     ) {
-        ///get original full viewtree
+        ///get full viewtree
         guard case .treeComputed(let computedUIState) = uiState else {
             return
         }
 
         let tree = computedUIState.treeBreakDownOfOriginalContent
 
-        ///get subviewtree
+        ///get viewtree of the changed subview
+        var treeBuilder = TreeBuilder()
         let subviewTree = treeBuilder.getTreeFrom(
             originalView: originalSubView,
             modifiedView: modifiedSubView
         )
 
-        ///find subviewtree in full viewtree - how? serialnumber cannot be the same. remember serialnumber?
-        
+        ///find FIRST subviewtree in full viewtree - later I should make it better to find the exact one
+        ///merge the two trees
+        let mergedTree = TreeBuilder().merge(
+            fullTree: tree,
+            subViewTree: subviewTree
+        )
+
+        print("a")
 
         ///apply changes
+        guard case .treeComputed(let computedUIState) = uiState else {
+            return
+        }
+
+        for changedValue in TreeNodeRegistry.shared.allChangedNodes {
+            withAnimation {
+                computedUIState
+                    .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value
+            }
+        }
     }
 
     func computeViewTree(
@@ -88,6 +103,7 @@ final class TreeWindowViewModel {
                     }
             }
 
+            var treeBuilder = TreeBuilder()
             let newTree = treeBuilder.getTreeFrom(
                 originalView: originalView,
                 modifiedView: modifiedView
