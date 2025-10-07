@@ -9,6 +9,7 @@ struct Subview2: View {
         Text(isTapped ? "Yo what?" : "Hello, World!")
             .bold(isTapped ? true : false)
             .notifyViewTreeOnRerender(of: self)
+//            .renderViewTree(of: self)
         }
 }
 

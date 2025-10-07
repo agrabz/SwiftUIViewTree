@@ -13,7 +13,7 @@ final class TreeNode: Sendable {
     var value: String
     let serialNumber: Int
 
-    var descendantCount: Int = 0
+    var descendantCount = 0
 
     var id: TreeNode.ID {
         ID(rawValue: serialNumber)
@@ -57,7 +57,7 @@ final class TreeNode: Sendable {
         self.value = value
         self.serialNumber = serialNumber
 
-        print(serialNumber, type, label, value)
+//        print(serialNumber, type, label, value, descendantCount)
 
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)

@@ -66,10 +66,14 @@ final class TreeWindowViewModel {
 
         ///find FIRST subviewtree in full viewtree - later I should make it better to find the exact one
         ///merge the two trees
-        let mergedTree = TreeBuilder().merge(
-            fullTree: tree,
-            subViewTree: subviewTree
+        let matchingSubTree = TreeBuilder().findMatchingSubtree(
+            in: tree,
+            matching: subviewTree.children.first!
         )
+//        merge(
+//            fullTree: tree,
+//            subViewTree: subviewTree
+//        )
 
         print("a")
 

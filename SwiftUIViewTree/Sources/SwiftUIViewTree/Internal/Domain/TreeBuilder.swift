@@ -30,11 +30,11 @@ struct TreeBuilder {
         return newTree
     }
 
-    func merge(fullTree: Tree, subViewTree: Tree) -> Tree {
-        /// traverse fullTree with BFS until parentNode == subViewTree.parentNode
-        let matchingSubtree = findMatchingSubtree(in: fullTree, matching: subViewTree) ?? subViewTree
-        return matchingSubtree
-    }
+//    func merge(fullTree: Tree, subViewTree: Tree) -> Tree {
+//        /// traverse fullTree with BFS until parentNode == subViewTree.parentNode
+//        let matchingSubtree = findMatchingSubtree(in: fullTree, matching: subViewTree) ?? subViewTree
+//        return matchingSubtree
+//    }
 
     func findMatchingSubtree(in root: Tree, matching target: Tree) -> Tree? {
         var queue: [Tree] = [root]
@@ -86,7 +86,47 @@ private extension TreeBuilder {
         source: any View,
     ) -> [Tree] {
         let result = mirror.children.enumerated().map { (index, child) in
+            guard
+                child.label != "location",
+                !"\(type(of: child.value))".starts(with: "AtomicBox"),
+                !"\(type(of: child.value))".starts(with: "AtomicBuffer")
+            else {
+                print()
+                print("!!location or atomic found!!")
+                print()
+                return Tree(
+                    node: TreeNode(
+                        type: "location",
+                        label: "location",
+                        value: "location",
+                        serialNumber: nodeSerialNumberCounter.counter
+                    )
+                ) // as Any? see type(of:) docs
+            }
             let childMirror = Mirror(reflecting: child.value)
+
+            var value = "\(child.value)"
+            /// if type contains "location:" then replace the part between "location:" and the first comma "," after "location:", with string "SwiftUIViewTree.location"
+
+            if let locationRange = value.range(of: " location:") {
+                print("found location:")
+                // Start searching *after* "location:"
+                let start = locationRange.upperBound
+
+                // Find the first comma or closing parenthesis after it
+                let end = value[start...].firstIndex(where: { $0 == "," || $0 == ")" })
+
+                if let end = end {
+                    // Replace the substring between "location:" and that symbol
+                    value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
+                } else {
+                    // If neither comma nor parenthesis found, replace until the end
+                    value.replaceSubrange(start..<value.endIndex, with: " SwiftUIViewTree.location")
+                }
+            }
+
+            print(value)
+
 
             let childTree = Tree(
                 node: TreeNode(
@@ -102,6 +142,13 @@ private extension TreeBuilder {
             )
 
             childTree.parentNode.descendantCount = getDescendantCount(of: childTree)
+            print(
+                childTree.parentNode.serialNumber,
+                childTree.parentNode.label,
+                childTree.parentNode.type,
+                childTree.parentNode.value,
+                childTree.parentNode.descendantCount,
+            )
 
             return childTree
         }
