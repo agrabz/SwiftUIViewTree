@@ -16,7 +16,7 @@ struct ContentView: View {
     @State private var isTapped = false
 
     var body: some View {
-        let a = Subview2(isTapped: $isTapped)
+//        let a = Subview2(isTapped: $isTapped)
         Button {
             isTapped.toggle()
         } label: {
@@ -25,12 +25,13 @@ struct ContentView: View {
                     .imageScale(.large)
                     .foregroundStyle(.tint)
 
-                a
+                Subview2(isTapped: $isTapped)
+//                a
 //                    .imReRenderingMyselfAndLettingYouKnowSoYouCanUpdateTheViewTree()
             }
             .padding()
         }
-        .renderViewTree(of: a)
+        .renderViewTree(of: self)
     }
 }
 

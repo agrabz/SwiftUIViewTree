@@ -12,12 +12,12 @@ public extension View {
         return modifier(RenderViewTreeModifier())
     }
 
-    func notifyViewTree(of originalView: any View) -> some View { //onFirstAppear ViewModifier?
-        TreeWindowViewModel.shared.computeViewTree(
-            originalView: originalView,
-            modifiedView: self
+    func notifyViewTree(of originalView: any View) -> some View {
+        return modifier(
+            NotifyViewTreeModifier(
+                originalSubView: originalView,
+                modifiedSubView: self
+            )
         )
-
-        return self
     }
 }

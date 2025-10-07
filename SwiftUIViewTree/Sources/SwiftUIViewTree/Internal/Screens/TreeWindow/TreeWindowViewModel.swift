@@ -2,12 +2,12 @@
 import Combine
 import SwiftUI
 
-@MainActor
-final class SubviewChangeDetector: ObservableObject {
-    static var shared: SubviewChangeDetector = .init()
-
-    var isChangeDetected = PassthroughSubject<Void, Never>()
-}
+//@MainActor
+//final class SubviewChangeDetector: ObservableObject {
+//    static var shared: SubviewChangeDetector = .init()
+//
+//    var isChangeDetected = PassthroughSubject<Void, Never>()
+//}
 
 
 @MainActor
@@ -20,40 +20,63 @@ final class TreeWindowViewModel {
 
     private var treeBuilder = TreeBuilder()
 
-    private var originalView: (any View)?
-    private var modifiedView: (any View)?
+//    private var originalView: (any View)?
+//    private var modifiedView: (any View)?
 
     private var cancellables = Set<AnyCancellable>()
 
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
 
-    init() {
-        SubviewChangeDetector.shared.isChangeDetected
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                guard
-                    let self,
-                    let originalView,
-                    let modifiedView
-                else {
-                    return
-                }
+//    init() {
+//        SubviewChangeDetector.shared.isChangeDetected
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] in
+//                guard
+//                    let self,
+//                    let originalView,
+//                    let modifiedView
+//                else {
+//                    return
+//                }
+//
+//                self.computeViewTree(
+//                    originalView: originalView,
+//                    modifiedView: modifiedView
+//                )
+//            }
+//            .store(in: &cancellables)
+//    }
 
-                self.computeViewTree(
-                    originalView: originalView,
-                    modifiedView: modifiedView
-                )
-            }
-            .store(in: &cancellables)
+    func computeSubViewChanges(
+        originalSubView: any View,
+        modifiedSubView: any View
+    ) {
+        ///get original full viewtree
+        guard case .treeComputed(let computedUIState) = uiState else {
+            return
+        }
+
+        let tree = computedUIState.treeBreakDownOfOriginalContent
+
+        ///get subviewtree
+        let subviewTree = treeBuilder.getTreeFrom(
+            originalView: originalSubView,
+            modifiedView: modifiedSubView
+        )
+
+        ///find subviewtree in full viewtree - how? serialnumber cannot be the same. remember serialnumber?
+        
+
+        ///apply changes
     }
 
     func computeViewTree(
         originalView: any View,
         modifiedView: any View
     ) {
-        self.originalView = originalView
-        self.modifiedView = modifiedView
+//        self.originalView = originalView
+//        self.modifiedView = modifiedView
         //TODO: review if this Task can be placed somewhere else, so we might not need the sleep below?
         Task {
             switch uiState {
