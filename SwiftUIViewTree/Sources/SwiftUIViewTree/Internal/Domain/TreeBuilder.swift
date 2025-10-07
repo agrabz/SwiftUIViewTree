@@ -114,25 +114,42 @@ private extension TreeBuilder {
                 let start = locationRange.upperBound
 
                 // Find the first comma or closing parenthesis after it
-                let end = value[start...].firstIndex(where: { $0 == "," || $0 == ")" })
+                let end = value[start...].endIndex //.firstIndex(where: { $0 == "," || $0 == ")" })
 
-                if let end = end {
+//                if let end = end {
                     // Replace the substring between "location:" and that symbol
                     value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
-                } else {
-                    // If neither comma nor parenthesis found, replace until the end
-                    value.replaceSubrange(start..<value.endIndex, with: " SwiftUIViewTree.location")
-                }
+//                } else {
+//                    // If neither comma nor parenthesis found, replace until the end
+//                    value.replaceSubrange(start..<value.endIndex, with: " SwiftUIViewTree.location")
+//                }
             }
 
-            print(value)
+            if let locationRange = value.range(of: " _location:") {
+                print("found _location:")
+                // Start searching *after* "location:"
+                let start = locationRange.upperBound
+
+                // Find the first comma or closing parenthesis after it
+                let end = value[start...].endIndex //.firstIndex(where: { $0 == "," || $0 == ")" })
+
+//                if let end = end {
+                    // Replace the substring between "location:" and that symbol
+                    value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
+//                } else {
+//                    // If neither comma nor parenthesis found, replace until the end
+//                    value.replaceSubrange(start..<value.endIndex, with: " SwiftUIViewTree.location")
+//                }
+            }
+
+//            print(value)
 
 
             let childTree = Tree(
                 node: TreeNode(
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
-                    value: "\(child.value)",
+                    value: value,
                     serialNumber: nodeSerialNumberCounter.counter
                 )
             ) // as Any? see type(of:) docs
