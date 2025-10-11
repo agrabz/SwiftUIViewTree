@@ -54,37 +54,19 @@ struct TreeBuilder {
         return nil
     }
 
-    // Helper to check structural equality
-    private func areSubtreesEqual(_ lhs: Tree, _ rhs: Tree) -> Bool {
-        // Compare the nodes themselves
-        guard
-            lhs.parentNode.label == rhs.parentNode.label
-        else {
-            print("labels NOT equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
-            return false
-        }
-        print("labels IS equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
-        guard
-            lhs.parentNode.type == rhs.parentNode.type
-        else {
-            print("types NOT equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
-            return false
-        }
-        print("types IS equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
+    func flatten(_ treeToFlatten: Tree) -> [TreeNode] {
+        var flattenedTree: [TreeNode] = []
 
-        // Recursively compare children one-by-one
-        for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
-            if !areSubtreesEqual(leftChild, rightChild) {
-                print("children NOT equal", leftChild.parentNode.label, rightChild.parentNode.label)
-                return false
-            }
-            print("children ARE equal", leftChild.parentNode.label, rightChild.parentNode.label)
-        }
+        flattenedTree.append(treeToFlatten.parentNode)
 
-        return true
+        for child in treeToFlatten.children {
+            flattenedTree.append(
+                contentsOf: flatten(child)
+            )
+        }
+        
+        return flattenedTree
     }
-
-
 }
 
 private extension TreeBuilder {
@@ -202,5 +184,34 @@ private extension TreeBuilder {
             value: "\(view)",
             serialNumber: rootNodeType.serialNumber,
         )
+    }
+
+    func areSubtreesEqual(_ lhs: Tree, _ rhs: Tree) -> Bool {
+        // Compare the nodes themselves
+        guard
+            lhs.parentNode.label == rhs.parentNode.label
+        else {
+            print("labels NOT equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
+            return false
+        }
+        print("labels IS equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
+        guard
+            lhs.parentNode.type == rhs.parentNode.type
+        else {
+            print("types NOT equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
+            return false
+        }
+        print("types IS equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
+
+        // Recursively compare children one-by-one
+        for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
+            if !areSubtreesEqual(leftChild, rightChild) {
+                print("children NOT equal", leftChild.parentNode.label, rightChild.parentNode.label)
+                return false
+            }
+            print("children ARE equal", leftChild.parentNode.label, rightChild.parentNode.label)
+        }
+
+        return true
     }
 }

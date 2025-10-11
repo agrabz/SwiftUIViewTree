@@ -66,10 +66,13 @@ final class TreeWindowViewModel {
 
         ///find FIRST subviewtree in full viewtree - later I should make it better to find the exact one
         ///merge the two trees
-        let matchingSubTree = TreeBuilder().findMatchingSubtree(
+        guard let matchingSubTree = TreeBuilder().findMatchingSubtree(
             in: tree,
             matching: subviewTree.children.first!.children.first!
-        )
+        ) else {
+            print("couldn't find matching subtree")
+            return
+        }
 //        merge(
 //            fullTree: tree,
 //            subViewTree: subviewTree
@@ -87,14 +90,15 @@ final class TreeWindowViewModel {
         /// match the serialnumbers of the allChangedNodes with the SNs of the matchingSubTree
         ///
 
-        for changedTreeNode in zip(
-            TreeNodeRegistry.shared.allChangedNodes,
-            treeBuilder.flat(matchingSubTree)
+        for (changedTreeNode, originalTreeNode) in zip(
+            TreeNodeRegistry.shared.allChangedNodes.dropFirst(),
+            treeBuilder.flatten(matchingSubTree)
         ) {
-            print("- changed:", changedTreeNode.label, changedTreeNode.type, changedTreeNode.value)
+            print("- original:", originalTreeNode.serialNumber, originalTreeNode.label, originalTreeNode.type, originalTreeNode.value)
+            print("- changed:", changedTreeNode.serialNumber, changedTreeNode.label, changedTreeNode.type, changedTreeNode.value)
             withAnimation {
                 computedUIState
-                    .treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = changedTreeNode.value
+                    .treeBreakDownOfOriginalContent[originalTreeNode.serialNumber]?.value = changedTreeNode.value
             }
         }
     }
