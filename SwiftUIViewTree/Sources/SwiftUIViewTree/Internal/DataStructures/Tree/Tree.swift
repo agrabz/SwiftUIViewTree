@@ -27,3 +27,13 @@ final class Tree {
         }
     }
 }
+
+extension Tree: @MainActor CustomStringConvertible {
+    var description: String {
+        var description = parentNode.description
+        for child in children {
+            description += "\n" + "-- " + child.description
+        }
+        return description
+    }
+}

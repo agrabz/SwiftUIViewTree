@@ -82,3 +82,9 @@ extension TreeNode {
         serialNumber: -1,
     )
 }
+
+extension TreeNode: @MainActor CustomStringConvertible {
+    var description: String {
+        "(\(self.serialNumber)) \(self.label): \(self.type) = \(self.value)"
+    }
+}
