@@ -57,7 +57,7 @@ final class TreeWindowViewModel {
 
         let tree = computedUIState.treeBreakDownOfOriginalContent
 
-        ///get viewtree of the changed subview
+        ///get viewtree of the changed subview --> this comes with the side effect of TreeNodeRegistry registrations that won't be accurate as the subview's children cannot have the same serial numbers as the original view got - this is handled later below
         var treeBuilder = TreeBuilder()
         let subviewTree = treeBuilder.getTreeFrom(
             originalView: originalSubView,
@@ -66,9 +66,9 @@ final class TreeWindowViewModel {
 
         ///find FIRST subviewtree in full viewtree - later I should make it better to find the exact one
         ///merge the two trees
-        guard let matchingSubTree = TreeBuilder().findMatchingSubtree(
+        guard let matchingSubTree = TreeBuilder().findMatchingSubtree( //TODO: adjust to include first in its name
             in: tree,
-            matching: subviewTree.children.first!.children.first!
+            matching: subviewTree.children.first!.children.first! //TODO: no force cast
         ) else {
             print("couldn't find matching subtree")
             return
@@ -87,18 +87,30 @@ final class TreeWindowViewModel {
             return
         }
 
-        /// match the serialnumbers of the allChangedNodes with the SNs of the matchingSubTree
-        ///
+        /// remove semi-correct change registrations and replace them with correct registrations
+        let allChangedNodes = TreeNodeRegistry.shared.allChangedNodes
+        for changedNode in allChangedNodes {
+            TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
+        }
 
-        for (changedTreeNode, originalTreeNode) in zip(
-            TreeNodeRegistry.shared.allChangedNodes.dropFirst(),
-            treeBuilder.flatten(matchingSubTree)
+        let flattenedMatchingSubTree = treeBuilder.flatten(matchingSubTree)
+        for (node, originalNode) in zip(
+            flattenedMatchingSubTree,
+            allChangedNodes.dropFirst() /// drop first to make sure that the technical .originalView is exlcuded
         ) {
-            print("- original:", originalTreeNode.serialNumber, originalTreeNode.label, originalTreeNode.type, originalTreeNode.value)
+            _ = TreeNode( //initializing a TreeNode comes with the side-effect of registering it to TreeNodeRegistry, which is enough for us to make sure that it'll get the proper details to render a new background color on value change
+                type: originalNode.type,
+                label: originalNode.label,
+                value: originalNode.value,
+                serialNumber: node.serialNumber
+            )
+        }
+
+        for changedTreeNode in TreeNodeRegistry.shared.allChangedNodes {
             print("- changed:", changedTreeNode.serialNumber, changedTreeNode.label, changedTreeNode.type, changedTreeNode.value)
             withAnimation {
                 computedUIState
-                    .treeBreakDownOfOriginalContent[originalTreeNode.serialNumber]?.value = changedTreeNode.value
+                    .treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = changedTreeNode.value
             }
         }
     }
