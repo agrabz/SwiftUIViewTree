@@ -58,20 +58,27 @@ struct TreeBuilder {
     private func areSubtreesEqual(_ lhs: Tree, _ rhs: Tree) -> Bool {
         // Compare the nodes themselves
         guard
-            lhs.parentNode.label == rhs.parentNode.label,
-            lhs.parentNode.type == rhs.parentNode.type
+            lhs.parentNode.label == rhs.parentNode.label
         else {
+            print("labels NOT equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
             return false
         }
-
-        // Compare number of children
-        guard lhs.children.count == rhs.children.count else { return false }
+        print("labels IS equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
+        guard
+            lhs.parentNode.type == rhs.parentNode.type
+        else {
+            print("types NOT equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
+            return false
+        }
+        print("types IS equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
 
         // Recursively compare children one-by-one
         for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
             if !areSubtreesEqual(leftChild, rightChild) {
+                print("children NOT equal", leftChild.parentNode.label, rightChild.parentNode.label)
                 return false
             }
+            print("children ARE equal", leftChild.parentNode.label, rightChild.parentNode.label)
         }
 
         return true

@@ -68,24 +68,33 @@ final class TreeWindowViewModel {
         ///merge the two trees
         let matchingSubTree = TreeBuilder().findMatchingSubtree(
             in: tree,
-            matching: subviewTree.children.first!
+            matching: subviewTree.children.first!.children.first!
         )
 //        merge(
 //            fullTree: tree,
 //            subViewTree: subviewTree
 //        )
 
-        print("a")
+        print()
+        print("--matchingSubTree", matchingSubTree)
+        print()
 
         ///apply changes
         guard case .treeComputed(let computedUIState) = uiState else {
             return
         }
 
-        for changedValue in TreeNodeRegistry.shared.allChangedNodes {
+        /// match the serialnumbers of the allChangedNodes with the SNs of the matchingSubTree
+        ///
+
+        for changedTreeNode in zip(
+            TreeNodeRegistry.shared.allChangedNodes,
+            treeBuilder.flat(matchingSubTree)
+        ) {
+            print("- changed:", changedTreeNode.label, changedTreeNode.type, changedTreeNode.value)
             withAnimation {
                 computedUIState
-                    .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value
+                    .treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = changedTreeNode.value
             }
         }
     }
