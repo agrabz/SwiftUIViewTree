@@ -66,7 +66,7 @@ final class TreeWindowViewModel {
 
         ///find FIRST subviewtree in full viewtree - later I should make it better to find the exact one
         ///merge the two trees
-        guard let matchingSubTree = TreeBuilder().findMatchingSubtree( //TODO: adjust to include first in its name
+        guard let (changedMatchingSubTree, originalMatchingSubtree) = TreeBuilder().findMatchingSubtree( //TODO: adjust to include first in its name
             in: tree,
             matching: subviewTree.children.first!.children.first! //TODO: no force cast
         ) else {
@@ -79,7 +79,8 @@ final class TreeWindowViewModel {
 //        )
 
         print()
-        print("--matchingSubTree", matchingSubTree)
+        print("--changedMatchingSubTree", changedMatchingSubTree)
+        print("--originalMatchingSubtree", originalMatchingSubtree)
         print()
 
         ///apply changes
@@ -93,16 +94,18 @@ final class TreeWindowViewModel {
             TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
         }
 
-        let flattenedMatchingSubTree = treeBuilder.flatten(matchingSubTree)
-        for (node, originalNode) in zip(
-            flattenedMatchingSubTree,
-            allChangedNodes.dropFirst() /// drop first to make sure that the technical .originalView is exlcuded
+        let flattenedChangedMatchingSubTree = treeBuilder.flatten(changedMatchingSubTree)
+        let flattenedOriginalMatchingSubTree = treeBuilder.flatten(originalMatchingSubtree)
+        for (changedNode, originalNode) in zip(
+            flattenedChangedMatchingSubTree,
+            flattenedOriginalMatchingSubTree
         ) {
             _ = TreeNode( //initializing a TreeNode comes with the side-effect of registering it to TreeNodeRegistry, which is enough for us to make sure that it'll get the proper details to render a new background color on value change
                 type: originalNode.type,
                 label: originalNode.label,
                 value: originalNode.value,
-                serialNumber: node.serialNumber
+                serialNumber: changedNode.serialNumber //TODO: is this logical? changedNode.serialNumber sounds to be the one that we try to get rid of?
+                //TODO: where is Hello and Yo what?! from the graph
             )
         }
 

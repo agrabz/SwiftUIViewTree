@@ -36,7 +36,7 @@ struct TreeBuilder {
 //        return matchingSubtree
 //    }
 
-    func findMatchingSubtree(in root: Tree, matching target: Tree) -> Tree? {
+    func findMatchingSubtree(in root: Tree, matching target: Tree) -> (changed: Tree, original: Tree)? {
         var queue: [Tree] = [root]
 
         while !queue.isEmpty {
@@ -44,7 +44,7 @@ struct TreeBuilder {
 
             // 1️⃣ Check if current node could be the root of the target subtree
             if areSubtreesEqual(current, target) {
-                return current
+                return (current, target)
             }
 
             // 2️⃣ Continue BFS
