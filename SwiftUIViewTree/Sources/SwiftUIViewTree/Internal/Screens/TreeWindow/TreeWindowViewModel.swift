@@ -136,7 +136,7 @@ final class TreeWindowViewModel {
                     for changedValue in TreeNodeRegistry.shared.allChangedNodes {
                         withAnimation {
                             computedUIState
-                                .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value
+                                .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.setValue(to: changedValue.value)
                         }
                     }
             }

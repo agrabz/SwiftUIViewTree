@@ -10,7 +10,7 @@ final class TreeNode: Sendable {
 
     let type: String
     let label: String
-    var value: String
+    private(set) var value: String
     let serialNumber: Int
 
     var descendantCount = 0
@@ -73,8 +73,10 @@ final class TreeNode: Sendable {
         }
     }
 
+    /// To be able to set the value from async, non MainActor isolated contexts, we have to have this setter.
+    /// "await node.value = await someOtherValue" is not valid
     func setValue(to: String) {
-        value = to
+        self.value = to
     }
 }
 
