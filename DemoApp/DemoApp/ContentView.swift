@@ -8,7 +8,7 @@ struct Subview2: View {
     var body: some View {
         Text(isTapped ? "Yo what?" : "Hello, World!")
             .bold(isTapped ? true : false)
-            .notifyViewTreeOnRerender(of: self)
+            .notifyViewTreeOnChanges(of: self)
 //            .renderViewTree(of: self)
         }
 }

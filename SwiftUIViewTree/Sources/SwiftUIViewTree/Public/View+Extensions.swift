@@ -12,7 +12,8 @@ public extension View {
         return modifier(RenderViewTreeModifier())
     }
 
-    func notifyViewTreeOnRerender(of originalSubView: any View) -> some View {
+    //TODO: documentation
+    func notifyViewTreeOnChanges(of originalSubView: any View) -> some View {
         if !IsFirst.shared.isFirst {
             TreeWindowViewModel.shared
                 .computeSubViewChanges(
