@@ -37,7 +37,7 @@ struct TreeBuilder {
             let current = queue.removeFirst()
 
             if areSubtreesEqual(current, target) {
-                return (current, target)
+                return (changed: current, original: target)
             }
 
             queue.append(contentsOf: current.children)
