@@ -26,16 +26,6 @@ public extension View {
             return self
         }
     }
-
-    func notifyViewTree(of originalSubView: any View) -> some View {
-        TreeWindowViewModel.shared
-            .computeSubViewChanges(
-                originalSubView: originalSubView,
-                modifiedSubView: self
-            )
-
-        return self
-    }
 }
 
 @MainActor
