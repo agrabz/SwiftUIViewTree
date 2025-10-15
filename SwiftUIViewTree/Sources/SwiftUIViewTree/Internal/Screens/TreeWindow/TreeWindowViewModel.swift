@@ -57,12 +57,7 @@ actor SubViewChangeHandler {
             )
             let value = await changedTreeNode.value
 
-//            withAnimation {
-            await uiState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.setValue(to: value)
-//            }
-
-
-//                uiState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = await changedTreeNode.value
+            await uiState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.setValueWithAnimation(to: value)
         }
     }
 }
@@ -134,10 +129,9 @@ final class TreeWindowViewModel {
                     }
                 case .treeComputed(let computedUIState):
                     for changedValue in TreeNodeRegistry.shared.allChangedNodes {
-                        withAnimation {
-                            computedUIState
-                                .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.setValue(to: changedValue.value)
-                        }
+                        computedUIState.treeBreakDownOfOriginalContent[changedValue.serialNumber]?.setValueWithAnimation(
+                            to: changedValue.value
+                        )
                     }
             }
         }

@@ -75,8 +75,10 @@ final class TreeNode: Sendable {
 
     /// To be able to set the value from async, non MainActor isolated contexts, we have to have this setter.
     /// "await node.value = await someOtherValue" is not valid
-    func setValue(to: String) {
-        self.value = to
+    func setValueWithAnimation(to: String) {
+        withAnimation {
+            self.value = to
+        }
     }
 }
 
