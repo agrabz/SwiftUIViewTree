@@ -65,7 +65,7 @@ final class TreeWindowViewModel {
 
         guard let (changedMatchingSubTree, originalMatchingSubtree) = TreeBuilder().findMatchingSubtree( //TODO: adjust to include first in its name
             in: tree,
-            matching: subviewTree.children.first!.children.first! //TODO: no force cast
+            matching: subviewTree.children.first!.children.first! //TODO: no force cast, this is the path to the "originalView"
         ) else {
             print("couldn't find matching subtree")
             return
