@@ -48,16 +48,9 @@ actor SubViewChangeHandler {
         }
 
         for changedTreeNode in await TreeNodeRegistry.shared.allChangedNodes {
-            print(
-                "- changed:",
-                await changedTreeNode.serialNumber,
-                await changedTreeNode.label,
-                await changedTreeNode.type,
-                await changedTreeNode.value
+            await uiState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.setValueWithAnimation(
+                to: await changedTreeNode.value
             )
-            let value = await changedTreeNode.value
-
-            await uiState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.setValueWithAnimation(to: value)
         }
     }
 }
