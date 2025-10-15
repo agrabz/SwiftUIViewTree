@@ -30,24 +30,16 @@ struct TreeBuilder {
         return newTree
     }
 
-//    func merge(fullTree: Tree, subViewTree: Tree) -> Tree {
-//        /// traverse fullTree with BFS until parentNode == subViewTree.parentNode
-//        let matchingSubtree = findMatchingSubtree(in: fullTree, matching: subViewTree) ?? subViewTree
-//        return matchingSubtree
-//    }
-
     func findMatchingSubtree(in root: Tree, matching target: Tree) -> (changed: Tree, original: Tree)? {
         var queue: [Tree] = [root]
 
         while !queue.isEmpty {
             let current = queue.removeFirst()
 
-            // 1️⃣ Check if current node could be the root of the target subtree
             if areSubtreesEqual(current, target) {
                 return (current, target)
             }
 
-            // 2️⃣ Continue BFS
             queue.append(contentsOf: current.children)
         }
 
@@ -167,7 +159,6 @@ private extension TreeBuilder {
     }
 
     func areSubtreesEqual(_ lhs: Tree, _ rhs: Tree) -> Bool {
-        // Compare the nodes themselves
         guard
             lhs.parentNode.label == rhs.parentNode.label
         else {
@@ -183,7 +174,6 @@ private extension TreeBuilder {
         }
         print("types IS equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
 
-        // Recursively compare children one-by-one
         for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
             if !areSubtreesEqual(leftChild, rightChild) {
                 print("children NOT equal", leftChild.parentNode.label, rightChild.parentNode.label)
