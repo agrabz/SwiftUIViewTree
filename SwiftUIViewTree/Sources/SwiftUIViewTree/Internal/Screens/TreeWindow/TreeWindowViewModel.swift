@@ -103,8 +103,7 @@ final class TreeWindowViewModel {
         for changedTreeNode in TreeNodeRegistry.shared.allChangedNodes {
             print("- changed:", changedTreeNode.serialNumber, changedTreeNode.label, changedTreeNode.type, changedTreeNode.value)
             withAnimation {
-                computedUIState
-                    .treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = changedTreeNode.value
+                computedUIState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = changedTreeNode.value
             }
         }
     }

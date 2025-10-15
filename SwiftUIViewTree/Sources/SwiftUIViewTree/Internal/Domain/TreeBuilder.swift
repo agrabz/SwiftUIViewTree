@@ -98,40 +98,20 @@ private extension TreeBuilder {
             /// if type contains "location:" then replace the part between "location:" and the first comma "," after "location:", with string "SwiftUIViewTree.location"
 
             if let locationRange = value.range(of: " location:") {
-                print("found location:")
-                // Start searching *after* "location:"
                 let start = locationRange.upperBound
 
-                // Find the first comma or closing parenthesis after it
-                let end = value[start...].endIndex //.firstIndex(where: { $0 == "," || $0 == ")" })
+                let end = value[start...].endIndex
 
-//                if let end = end {
-                    // Replace the substring between "location:" and that symbol
-                    value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
-//                } else {
-//                    // If neither comma nor parenthesis found, replace until the end
-//                    value.replaceSubrange(start..<value.endIndex, with: " SwiftUIViewTree.location")
-//                }
+                value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
             }
 
-            if let locationRange = value.range(of: " _location:") {
-                print("found _location:")
-                // Start searching *after* "location:"
+            if let locationRange = value.range(of: " _location:") { //TODO: unify with the above one
                 let start = locationRange.upperBound
 
-                // Find the first comma or closing parenthesis after it
-                let end = value[start...].endIndex //.firstIndex(where: { $0 == "," || $0 == ")" })
+                let end = value[start...].endIndex
 
-//                if let end = end {
-                    // Replace the substring between "location:" and that symbol
-                    value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
-//                } else {
-//                    // If neither comma nor parenthesis found, replace until the end
-//                    value.replaceSubrange(start..<value.endIndex, with: " SwiftUIViewTree.location")
-//                }
+                value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
             }
-
-//            print(value)
 
 
             let childTree = Tree(
