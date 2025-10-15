@@ -72,6 +72,10 @@ final class TreeNode: Sendable {
             }
         }
     }
+
+    func setValue(to: String) {
+        value = to
+    }
 }
 
 extension TreeNode {
