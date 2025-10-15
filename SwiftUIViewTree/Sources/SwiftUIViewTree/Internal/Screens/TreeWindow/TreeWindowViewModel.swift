@@ -57,15 +57,12 @@ final class TreeWindowViewModel {
 
         let tree = computedUIState.treeBreakDownOfOriginalContent
 
-        ///get viewtree of the changed subview --> this comes with the side effect of TreeNodeRegistry registrations that won't be accurate as the subview's children cannot have the same serial numbers as the original view got - this is handled later below
         var treeBuilder = TreeBuilder()
         let subviewTree = treeBuilder.getTreeFrom(
             originalView: originalSubView,
             modifiedView: modifiedSubView
         )
 
-        ///find FIRST subviewtree in full viewtree - later I should make it better to find the exact one
-        ///merge the two trees
         guard let (changedMatchingSubTree, originalMatchingSubtree) = TreeBuilder().findMatchingSubtree( //TODO: adjust to include first in its name
             in: tree,
             matching: subviewTree.children.first!.children.first! //TODO: no force cast
@@ -73,22 +70,16 @@ final class TreeWindowViewModel {
             print("couldn't find matching subtree")
             return
         }
-//        merge(
-//            fullTree: tree,
-//            subViewTree: subviewTree
-//        )
 
         print()
         print("--changedMatchingSubTree", changedMatchingSubTree)
         print("--originalMatchingSubtree", originalMatchingSubtree)
         print()
 
-        ///apply changes
         guard case .treeComputed(let computedUIState) = uiState else {
             return
         }
 
-        /// remove semi-correct change registrations and replace them with correct registrations
         let allChangedNodes = TreeNodeRegistry.shared.allChangedNodes
         for changedNode in allChangedNodes {
             TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
@@ -122,8 +113,6 @@ final class TreeWindowViewModel {
         originalView: any View,
         modifiedView: any View
     ) {
-//        self.originalView = originalView
-//        self.modifiedView = modifiedView
         //TODO: review if this Task can be placed somewhere else, so we might not need the sleep below?
         Task {
             switch uiState {
