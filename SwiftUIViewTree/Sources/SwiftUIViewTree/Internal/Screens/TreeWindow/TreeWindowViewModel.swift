@@ -9,11 +9,6 @@ final class TreeWindowViewModel {
     /// Change this value to simulate longer/shorter computation times
     static let waitTimeInSeconds = 1.0
 
-    @ObservationIgnored
-    private var flattenedOriginalMatchingSubTree: [TreeNode]?
-    @ObservationIgnored
-    private var flattenedChangedMatchingSubTree: [TreeNode]?
-
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
 
@@ -21,7 +16,6 @@ final class TreeWindowViewModel {
         originalSubView: any View,
         modifiedSubView: any View
     ) {
-        ///get full viewtree
         guard case .treeComputed(let computedUIState) = uiState else {
             return
         }
@@ -47,21 +41,15 @@ final class TreeWindowViewModel {
         print("--originalMatchingSubtree", originalMatchingSubtree)
         print()
 
-        guard case .treeComputed(let computedUIState) = uiState else {
-            return
+        for changedNode in TreeNodeRegistry.shared.allChangedNodes {
+            TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
         }
 
-        if self.flattenedChangedMatchingSubTree != nil && self.flattenedOriginalMatchingSubTree != nil {
-            for changedNode in TreeNodeRegistry.shared.allChangedNodes {
-                TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
-            }
-        }
-
-        self.flattenedChangedMatchingSubTree = treeBuilder.flatten(changedMatchingSubTree)
-        self.flattenedOriginalMatchingSubTree = treeBuilder.flatten(originalMatchingSubtree)
+        let flattenedChangedMatchingSubTree = treeBuilder.flatten(changedMatchingSubTree)
+        let flattenedOriginalMatchingSubTree = treeBuilder.flatten(originalMatchingSubtree)
         for (changedNode, originalNode) in zip(
-            flattenedChangedMatchingSubTree!,
-            flattenedOriginalMatchingSubTree! //TODO: ehh force case
+            flattenedChangedMatchingSubTree,
+            flattenedOriginalMatchingSubTree
         ) {
             _ = TreeNode( //initializing a TreeNode comes with the side-effect of registering it to TreeNodeRegistry, which is enough for us to make sure that it'll get the proper details to render a new background color on value change
                 type: originalNode.type,
@@ -78,9 +66,6 @@ final class TreeWindowViewModel {
                 computedUIState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = changedTreeNode.value
             }
         }
-
-        self.flattenedChangedMatchingSubTree = nil
-        self.flattenedOriginalMatchingSubTree = nil
     }
 
     func computeViewTree(
