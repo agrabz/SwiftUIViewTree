@@ -1,14 +1,5 @@
 
-import Combine
 import SwiftUI
-
-//@MainActor
-//final class SubviewChangeDetector: ObservableObject {
-//    static var shared: SubviewChangeDetector = .init()
-//
-//    var isChangeDetected = PassthroughSubject<Void, Never>()
-//}
-
 
 @MainActor
 @Observable
@@ -18,33 +9,13 @@ final class TreeWindowViewModel {
     /// Change this value to simulate longer/shorter computation times
     static let waitTimeInSeconds = 1.0
 
-//    private var originalView: (any View)?
-//    private var modifiedView: (any View)?
-
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored
+    private var flattenedOriginalMatchingSubTree: [TreeNode]?
+    @ObservationIgnored
+    private var flattenedChangedMatchingSubTree: [TreeNode]?
 
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
-
-//    init() {
-//        SubviewChangeDetector.shared.isChangeDetected
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] in
-//                guard
-//                    let self,
-//                    let originalView,
-//                    let modifiedView
-//                else {
-//                    return
-//                }
-//
-//                self.computeViewTree(
-//                    originalView: originalView,
-//                    modifiedView: modifiedView
-//                )
-//            }
-//            .store(in: &cancellables)
-//    }
 
     func computeSubViewChanges(
         originalSubView: any View,
@@ -80,16 +51,17 @@ final class TreeWindowViewModel {
             return
         }
 
-        let allChangedNodes = TreeNodeRegistry.shared.allChangedNodes
-        for changedNode in allChangedNodes {
-            TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
+        if self.flattenedChangedMatchingSubTree != nil && self.flattenedOriginalMatchingSubTree != nil {
+            for changedNode in TreeNodeRegistry.shared.allChangedNodes {
+                TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
+            }
         }
 
-        let flattenedChangedMatchingSubTree = treeBuilder.flatten(changedMatchingSubTree)
-        let flattenedOriginalMatchingSubTree = treeBuilder.flatten(originalMatchingSubtree)
+        self.flattenedChangedMatchingSubTree = treeBuilder.flatten(changedMatchingSubTree)
+        self.flattenedOriginalMatchingSubTree = treeBuilder.flatten(originalMatchingSubtree)
         for (changedNode, originalNode) in zip(
-            flattenedChangedMatchingSubTree,
-            flattenedOriginalMatchingSubTree
+            flattenedChangedMatchingSubTree!,
+            flattenedOriginalMatchingSubTree! //TODO: ehh force case
         ) {
             _ = TreeNode( //initializing a TreeNode comes with the side-effect of registering it to TreeNodeRegistry, which is enough for us to make sure that it'll get the proper details to render a new background color on value change
                 type: originalNode.type,
@@ -106,6 +78,9 @@ final class TreeWindowViewModel {
                 computedUIState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.value = changedTreeNode.value
             }
         }
+
+        self.flattenedChangedMatchingSubTree = nil
+        self.flattenedOriginalMatchingSubTree = nil
     }
 
     func computeViewTree(
