@@ -23,11 +23,6 @@ actor SubViewChangeHandler {
             return
         }
 
-        print()
-        print("--changedMatchingSubTree", changedMatchingSubTree)
-        print("--originalMatchingSubtree", originalMatchingSubtree)
-        print()
-
         for changedNode in await TreeNodeRegistry.shared.allChangedNodes {
             await TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
         }

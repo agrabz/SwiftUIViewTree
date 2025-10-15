@@ -68,18 +68,15 @@ private extension TreeBuilder {
     ) -> [Tree] {
         let result = mirror.children.enumerated().map { (index, child) in
             guard
-                child.label != "location",
+                child.label != "location", //TODO: these types are changing between different views therefore their matching is really hard, and the easiest is to just rename them all <-- this logic here is wrong because it should be for all the 3 different strings and they should be named accordingly
                 !"\(type(of: child.value))".starts(with: "AtomicBox"),
                 !"\(type(of: child.value))".starts(with: "AtomicBuffer")
             else {
-                print()
-                print("!!location or atomic found!!")
-                print()
                 return Tree(
                     node: TreeNode(
-                        type: "location",
-                        label: "location",
-                        value: "location",
+                        type: "SwiftUIViewTree.location",
+                        label: "SwiftUIViewTree.location",
+                        value: "SwiftUIViewTree.location",
                         serialNumber: nodeSerialNumberCounter.counter
                     )
                 ) // as Any? see type(of:) docs
@@ -87,14 +84,13 @@ private extension TreeBuilder {
             let childMirror = Mirror(reflecting: child.value)
 
             var value = "\(child.value)"
-            /// if type contains "location:" then replace the part between "location:" and the first comma "," after "location:", with string "SwiftUIViewTree.location"
 
             if let locationRange = value.range(of: " location:") {
                 let start = locationRange.upperBound
 
                 let end = value[start...].endIndex
 
-                value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
+                value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location") //TODO: constant
             }
 
             if let locationRange = value.range(of: " _location:") { //TODO: unify with the above one
@@ -120,13 +116,6 @@ private extension TreeBuilder {
             )
 
             childTree.parentNode.descendantCount = getDescendantCount(of: childTree)
-            print(
-                childTree.parentNode.serialNumber,
-                childTree.parentNode.label,
-                childTree.parentNode.type,
-                childTree.parentNode.value,
-                childTree.parentNode.descendantCount,
-            )
 
             return childTree
         }
@@ -162,24 +151,24 @@ private extension TreeBuilder {
         guard
             lhs.parentNode.label == rhs.parentNode.label
         else {
-            print("labels NOT equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
+//            print("labels NOT equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
             return false
         }
-        print("labels IS equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
+//        print("labels IS equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
         guard
             lhs.parentNode.type == rhs.parentNode.type
         else {
-            print("types NOT equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
+//            print("types NOT equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
             return false
         }
-        print("types IS equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
+//        print("types IS equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
 
         for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
             if !areSubtreesEqual(leftChild, rightChild) {
-                print("children NOT equal", leftChild.parentNode.label, rightChild.parentNode.label)
+//                print("children NOT equal", leftChild.parentNode.label, rightChild.parentNode.label)
                 return false
             }
-            print("children ARE equal", leftChild.parentNode.label, rightChild.parentNode.label)
+//            print("children ARE equal", leftChild.parentNode.label, rightChild.parentNode.label)
         }
 
         return true
