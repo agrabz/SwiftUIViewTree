@@ -32,4 +32,63 @@ struct TreeTests {
         #expect(foundNode == nil)
         #expect(foundNode?.id != node.id)
     }
+
+    @MainActor
+    struct Equality {
+        @Test
+        func typesAreMatching_LabelsAreMatching() async {
+            //GIVEN
+            let node1 = TreeNode.createMock(type: "matchingType", label: "matchingLabel")
+            let node2 = TreeNode.createMock(type: "matchingType", label: "matchingLabel")
+
+            //WHEN
+            let tree1 = Tree(node: node1)
+            let tree2 = Tree(node: node2)
+
+            //THEN
+            #expect(tree1 == tree2)
+        }
+
+        @Test
+        func typesAreMatching_LabelsAreNOTMatching() async {
+            //GIVEN
+            let node1 = TreeNode.createMock(type: "matchingType", label: "label")
+            let node2 = TreeNode.createMock(type: "matchingType", label: "NON_matchingLabel")
+
+            //WHEN
+            let tree1 = Tree(node: node1)
+            let tree2 = Tree(node: node2)
+
+            //THEN
+            #expect(tree1 != tree2)
+        }
+
+        @Test
+        func typesAreNOTMatching_LabelsAreMatching() async {
+            //GIVEN
+            let node1 = TreeNode.createMock(type: "type", label: "matchingLabel")
+            let node2 = TreeNode.createMock(type: "NON_matchingType", label: "matchingLabel")
+
+            //WHEN
+            let tree1 = Tree(node: node1)
+            let tree2 = Tree(node: node2)
+
+            //THEN
+            #expect(tree1 != tree2)
+        }
+
+        @Test
+        func typesAreNOTMatching_LabelsAreNOTMatching() async {
+            //GIVEN
+            let node1 = TreeNode.createMock(type: "type", label: "label")
+            let node2 = TreeNode.createMock(type: "NON_matchingType", label: "NON_matchingLabel")
+
+            //WHEN
+            let tree1 = Tree(node: node1)
+            let tree2 = Tree(node: node2)
+
+            //THEN
+            #expect(tree1 != tree2)
+        }
+    }
 }
