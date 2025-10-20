@@ -3,10 +3,10 @@ import SwiftUI
 
 @MainActor
 struct TreeBuilder {
-    private let validationList: [any TreeBuilder.ValidatorProtocol] = [
-        LocationLabelValidator(),
-        AtomicBoxTypeValidator(),
-        AtomicBufferTypeValidator(),
+    private let validationList: [any TreeNodeValidatorProtocol] = [
+        LocationLabelTreeNodeValidator(),
+        AtomicBoxTypeTreeNodeValidator(),
+        AtomicBufferTypeTreeNodeValidator(),
     ]
     private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
@@ -35,22 +35,6 @@ struct TreeBuilder {
         return newTree
     }
 
-    func findMatchingSubtree(in root: Tree, matching target: Tree) -> (changed: Tree, original: Tree)? {
-        var queue: [Tree] = [root]
-
-        while !queue.isEmpty {
-            let current = queue.removeFirst()
-
-            if areSubtreesEqual(current, target) {
-                return (changed: current, original: target)
-            }
-
-            queue.append(contentsOf: current.children)
-        }
-
-        return nil
-    }
-
     func flatten(_ treeToFlatten: Tree) -> [TreeNode] {
         var flattenedTree: [TreeNode] = []
 
@@ -73,7 +57,7 @@ private extension TreeBuilder {
     ) -> [Tree] {
         let result = mirror.children.enumerated().map { (index, child) in
             for validation in validationList {
-                do throws(TreeBuilder.ValidationError) {
+                do throws(TreeNodeValidationError) {
                     try validation.validate(child)
                 } catch {
                     return Tree(
@@ -138,35 +122,6 @@ private extension TreeBuilder {
         )
     }
 
-    func areSubtreesEqual(_ lhs: Tree, _ rhs: Tree) -> Bool {
-        guard
-            lhs.parentNode.label == rhs.parentNode.label
-        else {
-//            print("labels NOT equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
-            return false
-        }
-//        print("labels IS equal: \(lhs.parentNode.label) != \(rhs.parentNode.label)")
-        guard
-            lhs.parentNode.type == rhs.parentNode.type
-        else {
-//            print("types NOT equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
-            return false
-        }
-//        print("types IS equal: \(lhs.parentNode.type) != \(rhs.parentNode.type)")
-
-        for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
-            if !areSubtreesEqual(leftChild, rightChild) {
-//                print("children NOT equal", leftChild.parentNode.label, rightChild.parentNode.label)
-                return false
-            }
-//            print("children ARE equal", leftChild.parentNode.label, rightChild.parentNode.label)
-        }
-
-        return true
-    }
-}
-
-private extension TreeBuilder {
     func transformIfNeeded(_ value: inout String) {
         /// Having these strings in the value makes it really hard to compare values, as they're different between parent and child views.
         let unwantedSubStringList = [
@@ -180,58 +135,7 @@ private extension TreeBuilder {
 
                 let end = value[start...].endIndex
 
-                value.replaceSubrange(start..<end, with: " " + TreeBuilder.ValidationError.location.description)
-            }
-        }
-    }
-}
-
-
-private extension TreeBuilder {
-    protocol ValidatorProtocol {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError)
-    }
-
-    enum ValidationError: Error {
-        case location
-        case atomicBox
-        case atomicBuffer
-
-        var description: String {
-            let prefix = "SwiftUIViewTree."
-            let postfix =
-            switch self {
-                case .location:
-                    "location"
-                case .atomicBox:
-                    "AtomicBox"
-                case .atomicBuffer:
-                    "AtomicBuffer"
-            }
-            return prefix + postfix
-        }
-    }
-
-    struct LocationLabelValidator: ValidatorProtocol {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
-            if child.label == "location" {
-                throw .location
-            }
-        }
-    }
-
-    struct AtomicBoxTypeValidator: ValidatorProtocol {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
-            if "\(type(of: child.value))".starts(with: "AtomicBox") {
-                throw .atomicBox
-            }
-        }
-    }
-
-    struct AtomicBufferTypeValidator: ValidatorProtocol {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
-            if "\(type(of: child.value))".starts(with: "AtomicBuffer") {
-                throw .atomicBox
+                value.replaceSubrange(start..<end, with: " " + TreeNodeValidationError.location.description)
             }
         }
     }

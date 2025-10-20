@@ -15,7 +15,7 @@ actor SubViewChangeHandler {
 
         let tree = uiState.treeBreakDownOfOriginalContent
 
-        guard let (changed: changedMatchingSubTree, original: originalMatchingSubtree) = await TreeBuilder().findMatchingSubtree( //TODO: adjust to include first in its name
+        guard let (changed: changedMatchingSubTree, original: originalMatchingSubtree) = await SubtreeMatcher.findMatchingSubtree( //TODO: adjust to include first in its name
             in: tree,
             matching: subviewTree.children.first!.children.first! //TODO: no force cast, this is the path to the "originalView"
         ) else {
