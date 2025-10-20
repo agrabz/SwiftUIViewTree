@@ -4,9 +4,9 @@ import SwiftUI
 @MainActor
 struct TreeBuilder {
     private let validationList: [any TreeBuilder.ValidatorProtocol] = [
-        LocationTypeValidator(),
-        AtomicBoxValueValidator(),
-        AtomicBufferValueValidator(),
+        LocationLabelValidator(),
+        AtomicBoxTypeValidator(),
+        AtomicBufferTypeValidator(),
     ]
     private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
@@ -90,6 +90,8 @@ private extension TreeBuilder {
             let childMirror = Mirror(reflecting: child.value)
 
             var value = "\(child.value)"
+
+            
 
             if let locationRange = value.range(of: " location:") {
                 let start = locationRange.upperBound
@@ -206,7 +208,7 @@ private extension TreeBuilder {
         }
     }
 
-    struct LocationTypeValidator: ValidatorProtocol {
+    struct LocationLabelValidator: ValidatorProtocol {
         func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
             if child.label == "location" {
                 throw .location
@@ -214,7 +216,7 @@ private extension TreeBuilder {
         }
     }
 
-    struct AtomicBoxValueValidator: ValidatorProtocol {
+    struct AtomicBoxTypeValidator: ValidatorProtocol {
         func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
             if "\(type(of: child.value))".starts(with: "AtomicBox") {
                 throw .atomicBox
@@ -222,7 +224,7 @@ private extension TreeBuilder {
         }
     }
 
-    struct AtomicBufferValueValidator: ValidatorProtocol {
+    struct AtomicBufferTypeValidator: ValidatorProtocol {
         func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
             if "\(type(of: child.value))".starts(with: "AtomicBuffer") {
                 throw .atomicBox
