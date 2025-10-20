@@ -1,7 +1,7 @@
 
 @MainActor
 final class IsFirst {
-    static let shared = IsFirst()
-    private init() {}
+    @TaskLocal static var shared = IsFirst()
+
     var isFirst = true
 }
