@@ -14,14 +14,14 @@ actor SubViewChangeHandler {
             modifiedView: modifiedSubView
         )
 
-        let tree = uiState.treeBreakDownOfOriginalContent
+        let fullTree = uiState.treeBreakDownOfOriginalContent
 
         //Right now we cannot properly differentiate between subviews that are the same, so we always return the first match. Later it should be adjusted with a @State UUID approach like .notifyViewTreeOnChanges(of: self, id: $id)
         guard
-            let originalView = await subviewTree.children.first?.children.first,
+            let originalSubViewAsTree = await subviewTree.children.first?.children.first,
             let (changed: changedFirstMatchingSubTree, original: originalMatchingSubtree) = await SubtreeMatcher.findMatchingSubtree(
-                in: tree,
-                matching: originalView
+                in: fullTree,
+                matching: originalSubViewAsTree
             )
         else {
             print()
