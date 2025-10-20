@@ -1,6 +1,7 @@
 
 import SwiftUI
 
+/// This has to be an actor otherwise some weird actor-reentrancy like issue happened when it was straight in the TreeWindowViewModel
 actor SubViewChangeHandler {
     func computeSubViewChanges(
         originalSubView: any View,
@@ -15,11 +16,17 @@ actor SubViewChangeHandler {
 
         let tree = uiState.treeBreakDownOfOriginalContent
 
-        guard let (changed: changedMatchingSubTree, original: originalMatchingSubtree) = await SubtreeMatcher.findMatchingSubtree( //TODO: adjust to include first in its name
-            in: tree,
-            matching: subviewTree.children.first!.children.first! //TODO: no force cast, this is the path to the "originalView"
-        ) else {
-            print("couldn't find matching subtree")
+        //Right now we cannot properly differentiate between subviews that are the same, so we always return the first match. Later it should be adjusted with a @State UUID approach like .notifyViewTreeOnChanges(of: self, id: $id)
+        guard
+            let originalView = await subviewTree.children.first?.children.first,
+            let (changed: changedFirstMatchingSubTree, original: originalMatchingSubtree) = await SubtreeMatcher.findMatchingSubtree(
+                in: tree,
+                matching: originalView
+            )
+        else {
+            print()
+            print("⚠️ Couldn't find matching subtree, that shouldn't happen!")
+            print()
             return
         }
 
@@ -28,7 +35,7 @@ actor SubViewChangeHandler {
         }
 
         let flattenedChangedMatchingSubTree = await treeBuilder.flatten(
-            changedMatchingSubTree
+            changedFirstMatchingSubTree
         )
         let flattenedOriginalMatchingSubTree = await treeBuilder.flatten(
             originalMatchingSubtree
@@ -38,12 +45,12 @@ actor SubViewChangeHandler {
             flattenedChangedMatchingSubTree,
             flattenedOriginalMatchingSubTree
         ) {
-            _ = await TreeNode( //initializing a TreeNode comes with the side-effect of registering it to TreeNodeRegistry, which is enough for us to make sure that it'll get the proper details to render a new background color on value change
+            //initializing a TreeNode comes with the side-effect of registering it to TreeNodeRegistry, which is enough for us to make sure that it'll get the proper details to render a new background color on value change
+            _ = await TreeNode(
                 type: originalNode.type,
                 label: originalNode.label,
                 value: originalNode.value,
-                serialNumber: changedNode.serialNumber //TODO: is this logical? changedNode.serialNumber sounds to be the one that we try to get rid of?
-                //TODO: where is Hello and Yo what?! from the graph
+                serialNumber: changedNode.serialNumber
             )
         }
 
