@@ -91,24 +91,7 @@ private extension TreeBuilder {
 
             var value = "\(child.value)"
 
-            
-
-            if let locationRange = value.range(of: " location:") {
-                let start = locationRange.upperBound
-
-                let end = value[start...].endIndex
-
-                value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location") //TODO: constant
-            }
-
-            if let locationRange = value.range(of: " _location:") { //TODO: unify with the above one
-                let start = locationRange.upperBound
-
-                let end = value[start...].endIndex
-
-                value.replaceSubrange(start..<end, with: " SwiftUIViewTree.location")
-            }
-
+            self.transformIfNeeded(&value)
 
             let childTree = Tree(
                 node: TreeNode(
@@ -184,6 +167,27 @@ private extension TreeBuilder {
 }
 
 private extension TreeBuilder {
+    func transformIfNeeded(_ value: inout String) {
+        /// Having these strings in the value makes it really hard to compare values, as they're different between parent and child views.
+        let unwantedSubStringList = [
+            " location:",
+            " _location:"
+        ]
+
+        for unwantedSubString in unwantedSubStringList {
+            if let locationRange = value.range(of: unwantedSubString) {
+                let start = locationRange.upperBound
+
+                let end = value[start...].endIndex
+
+                value.replaceSubrange(start..<end, with: " " + TreeBuilder.ValidationError.location.description)
+            }
+        }
+    }
+}
+
+
+private extension TreeBuilder {
     protocol ValidatorProtocol {
         func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError)
     }
@@ -198,7 +202,7 @@ private extension TreeBuilder {
             let postfix =
             switch self {
                 case .location:
-                    "Location"
+                    "location"
                 case .atomicBox:
                     "AtomicBox"
                 case .atomicBuffer:
