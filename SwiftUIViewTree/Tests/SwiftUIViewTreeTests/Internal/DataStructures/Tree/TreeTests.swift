@@ -90,5 +90,65 @@ struct TreeTests {
             //THEN
             #expect(tree1 != tree2)
         }
+
+        @MainActor
+        struct Children {
+            @Test
+            func ARE_Equal() async {
+                //GIVEN
+                let parent = TreeNode.createMock()
+                let child1 = TreeNode.createMock()
+                let child2 = TreeNode.createMock()
+
+                //WHEN
+                let tree1 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child1),
+                        Tree(node: child2),
+                    ]
+                )
+                let tree2 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child1),
+                        Tree(node: child2),
+                    ]
+                )
+
+                //THEN
+                #expect(tree1 == tree2)
+            }
+
+            @Test
+            func NOT_Equal() async {
+                //GIVEN
+                let parent = TreeNode.createMock()
+                let child1 = TreeNode.createMock()
+                let child2 = TreeNode.createMock()
+                let child3 = TreeNode.createMock()
+
+                //WHEN
+                let tree1 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child1),
+                        Tree(node: child2),
+                    ]
+                )
+                let tree2 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child2),
+                        Tree(node: child3),
+                    ]
+                )
+
+                //THEN
+                #expect(tree1 != tree2)
+            }
+
+            //TODO: mismatching number of children should fail too! review implementation
+        }
     }
 }
