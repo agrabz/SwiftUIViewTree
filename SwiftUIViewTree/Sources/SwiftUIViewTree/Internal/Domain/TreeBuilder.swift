@@ -34,20 +34,6 @@ struct TreeBuilder {
 
         return newTree
     }
-
-    func flatten(_ treeToFlatten: Tree) -> [TreeNode] {
-        var flattenedTree: [TreeNode] = []
-
-        flattenedTree.append(treeToFlatten.parentNode)
-
-        for child in treeToFlatten.children {
-            flattenedTree.append(
-                contentsOf: flatten(child)
-            )
-        }
-        
-        return flattenedTree
-    }
 }
 
 private extension TreeBuilder {

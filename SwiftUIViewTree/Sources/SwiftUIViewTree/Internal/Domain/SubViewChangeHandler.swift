@@ -34,10 +34,10 @@ actor SubViewChangeHandler {
             await TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
         }
 
-        let flattenedChangedMatchingSubTree = await treeBuilder.flatten(
+        let flattenedChangedMatchingSubTree = await TreeFlattener.flatten(
             changedFirstMatchingSubTree
         )
-        let flattenedOriginalMatchingSubTree = await treeBuilder.flatten(
+        let flattenedOriginalMatchingSubTree = await TreeFlattener.flatten(
             originalMatchingSubtree
         )
 
