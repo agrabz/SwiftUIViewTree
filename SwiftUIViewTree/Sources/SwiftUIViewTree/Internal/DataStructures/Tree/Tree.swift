@@ -28,6 +28,25 @@ final class Tree {
     }
 }
 
+extension Tree: @MainActor Equatable {
+    static func == (_ lhs: Tree, _ rhs: Tree) -> Bool {
+        guard
+            lhs.parentNode.label == rhs.parentNode.label,
+            lhs.parentNode.type == rhs.parentNode.type
+        else {
+            return false
+        }
+
+        for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
+            if leftChild != rightChild {
+                return false
+            }
+        }
+
+        return true
+    }
+}
+
 extension Tree: @MainActor CustomStringConvertible {
     var description: String {
         var description = parentNode.description
