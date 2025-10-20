@@ -96,3 +96,10 @@ extension TreeNode: @MainActor CustomStringConvertible {
         "(\(self.serialNumber)) \(self.label): \(self.type) = \(self.value)"
     }
 }
+
+extension TreeNode: @MainActor Equatable {
+    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        lhs.type == rhs.type &&
+        lhs.label == rhs.label
+    }
+}
