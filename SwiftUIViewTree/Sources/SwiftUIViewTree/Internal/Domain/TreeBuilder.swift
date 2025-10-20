@@ -1,8 +1,63 @@
 
 import SwiftUI
 
+private extension TreeBuilder {
+    protocol Validation {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError)
+    }
+
+    enum ValidationError: Error {
+        case location
+        case atomicBox
+        case atomicBuffer
+
+        var description: String {
+            var prefix = "SwiftUIViewTree."
+            let postfix =
+            switch self {
+                case .location:
+                    "Location"
+                case .atomicBox:
+                    "AtomicBox"
+                case .atomicBuffer:
+                    "AtomicBuffer"
+            }
+            return prefix + postfix
+        }
+    }
+
+    struct LocationTypeValidator: Validation {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
+            if child.label == "location" {
+                throw .location
+            }
+        }
+    }
+
+    struct AtomicBoxValueValidator: Validation {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
+            if "\(type(of: child.value))".starts(with: "AtomicBox") {
+                throw .atomicBox
+            }
+        }
+    }
+
+    struct AtomicBufferValueValidator: Validation {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
+            if "\(type(of: child.value))".starts(with: "AtomicBuffer") {
+                throw .atomicBox
+            }
+        }
+    }
+}
+
 @MainActor
 struct TreeBuilder {
+    private let validationList: [any Validation] = [
+        LocationTypeValidator(),
+        AtomicBoxValueValidator(),
+        AtomicBufferValueValidator(),
+    ]
     private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
     mutating func getTreeFrom(
@@ -67,20 +122,21 @@ private extension TreeBuilder {
         source: any View,
     ) -> [Tree] {
         let result = mirror.children.enumerated().map { (index, child) in
-            guard
-                child.label != "location", //TODO: these types are changing between different views therefore their matching is really hard, and the easiest is to just rename them all <-- this logic here is wrong because it should be for all the 3 different strings and they should be named accordingly
-                !"\(type(of: child.value))".starts(with: "AtomicBox"),
-                !"\(type(of: child.value))".starts(with: "AtomicBuffer")
-            else {
-                return Tree(
-                    node: TreeNode(
-                        type: "SwiftUIViewTree.location",
-                        label: "SwiftUIViewTree.location",
-                        value: "SwiftUIViewTree.location",
-                        serialNumber: nodeSerialNumberCounter.counter
+            for validation in validationList {
+                do throws(ValidationError) {
+                    try validation.validate(child)
+                } catch {
+                    return Tree(
+                        node: TreeNode(
+                            type: error.description,
+                            label: error.description,
+                            value: error.description,
+                            serialNumber: nodeSerialNumberCounter.counter
+                        )
                     )
-                ) // as Any? see type(of:) docs
+                }
             }
+
             let childMirror = Mirror(reflecting: child.value)
 
             var value = "\(child.value)"

@@ -7,7 +7,7 @@ actor SubViewChangeHandler {
         modifiedSubView: any View,
         uiState: inout TreeWindowUIModel.ComputedUIState,
     ) async {
-        var treeBuilder = TreeBuilder()
+        var treeBuilder = await TreeBuilder()
         let subviewTree = await treeBuilder.getTreeFrom(
             originalView: originalSubView,
             modifiedView: modifiedSubView
