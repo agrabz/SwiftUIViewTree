@@ -1,59 +1,9 @@
 
 import SwiftUI
 
-private extension TreeBuilder {
-    protocol Validation {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError)
-    }
-
-    enum ValidationError: Error {
-        case location
-        case atomicBox
-        case atomicBuffer
-
-        var description: String {
-            var prefix = "SwiftUIViewTree."
-            let postfix =
-            switch self {
-                case .location:
-                    "Location"
-                case .atomicBox:
-                    "AtomicBox"
-                case .atomicBuffer:
-                    "AtomicBuffer"
-            }
-            return prefix + postfix
-        }
-    }
-
-    struct LocationTypeValidator: Validation {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
-            if child.label == "location" {
-                throw .location
-            }
-        }
-    }
-
-    struct AtomicBoxValueValidator: Validation {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
-            if "\(type(of: child.value))".starts(with: "AtomicBox") {
-                throw .atomicBox
-            }
-        }
-    }
-
-    struct AtomicBufferValueValidator: Validation {
-        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
-            if "\(type(of: child.value))".starts(with: "AtomicBuffer") {
-                throw .atomicBox
-            }
-        }
-    }
-}
-
 @MainActor
 struct TreeBuilder {
-    private let validationList: [any Validation] = [
+    private let validationList: [any TreeBuilder.ValidatorProtocol] = [
         LocationTypeValidator(),
         AtomicBoxValueValidator(),
         AtomicBufferValueValidator(),
@@ -117,13 +67,13 @@ struct TreeBuilder {
 }
 
 private extension TreeBuilder {
-    mutating func convertToTreesRecursively( //TODO: to test, maybe it should be global function or just be somewhere else to make it usable for printViewTree?
+    mutating func convertToTreesRecursively(
         mirror: Mirror,
         source: any View,
     ) -> [Tree] {
         let result = mirror.children.enumerated().map { (index, child) in
             for validation in validationList {
-                do throws(ValidationError) {
+                do throws(TreeBuilder.ValidationError) {
                     try validation.validate(child)
                 } catch {
                     return Tree(
@@ -228,5 +178,55 @@ private extension TreeBuilder {
         }
 
         return true
+    }
+}
+
+private extension TreeBuilder {
+    protocol ValidatorProtocol {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError)
+    }
+
+    enum ValidationError: Error {
+        case location
+        case atomicBox
+        case atomicBuffer
+
+        var description: String {
+            let prefix = "SwiftUIViewTree."
+            let postfix =
+            switch self {
+                case .location:
+                    "Location"
+                case .atomicBox:
+                    "AtomicBox"
+                case .atomicBuffer:
+                    "AtomicBuffer"
+            }
+            return prefix + postfix
+        }
+    }
+
+    struct LocationTypeValidator: ValidatorProtocol {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
+            if child.label == "location" {
+                throw .location
+            }
+        }
+    }
+
+    struct AtomicBoxValueValidator: ValidatorProtocol {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
+            if "\(type(of: child.value))".starts(with: "AtomicBox") {
+                throw .atomicBox
+            }
+        }
+    }
+
+    struct AtomicBufferValueValidator: ValidatorProtocol {
+        func validate(_ child: Mirror.Child) throws(TreeBuilder.ValidationError) {
+            if "\(type(of: child.value))".starts(with: "AtomicBuffer") {
+                throw .atomicBox
+            }
+        }
     }
 }
