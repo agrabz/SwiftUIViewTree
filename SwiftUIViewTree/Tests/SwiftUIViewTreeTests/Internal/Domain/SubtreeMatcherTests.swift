@@ -49,7 +49,7 @@ struct SubtreeMatcherTests {
             Issue.record("Unexpectedly unfound subtree match")
             return
         }
-        let (changed: changedTree, original: originalTree) = result
+        let (changed: changedTree, original: _) = result
         #expect(changedTree == modifiedSubTree)
     }
 
