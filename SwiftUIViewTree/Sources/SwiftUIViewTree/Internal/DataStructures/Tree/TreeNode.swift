@@ -50,7 +50,7 @@ final class TreeNode: Sendable {
         type: String,
         label: String,
         value: String,
-        serialNumber: Int,
+        serialNumber: Int, //TODO: registryRelevant input param?
     ) {
         self.type = type
         self.label = label
