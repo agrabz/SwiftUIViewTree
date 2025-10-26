@@ -38,7 +38,6 @@ extension Tree: @MainActor Equatable {
             return false
         }
 
-        //TODO: zip might not be a good idea here because of mismatching number of children in rhs and lhs
         for (leftChild, rightChild) in zip(lhs.children, rhs.children) {
             if leftChild != rightChild {
                 return false

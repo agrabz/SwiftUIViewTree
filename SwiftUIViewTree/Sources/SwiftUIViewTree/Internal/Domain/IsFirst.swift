@@ -3,5 +3,10 @@
 final class IsFirst {
     @TaskLocal static var shared = IsFirst()
 
-    var isFirst = true
+    private var isFirst = true
+
+    func getValue() -> Bool {
+        defer { isFirst = false }
+        return isFirst
+    }
 }

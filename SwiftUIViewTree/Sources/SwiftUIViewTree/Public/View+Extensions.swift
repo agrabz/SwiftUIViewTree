@@ -14,17 +14,14 @@ public extension View {
 
     //TODO: documentation
     func notifyViewTreeOnChanges(of originalSubView: any View) -> some View {
-        if !IsFirst.shared.isFirst {
+        if !IsFirst.shared.getValue() {
             TreeWindowViewModel.shared
                 .computeSubViewChanges(
                     originalSubView: originalSubView,
                     modifiedSubView: self
                 )
 
-            return self
-        } else {
-            IsFirst.shared.isFirst = false
-            return self
         }
+        return self
     }
 }

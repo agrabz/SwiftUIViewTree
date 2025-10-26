@@ -62,7 +62,7 @@ final class TreeNode: Sendable {
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
-            if value != oldValue {
+            if value != oldValue { //TODO: there are more subview related things being logged than visible --> expand subview to be originalView+modifiedView?
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
                     previousNodeValue: oldValue
