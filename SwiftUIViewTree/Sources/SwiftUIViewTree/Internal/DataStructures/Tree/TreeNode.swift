@@ -50,7 +50,8 @@ final class TreeNode: Sendable {
         type: String,
         label: String,
         value: String,
-        serialNumber: Int, //TODO: registryRelevant input param?
+        serialNumber: Int,
+        registerChanges: Bool
     ) {
         self.type = type
         self.label = label
@@ -58,6 +59,10 @@ final class TreeNode: Sendable {
         self.serialNumber = serialNumber
 
 //        print(serialNumber, type, label, value, descendantCount)
+
+        guard registerChanges else {
+            return
+        }
 
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
@@ -88,6 +93,7 @@ extension TreeNode {
         label: "Root node",
         value: "Root node",
         serialNumber: -1,
+        registerChanges: true
     )
 }
 

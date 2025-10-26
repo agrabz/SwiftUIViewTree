@@ -9,10 +9,12 @@ actor SubViewChangeHandler {
         modifiedSubView: any View,
         uiState: inout TreeWindowUIModel.ComputedUIState,
     ) async {
+        /// Build sub view tree without registering changes (changes would be off due to serialNumber differences
         var treeBuilder = await TreeBuilder()
         let subviewTree = await treeBuilder.getTreeFrom(
             originalView: originalSubView,
-            modifiedView: modifiedSubView
+            modifiedView: modifiedSubView,
+            registerChanges: false
         )
 
         let fullTree = uiState.treeBreakDownOfOriginalContent
@@ -35,18 +37,7 @@ actor SubViewChangeHandler {
         //TODO: would be nice, but probably bigger rework
         /// Add originalSubView and modifiedSubViewTree to the tree
 
-        /// removeChangedNodesThatGotCreatedDueToSubTreeCreation
-        print()
-        print("removeChangedNodesThatGotCreatedDueToSubTreeCreation")
-        print()
-        for changedNode in await TreeNodeRegistry.shared.allChangedNodes {
-            await TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
-        }
-
-        /// register real changes
-        print()
-        print("register real changes")
-        print()
+        /// Register real changes
         let flattenedChangedMatchingSubTree = await TreeFlattener.flatten(
             changedFirstMatchingSubTree
         )
@@ -58,12 +49,12 @@ actor SubViewChangeHandler {
             flattenedChangedMatchingSubTree,
             flattenedOriginalMatchingSubTree
         ) {
-            //initializing a TreeNode comes with the side-effect of registering it to TreeNodeRegistry, which is enough for us to make sure that it'll get the proper details to render a new background color on value change
             _ = await TreeNode(
                 type: originalNode.type,
                 label: originalNode.label,
                 value: originalNode.value,
-                serialNumber: changedNode.serialNumber
+                serialNumber: changedNode.serialNumber,
+                registerChanges: true
             )
         }
 
