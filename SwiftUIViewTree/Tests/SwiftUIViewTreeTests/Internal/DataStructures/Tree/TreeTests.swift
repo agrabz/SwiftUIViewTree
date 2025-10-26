@@ -41,12 +41,14 @@ struct TreeTests {
             let node1 = TreeNode.createMock(type: "matchingType", label: "matchingLabel")
             let node2 = TreeNode.createMock(type: "matchingType", label: "matchingLabel")
 
-            //WHEN
             let tree1 = Tree(node: node1)
             let tree2 = Tree(node: node2)
 
+            //WHEN
+            let result = tree1 == tree2
+
             //THEN
-            #expect(tree1 == tree2)
+            #expect(result == true)
         }
 
         @Test
@@ -55,12 +57,14 @@ struct TreeTests {
             let node1 = TreeNode.createMock(type: "matchingType", label: "label")
             let node2 = TreeNode.createMock(type: "matchingType", label: "NON_matchingLabel")
 
-            //WHEN
             let tree1 = Tree(node: node1)
             let tree2 = Tree(node: node2)
 
+            //WHEN
+            let result = tree1 == tree2
+
             //THEN
-            #expect(tree1 != tree2)
+            #expect(result == false)
         }
 
         @Test
@@ -69,12 +73,14 @@ struct TreeTests {
             let node1 = TreeNode.createMock(type: "type", label: "matchingLabel")
             let node2 = TreeNode.createMock(type: "NON_matchingType", label: "matchingLabel")
 
-            //WHEN
             let tree1 = Tree(node: node1)
             let tree2 = Tree(node: node2)
 
+            //WHEN
+            let result = tree1 == tree2
+
             //THEN
-            #expect(tree1 != tree2)
+            #expect(result == false)
         }
 
         @Test
@@ -83,12 +89,14 @@ struct TreeTests {
             let node1 = TreeNode.createMock(type: "type", label: "label")
             let node2 = TreeNode.createMock(type: "NON_matchingType", label: "NON_matchingLabel")
 
-            //WHEN
             let tree1 = Tree(node: node1)
             let tree2 = Tree(node: node2)
 
+            //WHEN
+            let result = tree1 == tree2
+
             //THEN
-            #expect(tree1 != tree2)
+            #expect(result == false)
         }
 
         @MainActor
@@ -100,7 +108,6 @@ struct TreeTests {
                 let child1 = TreeNode.createMock()
                 let child2 = TreeNode.createMock()
 
-                //WHEN
                 let tree1 = Tree(
                     node: parent,
                     children: [
@@ -115,9 +122,11 @@ struct TreeTests {
                         Tree(node: child2),
                     ]
                 )
+                //WHEN
+                let result = tree1 == tree2
 
                 //THEN
-                #expect(tree1 == tree2)
+                #expect(result == true)
             }
 
             @Test
@@ -128,7 +137,6 @@ struct TreeTests {
                 let child2 = TreeNode.createMock()
                 let child3 = TreeNode.createMock()
 
-                //WHEN
                 let tree1 = Tree(
                     node: parent,
                     children: [
@@ -143,9 +151,11 @@ struct TreeTests {
                         Tree(node: child3),
                     ]
                 )
+                //WHEN
+                let result = tree1 == tree2
 
                 //THEN
-                #expect(tree1 != tree2)
+                #expect(result == false)
             }
 
             //TODO: mismatching number of children should fail too! review implementation
