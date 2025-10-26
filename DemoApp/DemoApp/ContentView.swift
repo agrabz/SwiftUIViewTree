@@ -2,7 +2,7 @@
 import SwiftUI
 import SwiftUIViewTree
 
-struct Subview2: View {
+struct SubviewToTestWith: View {
     @Binding var isTapped: Bool
 
     var body: some View {
@@ -25,7 +25,7 @@ struct ContentView: View {
                     .imageScale(.large)
                     .foregroundStyle(.tint)
 
-                Subview2(isTapped: $isTapped)
+                SubviewToTestWith(isTapped: $isTapped)
             }
             .padding()
         }
