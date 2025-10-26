@@ -75,7 +75,7 @@ struct TreeNodeRegistryTests {
 
         //WHEN
         let newValue = "new value"
-        node.value = newValue
+        node.setValueWithAnimation(to: newValue)
         sut.registerChangedNode(node)
 
         //THEN
@@ -91,7 +91,7 @@ struct TreeNodeRegistryTests {
         try sut.registerNode(serialNumber: node.serialNumber, value: node.value)
 
         let newValue = "new value"
-        node.value = newValue
+        node.setValueWithAnimation(to: newValue)
         sut.registerChangedNode(node)
 
         #expect(sut.allChangedNodes.contains { $0.serialNumber == node.serialNumber })

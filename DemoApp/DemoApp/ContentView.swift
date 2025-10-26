@@ -2,8 +2,19 @@
 import SwiftUI
 import SwiftUIViewTree
 
+struct SubviewToTestWith: View {
+    @Binding var isTapped: Bool
+
+    var body: some View {
+        Text(isTapped ? "Yo what?" : "Hello, World!")
+            .bold(isTapped ? true : false)
+            .notifyViewTreeOnChanges(of: self)
+//            .renderViewTree(of: self)
+        }
+}
+
 struct ContentView: View {
-    @State var isTapped = false
+    @State private var isTapped = false
 
     var body: some View {
         Button {
@@ -13,8 +24,8 @@ struct ContentView: View {
                 Image(systemName: "globe")
                     .imageScale(.large)
                     .foregroundStyle(.tint)
-                Text(isTapped ? "Yo what?" : "Hello, world!")
-                    .bold(isTapped ? true : false)
+
+                SubviewToTestWith(isTapped: $isTapped)
             }
             .padding()
         }

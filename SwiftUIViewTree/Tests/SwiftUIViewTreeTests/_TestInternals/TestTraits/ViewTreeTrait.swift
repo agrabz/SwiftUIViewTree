@@ -11,7 +11,7 @@ struct ViewTreeTrait: TestTrait, SuiteTrait, TestScoping {
     init(
         collapsedNodeStore: @autoclosure () -> CollapsedNodesStore,
         treeNodeRegistry: @autoclosure () -> TreeNodeRegistry,
-        viewTreeLogger: @autoclosure () -> ViewTreeLoggerProtocol
+        viewTreeLogger: @autoclosure () -> ViewTreeLoggerProtocol,
     ) {
         self.collapsedNodeStore = collapsedNodeStore()
         self.treeNodeRegistry = treeNodeRegistry()
@@ -19,10 +19,11 @@ struct ViewTreeTrait: TestTrait, SuiteTrait, TestScoping {
     }
 
     func provideScope(for test: Test, testCase: Test.Case?, performing function: @Sendable () async throws -> Void) async throws {
+        //TODO: ehh I want Factory instead
         try await CollapsedNodesStore.$shared.withValue(self.collapsedNodeStore) {
             try await TreeNodeRegistry.$shared.withValue(self.treeNodeRegistry) {
                 try await ViewTreeLogger.$shared.withValue(self.viewTreeLogger) {
-                    try await function()
+                        try await function()
                 }
             }
         }
@@ -33,9 +34,9 @@ extension Trait where Self == ViewTreeTrait {
     static func viewTree(
         collapsedNodesStore: CollapsedNodesStore = .init(),
         treeNodeRegistry: TreeNodeRegistry = .init(),
-        viewTreeLogger: ViewTreeLoggerProtocol = ViewTreeLogger()
+        viewTreeLogger: ViewTreeLoggerProtocol = ViewTreeLogger(),
     ) -> ViewTreeTrait {
-        .init(
+        ViewTreeTrait(
             collapsedNodeStore: collapsedNodesStore,
             treeNodeRegistry: treeNodeRegistry,
             viewTreeLogger: viewTreeLogger

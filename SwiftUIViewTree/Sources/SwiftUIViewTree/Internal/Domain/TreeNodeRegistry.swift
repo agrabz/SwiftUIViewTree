@@ -3,7 +3,7 @@
 final class TreeNodeRegistry {
     @TaskLocal static var shared = TreeNodeRegistry()
 
-    private var registry: [Int: String] = [:]
+    private(set) var registry: [Int: String] = [:]
     private(set) var allChangedNodes = [TreeNode]()
 
     func registerNode(serialNumber: Int, value: String) throws {

@@ -130,7 +130,7 @@ struct TreeNodeTests {
         func hasChanged() {
             //GIVEN
             let node = TreeNode.createMock()
-            node.value = "new value"
+            node.setValueWithAnimation(to: "new value")
             TreeNodeRegistry.shared.registerChangedNode(node)
             //WHEN
             let result = node.backgroundColor

@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 @MainActor
@@ -8,10 +9,25 @@ final class TreeWindowViewModel {
     /// Change this value to simulate longer/shorter computation times
     static let waitTimeInSeconds = 1.0
 
-    private var treeBuilder = TreeBuilder()
-
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
+
+    func computeSubViewChanges(
+        originalSubView: any View,
+        modifiedSubView: any View
+    ) {
+        guard case .treeComputed(var computedUIState) = uiState else {
+            return
+        }
+
+        Task {
+            await SubViewChangeHandler().computeSubViewChanges(
+                originalSubView: originalSubView,
+                modifiedSubView: modifiedSubView,
+                uiState: &computedUIState
+            )
+        }
+    }
 
     func computeViewTree(
         originalView: any View,
@@ -28,6 +44,7 @@ final class TreeWindowViewModel {
                     }
             }
 
+            var treeBuilder = TreeBuilder()
             let newTree = treeBuilder.getTreeFrom(
                 originalView: originalView,
                 modifiedView: modifiedView
@@ -51,10 +68,9 @@ final class TreeWindowViewModel {
                     }
                 case .treeComputed(let computedUIState):
                     for changedValue in TreeNodeRegistry.shared.allChangedNodes {
-                        withAnimation {
-                            computedUIState
-                                .treeBreakDownOfOriginalContent[changedValue.serialNumber]?.value = changedValue.value
-                        }
+                        computedUIState.treeBreakDownOfOriginalContent[changedValue.serialNumber]?.setValueWithAnimation(
+                            to: changedValue.value
+                        )
                     }
             }
         }

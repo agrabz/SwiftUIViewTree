@@ -10,10 +10,10 @@ final class TreeNode: Sendable {
 
     let type: String
     let label: String
-    var value: String
+    private(set) var value: String
     let serialNumber: Int
 
-    var descendantCount: Int = 0
+    var descendantCount = 0
 
     var id: TreeNode.ID {
         ID(rawValue: serialNumber)
@@ -50,17 +50,19 @@ final class TreeNode: Sendable {
         type: String,
         label: String,
         value: String,
-        serialNumber: Int,
+        serialNumber: Int, //TODO: registryRelevant input param?
     ) {
         self.type = type
         self.label = label
         self.value = value
         self.serialNumber = serialNumber
 
+//        print(serialNumber, type, label, value, descendantCount)
+
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
-            if value != oldValue {
+            if value != oldValue { //TODO: there are more subview related things being logged than visible --> expand subview to be originalView+modifiedView?
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
                     previousNodeValue: oldValue
@@ -68,6 +70,14 @@ final class TreeNode: Sendable {
 
                 TreeNodeRegistry.shared.registerChangedNode(self)
             }
+        }
+    }
+
+    /// To be able to set the value from async, non MainActor isolated contexts, we have to have this setter.
+    /// "await node.value = await someOtherValue" is not valid
+    func setValueWithAnimation(to: String) {
+        withAnimation {
+            self.value = to
         }
     }
 }
@@ -79,4 +89,17 @@ extension TreeNode {
         value: "Root node",
         serialNumber: -1,
     )
+}
+
+extension TreeNode: @MainActor CustomStringConvertible {
+    var description: String {
+        "(\(self.serialNumber)) \(self.label): \(self.type) = \(self.value)"
+    }
+}
+
+extension TreeNode: @MainActor Equatable {
+    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        lhs.type == rhs.type &&
+        lhs.label == rhs.label
+    }
 }
