@@ -130,12 +130,12 @@ struct TreeTests {
             }
 
             @Test
-            func NOT_Equal() async {
+            func NOT_Equal_LabelIsDifferent() async {
                 //GIVEN
                 let parent = TreeNode.createMock()
-                let child1 = TreeNode.createMock()
-                let child2 = TreeNode.createMock()
-                let child3 = TreeNode.createMock()
+                let child1 = TreeNode.createMock(type: "type", label: "label1")
+                let child2 = TreeNode.createMock(type: "type", label: "label2")
+                let child3 = TreeNode.createMock(type: "type", label: "label3")
 
                 let tree1 = Tree(
                     node: parent,
@@ -158,7 +158,94 @@ struct TreeTests {
                 #expect(result == false)
             }
 
-            //TODO: mismatching number of children should fail too! review implementation
+            @Test
+            func NOT_Equal_TypeIsDifferent() async {
+                //GIVEN
+                let parent = TreeNode.createMock()
+                let child1 = TreeNode.createMock(type: "type1", label: "label")
+                let child2 = TreeNode.createMock(type: "type2", label: "label")
+                let child3 = TreeNode.createMock(type: "type3", label: "label")
+
+                let tree1 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child1),
+                        Tree(node: child2),
+                    ]
+                )
+                let tree2 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child2),
+                        Tree(node: child3),
+                    ]
+                )
+                //WHEN
+                let result = tree1 == tree2
+
+                //THEN
+                #expect(result == false)
+            }
+
+            @Test
+            func NOT_Equal_LabelAndTypeAreBothDifferent() async {
+                //GIVEN
+                let parent = TreeNode.createMock()
+                let child1 = TreeNode.createMock(type: "type1", label: "label1")
+                let child2 = TreeNode.createMock(type: "type2", label: "label2")
+                let child3 = TreeNode.createMock(type: "type3", label: "label3")
+
+                let tree1 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child1),
+                        Tree(node: child2),
+                    ]
+                )
+                let tree2 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child2),
+                        Tree(node: child3),
+                    ]
+                )
+                //WHEN
+                let result = tree1 == tree2
+
+                //THEN
+                #expect(result == false)
+            }
+
+            @Test
+            func NOT_Equal_DescendantCountIsDifferent() async {
+                //GIVEN
+                let parent = TreeNode.createMock()
+                let child1 = TreeNode.createMock()
+                let child2 = TreeNode.createMock()
+                let child3 = TreeNode.createMock()
+                let child4 = TreeNode.createMock()
+
+                let tree1 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child1),
+                        Tree(node: child2),
+                    ]
+                )
+                let tree2 = Tree(
+                    node: parent,
+                    children: [
+                        Tree(node: child2),
+                        Tree(node: child3),
+                        Tree(node: child4),
+                    ]
+                )
+                //WHEN
+                let result = tree1 == tree2
+
+                //THEN
+                #expect(result == false)
+            }
         }
     }
 }
