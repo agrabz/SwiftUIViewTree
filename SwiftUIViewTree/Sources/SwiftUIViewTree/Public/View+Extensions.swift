@@ -15,13 +15,12 @@ public extension View {
     //TODO: documentation
     func notifyViewTreeOnChanges(of originalSubView: any View) -> some View {
         if !IsFirst.shared.getValue() {
-            TreeWindowViewModel.shared
-                .computeSubViewChanges(
-                    originalSubView: originalSubView,
-                    modifiedSubView: self
-                )
-
+            TreeWindowViewModel.shared.computeSubViewChanges(
+                originalSubView: originalSubView,
+                modifiedSubView: self
+            )
         }
+
         return self
     }
 }

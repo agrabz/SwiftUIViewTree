@@ -3,6 +3,7 @@ import SwiftUI
 
 /// This has to be an actor otherwise some weird actor-reentrancy like issue happened when it was straight in the TreeWindowViewModel
 actor SubViewChangeHandler {
+    //TODO: this func is too big, docs are added for now but at least some private funcs would be nice
     func computeSubViewChanges(
         originalSubView: any View,
         modifiedSubView: any View,
@@ -30,10 +31,12 @@ actor SubViewChangeHandler {
             return
         }
 
+        /// removeChangedNodesThatGotCreatedDueToSubTreeCreation
         for changedNode in await TreeNodeRegistry.shared.allChangedNodes {
             await TreeNodeRegistry.shared.removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: changedNode.serialNumber)
         }
 
+        /// register real changes
         let flattenedChangedMatchingSubTree = await TreeFlattener.flatten(
             changedFirstMatchingSubTree
         )
@@ -54,6 +57,7 @@ actor SubViewChangeHandler {
             )
         }
 
+        /// Apply real changes
         for changedTreeNode in await TreeNodeRegistry.shared.allChangedNodes {
             await uiState.treeBreakDownOfOriginalContent[changedTreeNode.serialNumber]?.setValueWithAnimation(
                 to: await changedTreeNode.value
