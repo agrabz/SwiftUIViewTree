@@ -17,6 +17,7 @@ actor SubViewChangeHandler {
 
         let fullTree = uiState.treeBreakDownOfOriginalContent
 
+        /// Find matching sub tree
         //Right now we cannot properly differentiate between subviews that are the same, so we always return the first match. Later it should be adjusted with a @State UUID approach like .notifyViewTreeOnChanges(of: self, id: $id)
         guard
             let originalSubViewAsTree = await subviewTree.children.first?.children.first,
@@ -30,6 +31,9 @@ actor SubViewChangeHandler {
             print()
             return
         }
+
+        //TODO: would be nice, but probably bigger rework
+        /// Add originalSubView and modifiedSubViewTree to the tree
 
         /// removeChangedNodesThatGotCreatedDueToSubTreeCreation
         print()
