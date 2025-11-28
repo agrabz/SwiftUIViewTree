@@ -136,32 +136,29 @@ private extension ZoomableViewController {
     }
 
     func applySteppedZoom(sender: UITapGestureRecognizer) {
-        let clampedTargetFillZoomScale = max(
-            scrollView.minimumZoomScale,
-            min(
-                zoomedOutScale,
-                scrollView.maximumZoomScale
-            )
-        )
-
         let proposedNextZoomScale = min(currentZoomScale * 2.0, scrollView.maximumZoomScale)
 
-        if canZoomInFurther(proposedNextZoomScale: proposedNextZoomScale) {
+        if canZoomIn(toZoomScale: proposedNextZoomScale) {
             zoomInAroundTapLocation(
                 sender: sender,
                 targetZoomedInScale: proposedNextZoomScale
             )
         } else {
-            zoomOutFully(clampedTargetFillZoomScale: clampedTargetFillZoomScale)
+            zoomOutFully()
         }
     }
 
-    func canZoomInFurther(
-        proposedNextZoomScale: CGFloat
+    func canZoomIn(
+        toZoomScale proposedNextZoomScale: CGFloat
     ) -> Bool {
         let canZoomInFurther = abs(proposedNextZoomScale - currentZoomScale) > zoomCalculationTolerance
 
         return canZoomInFurther
+    }
+
+    func zoomInAroundTapLocation(sender: UITapGestureRecognizer, targetZoomedInScale: CGFloat) {
+        let tapLocationInView = sender.location(in: contentView)
+        zoom(to: tapLocationInView, zoomScale: targetZoomedInScale, animated: true)
     }
 
     func zoom(to tapLocationInView: CGPoint, zoomScale: CGFloat, animated: Bool) {
@@ -182,15 +179,8 @@ private extension ZoomableViewController {
         scrollView.zoom(to: rect, animated: animated)
     }
 
-    func zoomOutFully(clampedTargetFillZoomScale: CGFloat) {
-        if abs(currentZoomScale - clampedTargetFillZoomScale) > 0.0001 {
-            scrollView.setZoomScale(clampedTargetFillZoomScale, animated: true)
-        }
-    }
-
-    func zoomInAroundTapLocation(sender: UITapGestureRecognizer, targetZoomedInScale: CGFloat) {
-        let tapLocationInView = sender.location(in: contentView)
-        zoom(to: tapLocationInView, zoomScale: targetZoomedInScale, animated: true)
+    func zoomOutFully() {
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
     }
 }
 
