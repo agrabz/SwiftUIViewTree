@@ -31,6 +31,10 @@ actor SubViewChangeHandler {
 }
 
 private extension SubViewChangeHandler {
+    enum Error: Swift.Error {
+        case notFoundMatchingSubViewTree
+    }
+
     /// Build sub view tree without registering changes (changes would be off due to serialNumber differences)
     func getSubViewTree(
         originalSubView: any View,
@@ -50,7 +54,7 @@ private extension SubViewChangeHandler {
         subViewTree: Tree
     ) async throws -> SubTree {
         guard
-            let originalBranchOfSubViewTree = await subViewTree.children.first?.children.first, /// Scope down the search into the originalBranch only.
+            let originalBranchOfSubViewTree = await subViewTree.children.first?.children.first, /// Scope down the search to the originalBranch only.
             let subTree = await SubtreeMatcher.findMatchingSubTree(
                 in: fullTree,
                 matching: originalBranchOfSubViewTree
@@ -59,10 +63,7 @@ private extension SubViewChangeHandler {
             print()
             print("⚠️ Couldn't find matching subtree, that shouldn't happen!")
             print()
-            throw {
-                struct MockError: Error {} //TODO: error with the above message
-                return MockError()
-            }()
+            throw Self.Error.notFoundMatchingSubViewTree
         }
 
         return subTree
