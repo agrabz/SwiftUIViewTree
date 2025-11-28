@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct ScrollableZoomableTreeView: View {
-    @State private var currentZoom: CGFloat = StatefulMagnifyGesture.idleZoom
-    @State private var totalZoom: CGFloat = StatefulMagnifyGesture.minZoom
+    @State private var currentZoom: CGFloat = 0.0
+    @State private var totalZoom: CGFloat = 1.0
+    @State private var itemsViewSize: CGSize = .zero
+    @State private var scrollViewSize: CGSize = .zero
+    @State private var hasScrolledToCenter: Bool = false
     @State private var offset: CGSize = .zero
     @State var tree: Tree
 
@@ -12,13 +15,13 @@ struct ScrollableZoomableTreeView: View {
             totalZoom: $totalZoom
         )
     }
-
-    private var dragGesture: DragToScrollGesture {
-        DragToScrollGesture(
-            offset: $offset,
-            scale: getScale()
-        )
-    }
+//
+//    private var dragGesture: DragToScrollGesture {
+//        DragToScrollGesture(
+//            offset: $offset,
+//            scale: getScale()
+//        )
+//    }
 
     init(tree: Tree) {
         self._tree = State(initialValue: tree)
@@ -28,15 +31,61 @@ struct ScrollableZoomableTreeView: View {
         }
     }
 
-    var body: some View {
-        if isViewPrintChangesEnabled {
-            let _ = print()
-            let _ = print("ScrollableZoomableTreeView")
-            let _ = Self._printChanges()
-            let _ = print()
-        }
 
-        ZStack {
+    var body: some View {
+        GeometryReader { scrollProxy in
+            ScrollViewReader { scrollViewReader in
+                ScrollView([.vertical, .horizontal]) {
+                    ZStack {
+                        TreeView(tree: $tree)
+                            .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
+                                LinesView(
+                                    parentTree: self.tree,
+                                    nodeCenters: nodeCenters
+                                )
+                            }
+                            .offset(offset)
+//                            .scaleEffect(max(totalZoom + currentZoom, 0.1)) // Prevent flipping by clamping scale
+                            .scaleEffect(getScale()) // Prevent flipping by clamping scale
+                            .background(
+                                GeometryReader { itemsProxy in
+                                    Color.clear
+                                        .onAppear {
+                                            self.itemsViewSize = itemsProxy.size
+                                            self.scrollViewSize = scrollProxy.size
+                                            self.updateInitialZoom()
+                                        }
+                                        .onChange(of: itemsProxy.size) { _, _ in
+                                            self.itemsViewSize = itemsProxy.size
+                                            self.updateInitialZoom()
+                                        }
+                                }
+                            )
+                        // Hidden anchor at center
+                        Color.clear
+                            .frame(width: 1, height: 1)
+                            .id("centerAnchor")
+                            .position(x: itemsViewSize.width / 2, y: itemsViewSize.height / 2)
+                    }
+                }
+                .onAppear {
+                    self.scrollViewSize = scrollProxy.size
+                    self.updateInitialZoom()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
+                    }
+                }
+                .onChange(of: itemsViewSize) { _, _ in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        scrollToCenterIfNeeded(scrollViewReader: scrollViewReader)
+                    }
+                }
+            }
+        }
+        .simultaneousGesture(
+            magnifyGesture
+        )
+        .background(
             LinearGradient(
                 gradient:
                     Gradient(
@@ -48,25 +97,23 @@ struct ScrollableZoomableTreeView: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
+        )
+    }
 
-            TreeView(tree: $tree)
-                .backgroundPreferenceValue(NodeCenterPreferenceKey.self) { nodeCenters in
-                    LinesView(
-                        parentTree: self.tree,
-                        nodeCenters: nodeCenters
-                    )
-                }
-                .offset(offset)
-                .scaleEffect(getScale())
-                .onAppear {
-                    if isPerformanceLoggingEnabled {
-                        print("ScrollableZoomableTreeView Appeared: \(Date())")
-                    }
-                }
+    private func updateInitialZoom() {
+        guard itemsViewSize.width > 0, itemsViewSize.height > 0, scrollViewSize.width > 0, scrollViewSize.height > 0 else { return }
+        let scaleX = scrollViewSize.width / itemsViewSize.width
+        let scaleY = scrollViewSize.height / itemsViewSize.height
+        let minScale = min(scaleX, scaleY, 1.0) // Don't zoom in by default
+        if abs(totalZoom - minScale) > 0.01 {
+            totalZoom = minScale
         }
-        .gesture(magnifyGesture)
-        .simultaneousGesture(dragGesture)
+    }
+
+    private func scrollToCenterIfNeeded(scrollViewReader: ScrollViewProxy) {
+        guard !hasScrolledToCenter, itemsViewSize.width > 0, itemsViewSize.height > 0 else { return }
+        scrollViewReader.scrollTo("centerAnchor", anchor: .center)
+        hasScrolledToCenter = true
     }
 }
 
