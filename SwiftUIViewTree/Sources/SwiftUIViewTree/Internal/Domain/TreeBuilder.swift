@@ -13,6 +13,7 @@ struct TreeBuilder {
     mutating func getTreeFrom(
         originalView: any View,
         modifiedView: any View,
+        registerChanges: Bool
     ) -> Tree {
         nodeSerialNumberCounter.reset()
 
@@ -23,12 +24,14 @@ struct TreeBuilder {
         let originalViewRootTree = getRootTree(
             from: originalView,
             as: .originalView,
+            registerChanges: registerChanges
         )
         newTree.children.append(originalViewRootTree)
 
         let modifiedViewRootTree = getRootTree(
             from: modifiedView,
             as: .modifiedView,
+            registerChanges: registerChanges
         )
         newTree.children.append(modifiedViewRootTree)
 
@@ -40,6 +43,7 @@ private extension TreeBuilder {
     mutating func convertToTreesRecursively(
         mirror: Mirror,
         source: any View,
+        registerChanges: Bool
     ) -> [Tree] {
         let result = mirror.children.enumerated().map { (index, child) in
             for validation in validationList {
@@ -51,7 +55,8 @@ private extension TreeBuilder {
                             type: error.description,
                             label: error.description,
                             value: error.description,
-                            serialNumber: nodeSerialNumberCounter.counter
+                            serialNumber: nodeSerialNumberCounter.counter,
+                            registerChanges: registerChanges
                         )
                     )
                 }
@@ -68,12 +73,14 @@ private extension TreeBuilder {
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
                     value: value,
-                    serialNumber: nodeSerialNumberCounter.counter
+                    serialNumber: nodeSerialNumberCounter.counter,
+                    registerChanges: registerChanges
                 )
             ) // as Any? see type(of:) docs
             childTree.children = convertToTreesRecursively(
                 mirror: childMirror,
-                source: source
+                source: source,
+                registerChanges: registerChanges
             )
 
             childTree.parentNode.descendantCount = getDescendantCount(of: childTree)
@@ -89,22 +96,36 @@ private extension TreeBuilder {
         }
     }
 
-    mutating func getRootTree(from rootView: any View, as rootNodeType: RootNodeType) -> Tree {
-        let rootNode = getRootTreeNode(of: rootView, as: rootNodeType)
+    mutating func getRootTree(
+        from rootView: any View,
+        as rootNodeType: RootNodeType,
+        registerChanges: Bool
+    ) -> Tree {
+        let rootNode = getRootTreeNode(
+            of: rootView,
+            as: rootNodeType,
+            registerChanges: registerChanges
+        )
         let rootViewTree = Tree(node: rootNode)
         rootViewTree.children = convertToTreesRecursively(
             mirror: Mirror(reflecting: rootView),
-            source: rootView
+            source: rootView,
+            registerChanges: registerChanges
         )
         return rootViewTree
     }
 
-    func getRootTreeNode(of view: any View, as rootNodeType: RootNodeType) -> TreeNode {
+    func getRootTreeNode(
+        of view: any View,
+        as rootNodeType: RootNodeType,
+        registerChanges: Bool
+    ) -> TreeNode {
         TreeNode(
             type: "\(type(of: view))",
             label: rootNodeType.rawValue,
             value: "\(view)",
             serialNumber: rootNodeType.serialNumber,
+            registerChanges: registerChanges
         )
     }
 

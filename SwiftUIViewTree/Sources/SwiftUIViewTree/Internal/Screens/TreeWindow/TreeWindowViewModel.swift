@@ -47,7 +47,8 @@ final class TreeWindowViewModel {
             var treeBuilder = TreeBuilder()
             let newTree = treeBuilder.getTreeFrom(
                 originalView: originalView,
-                modifiedView: modifiedView
+                modifiedView: modifiedView,
+                registerChanges: true
             )
 
             //TODO: without this delay, the view doesn't update properly in some cases (small-medium views only?)

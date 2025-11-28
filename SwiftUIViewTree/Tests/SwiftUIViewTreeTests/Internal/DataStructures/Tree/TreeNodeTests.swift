@@ -7,74 +7,92 @@ import Testing
 struct TreeNodeTests {
     @MainActor
     struct Init {
-        @Test
-        func getsRegistered_First() {
-            //GIVEN
-            let node = TreeNode.createMock()
-            //WHEN
-            let registeredValue = TreeNodeRegistry.shared.getRegisteredValueOfNodeWith(
-                serialNumber: node.serialNumber
-            )
-            //THEN
-            #expect(registeredValue == node.value)
+        @MainActor
+        struct RegisterChanges_True {
+            @Test
+            func getsRegistered_First() {
+                //GIVEN
+                let node = TreeNode.createMock(registerChanges: true)
+                //WHEN
+                let registeredValue = TreeNodeRegistry.shared.getRegisteredValueOfNodeWith(
+                    serialNumber: node.serialNumber
+                )
+                //THEN
+                #expect(registeredValue == node.value)
+            }
+
+            @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
+            func getsRegistered_Twice_ThereIs_NO_ValueChange() {
+                //GIVEN
+                let node1 = TreeNode.createMock(
+                    type: "type",
+                    label: "label",
+                    value: "value",
+                    serialNumber: 42
+                )
+
+                //WHEN
+                _ = TreeNode.createMock(
+                    type: "type",
+                    label: "label",
+                    value: node1.value,
+                    serialNumber: 42
+                )
+
+                //THEN
+                #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == false)
+                guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
+                    Issue.record("ViewTreeLogger is not spy: \(ViewTreeLogger.shared)")
+                    return
+                }
+                #expect(spyViewTreeLogger.hasBeenCalled == false)
+            }
+
+            @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
+            func getsRegistered_Twice_There_IS_ValueChange() {
+                //GIVEN
+                let value1 = "value1"
+                let value2 = "value2"
+
+                let node1 = TreeNode.createMock(
+                    type: "type",
+                    label: "label",
+                    value: value1,
+                    serialNumber: 42,
+                    registerChanges: true
+                )
+
+                //WHEN
+                _ = TreeNode.createMock(
+                    type: "type",
+                    label: "label",
+                    value: value2,
+                    serialNumber: 42,
+                    registerChanges: true
+                )
+
+                //THEN
+                #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == true)
+                guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
+                    Issue.record("ViewTreeLogger is not spy: \(ViewTreeLogger.shared)")
+                    return
+                }
+                #expect(spyViewTreeLogger.hasBeenCalled == true)
+            }
         }
 
-        @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
-        func getsRegistered_Twice_ThereIs_NO_ValueChange() {
-            //GIVEN
-            let node1 = TreeNode.createMock(
-                type: "type",
-                label: "label",
-                value: "value",
-                serialNumber: 42
-            )
+        @MainActor
+        struct RegisterChanges_False {
+            @Test func notRegistered() async throws {
+                //GIVEN
+                let registerChanges = false
 
-            //WHEN
-            _ = TreeNode.createMock(
-                type: "type",
-                label: "label",
-                value: node1.value,
-                serialNumber: 42
-            )
+                //WHEN
+                _ = TreeNode.createMock(registerChanges: registerChanges)
 
-            //THEN
-            #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == false)
-            guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
-                Issue.record("ViewTreeLogger is not spy: \(ViewTreeLogger.shared)")
-                return
+                //THEN
+                #expect(TreeNodeRegistry.shared.allChangedNodes.isEmpty)
             }
-            #expect(spyViewTreeLogger.hasBeenCalled == false)
-        }
-
-        @Test(.viewTree(viewTreeLogger: SpyViewTreeLogger()))
-        func getsRegistered_Twice_There_IS_ValueChange() {
-            //GIVEN
-            let value1 = "value1"
-            let value2 = "value2"
-
-            let node1 = TreeNode.createMock(
-                type: "type",
-                label: "label",
-                value: value1,
-                serialNumber: 42
-            )
-
-            //WHEN
-            _ = TreeNode.createMock(
-                type: "type",
-                label: "label",
-                value: value2,
-                serialNumber: 42
-            )
-
-            //THEN
-            #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == true)
-            guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
-                Issue.record("ViewTreeLogger is not spy: \(ViewTreeLogger.shared)")
-                return
-            }
-            #expect(spyViewTreeLogger.hasBeenCalled == true)
-
         }
     }
 
