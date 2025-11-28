@@ -13,7 +13,7 @@ struct ParentNodeView: View {
         }
 
         NodeView(node: $parentNode)
-            .simultaneousGesture(
+            .gesture(
                 CollapseNodeGesture(
                     node: $parentNode
                 )
