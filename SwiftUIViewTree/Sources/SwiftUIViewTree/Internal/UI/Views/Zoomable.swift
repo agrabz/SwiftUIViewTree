@@ -173,7 +173,8 @@ private extension ZoomableViewController {
     //TODO: review
     @objc func tap(sender: Any) {
         let currentScale = scrollView.zoomScale
-        let inPrimaryScale = abs(currentScale - primaryScale) < 1e-3
+        let tolerance = 0.001
+        let inPrimaryScale = abs(currentScale - primaryScale) < tolerance
 
         let newScale = max(scrollView.minimumZoomScale, inPrimaryScale ? secondaryScale : primaryScale)
         if currentScale != newScale {
