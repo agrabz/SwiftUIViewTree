@@ -3,10 +3,6 @@
 import UIKit
 import SwiftUI
 
-enum ZoomLevel {
-    case fill
-}
-
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
     private let host: UIHostingController<Content>
 
@@ -26,7 +22,6 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
 }
 
 final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
-    private let zoomedOutFully: ZoomLevel = .fill
     private let scrollView = UIScrollView()
     private let contentView: UIView
     private let originalContentSize: CGSize
@@ -80,7 +75,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         scrollView.zoomScale = fillZoomLevel
 
         Task {
-            scrollView.setZoomScale(zoomedOutScale, animated: true)
+            scrollView.setZoomScale(fillZoomLevel, animated: true)
         }
     }
 
@@ -100,10 +95,6 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 }
 
 private extension ZoomableViewController {
-    var zoomedOutScale: CGFloat {
-        zoomScale(for: zoomedOutFully)
-    }
-
     var currentZoomScale: CGFloat {
         scrollView.zoomScale
     }
@@ -119,13 +110,6 @@ private extension ZoomableViewController {
         let widthRatio = self.scrollView.frame.width / size.width
         let heightRatio = self.scrollView.frame.height / size.height
         return max(widthRatio, heightRatio)
-    }
-
-    func zoomScale(for zoomLevel: ZoomLevel) -> CGFloat {
-        switch zoomLevel {
-            case .fill:
-                return zoomScaleToFill(size: originalContentSize)
-        }
     }
 
     @objc func doubleTap(sender: UITapGestureRecognizer) {
