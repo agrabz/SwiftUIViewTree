@@ -3,16 +3,16 @@
 import UIKit
 import SwiftUI
 
-//TODO: still needed?
 enum ZoomLevel {
     case fill
+    case scale(CGFloat) // absolute scale factor relative to content’s original size
 }
 
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
     private let host: UIHostingController<Content>
     private var initialZoomLevel: ZoomLevel = .fill
     private var primaryZoomLevel: ZoomLevel = .fill
-    private var secondaryZoomLevel: ZoomLevel = .fill
+    private var secondaryZoomLevel: ZoomLevel = .scale(2.0) // default to 2x
 
     init(@ViewBuilder content: () -> Content) {
         self.host = UIHostingController(rootView: content())
@@ -70,7 +70,8 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     }
 
     var secondaryScale: CGFloat {
-        scale(for: secondaryZoomLevel)
+        // Clamp to maximumZoomScale to respect limits
+        min(scale(for: secondaryZoomLevel), scrollView.maximumZoomScale)
     }
 
     init(
@@ -165,21 +166,42 @@ private extension ZoomableViewController {
 
     func scale(for zoomLevel: ZoomLevel) -> CGFloat {
         switch zoomLevel {
-            case .fill:
-                zoomToFill(size: originalContentSize)
+        case .fill:
+            return zoomToFill(size: originalContentSize)
+        case .scale(let factor):
+            // factor is relative to the fill scale so that .scale(2.0) means “2x the fit”
+            return zoomToFill(size: originalContentSize) * factor
         }
     }
 
-    //TODO: review
-    @objc func tap(sender: Any) {
+    // Double-tap to toggle between fit (.fill) and 2x (or configured) around the tap location
+    @objc func tap(sender: UITapGestureRecognizer) {
         let currentScale = scrollView.zoomScale
-        let tolerance = 0.001
-        let inPrimaryScale = abs(currentScale - primaryScale) < tolerance
+        let tolerance: CGFloat = 0.001
+        let targetZoomedInScale = max(scrollView.minimumZoomScale, min(secondaryScale, scrollView.maximumZoomScale))
+        let targetFitScale = max(scrollView.minimumZoomScale, min(primaryScale, scrollView.maximumZoomScale))
 
-        let newScale = max(scrollView.minimumZoomScale, inPrimaryScale ? secondaryScale : primaryScale)
-        if currentScale != newScale {
-            scrollView.setZoomScale(newScale, animated: true)
+        let isCurrentlyZoomedIn = abs(currentScale - targetZoomedInScale) < tolerance || currentScale > targetFitScale + tolerance
+
+        if isCurrentlyZoomedIn {
+            // Zoom out to fit
+            if currentScale != targetFitScale {
+                scrollView.setZoomScale(targetFitScale, animated: true)
+            }
+        } else {
+            // Zoom in around the tap location
+            let locationInView = sender.location(in: contentView)
+            zoom(to: locationInView, scale: targetZoomedInScale, animated: true)
         }
+    }
+
+    // Compute a rect centered at a point that results in the requested scale, then zoom to it.
+    func zoom(to point: CGPoint, scale: CGFloat, animated: Bool) {
+        // Desired visible size in content coordinates = scrollView.bounds.size / scale
+        let size = CGSize(width: scrollView.bounds.width / scale, height: scrollView.bounds.height / scale)
+        let origin = CGPoint(x: point.x - size.width / 2.0, y: point.y - size.height / 2.0)
+        let rect = CGRect(origin: origin, size: size)
+        scrollView.zoom(to: rect, animated: animated)
     }
 }
 
