@@ -39,7 +39,7 @@ struct SubtreeMatcherTests {
         )
 
         //WHEN
-        let result = SubtreeMatcher.findMatchingSubtree(
+        let result = SubtreeMatcher.findMatchingSubTree(
             in: mainTree,
             matching: modifiedSubTree
         )
@@ -78,7 +78,7 @@ struct SubtreeMatcherTests {
         )
 
         //WHEN
-        let result = SubtreeMatcher.findMatchingSubtree(
+        let result = SubtreeMatcher.findMatchingSubTree(
             in: mainTree,
             matching: someSubTree
         )

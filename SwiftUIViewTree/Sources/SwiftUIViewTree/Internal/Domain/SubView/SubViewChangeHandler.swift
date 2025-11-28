@@ -51,7 +51,7 @@ private extension SubViewChangeHandler {
     ) async throws -> SubTree {
         guard
             let originalBranchOfSubViewTree = await subViewTree.children.first?.children.first, /// Scope down the search into the originalBranch only.
-            let subTree = await SubtreeMatcher.findMatchingSubtree(
+            let subTree = await SubtreeMatcher.findMatchingSubTree(
                 in: fullTree,
                 matching: originalBranchOfSubViewTree
             )

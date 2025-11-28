@@ -2,7 +2,7 @@
 @MainActor
 enum SubtreeMatcher {
     //TODO: Right now we cannot properly differentiate between subviews that are the same, so we always return the first match. Later it should be adjusted with a @State UUID approach like .notifyViewTreeOnChanges(of: self, id: $id)
-    static func findMatchingSubtree(in root: Tree, matching target: Tree) -> SubTree? {
+    static func findMatchingSubTree(in root: Tree, matching target: Tree) -> SubTree? {
         var queue: [Tree] = [root]
 
         while !queue.isEmpty {
