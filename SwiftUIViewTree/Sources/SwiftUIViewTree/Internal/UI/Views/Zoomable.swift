@@ -74,19 +74,17 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = originalContentSize
         scrollView.zoomScale = fillZoomLevel
 
-        Task {
+        Task { @MainActor in
             scrollView.setZoomScale(fillZoomLevel, animated: true)
+            alignHorizontallyCenterTop(animated: false)
         }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.minimumZoomScale = zoomScaleToFill(size: originalContentSize)
-        centerContent()
-    }
-
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        centerContent()
+        // After layout changes (bounds may change), keep the initial desired alignment.
+        alignHorizontallyCenterTop(animated: false)
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -97,26 +95,6 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 private extension ZoomableViewController {
     var currentZoomScale: CGFloat {
         scrollView.zoomScale
-    }
-
-    func centerContent() {
-        let contentSize = contentView.frame.size
-
-        let offsetX = max(
-            (scrollView.bounds.width - contentSize.width) * 0.5,
-            0
-        )
-        let offsetY = max(
-            (scrollView.bounds.height - contentSize.height) * 0.5,
-            0
-        )
-
-        scrollView.contentInset = UIEdgeInsets(
-            top: offsetY,
-            left: offsetX,
-            bottom: 0,
-            right: 0
-        )
     }
 
     func zoomScaleToFill(size: CGSize) -> CGFloat {
@@ -175,6 +153,35 @@ private extension ZoomableViewController {
 
     func zoomOutFully() {
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
+        alignHorizontallyCenterTop(animated: true)
+    }
+
+    // MARK: - Initial alignment: horizontally centered, vertically top
+    func alignHorizontallyCenterTop(animated: Bool) {
+        // Ensure contentSize reflects current zoom
+        let contentSize = scrollView.contentSize
+        let boundsSize = scrollView.bounds.size
+
+        guard boundsSize.width > 0, boundsSize.height > 0 else { return }
+
+        // Desired x: center horizontally
+        let maxOffsetX = max(contentSize.width - boundsSize.width, 0)
+        let centeredX = maxOffsetX / 2.0
+
+        // Desired y: top
+        let maxOffsetY = max(contentSize.height - boundsSize.height, 0)
+        let topY: CGFloat = 0
+
+        let target = CGPoint(
+            x: clamp(centeredX, lower: 0, upper: maxOffsetX),
+            y: clamp(topY, lower: 0, upper: maxOffsetY)
+        )
+
+        scrollView.setContentOffset(target, animated: animated)
+    }
+
+    func clamp(_ value: CGFloat, lower: CGFloat, upper: CGFloat) -> CGFloat {
+        return min(max(value, lower), upper)
     }
 }
 
