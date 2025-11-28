@@ -68,7 +68,6 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         ])
     }
 
-    //TODO: smaller funcs
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
         guard parent != nil else { return }
@@ -128,7 +127,6 @@ private extension ZoomableViewController {
         case .fill:
             return zoomToFill(size: originalContentSize)
         case .scale(let factor):
-            // factor is relative to the fill scale so that .scale(2.0) means “2x the fill”
             return zoomToFill(size: originalContentSize) * factor
         }
     }
@@ -142,14 +140,15 @@ private extension ZoomableViewController {
         let isCurrentlyZoomedIn = abs(currentScale - targetZoomedInScale) < tolerance || currentScale > targetFillScale + tolerance
 
         if isCurrentlyZoomedIn {
-            // Zoom out to fill
-            if currentScale != targetFillScale {
-                scrollView.setZoomScale(targetFillScale, animated: true)
-            }
+            zoomOutFully(
+                currentScale: currentScale,
+                targetFillScale: targetFillScale
+            )
         } else {
-            // Zoom in around the tap location
-            let locationInView = sender.location(in: contentView)
-            zoom(to: locationInView, scale: targetZoomedInScale, animated: true)
+            zoomInAroundTapLocation(
+                sender: sender,
+                targetZoomedInScale: targetZoomedInScale
+            )
         }
     }
 
@@ -160,6 +159,17 @@ private extension ZoomableViewController {
         let origin = CGPoint(x: point.x - size.width / 2.0, y: point.y - size.height / 2.0)
         let rect = CGRect(origin: origin, size: size)
         scrollView.zoom(to: rect, animated: animated)
+    }
+
+    func zoomOutFully(currentScale: CGFloat, targetFillScale: CGFloat) {
+        if currentScale != targetFillScale {
+            scrollView.setZoomScale(targetFillScale, animated: true)
+        }
+    }
+
+    func zoomInAroundTapLocation(sender: UITapGestureRecognizer, targetZoomedInScale: CGFloat) {
+        let locationInView = sender.location(in: contentView)
+        zoom(to: locationInView, scale: targetZoomedInScale, animated: true)
     }
 }
 
