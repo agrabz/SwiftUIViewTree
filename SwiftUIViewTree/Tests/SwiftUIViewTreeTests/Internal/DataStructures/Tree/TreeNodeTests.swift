@@ -10,7 +10,7 @@ struct TreeNodeTests {
         @Test
         func getsRegistered_First() {
             //GIVEN
-            let node = TreeNode.createMock()
+            let node = TreeNode.createMock(registerChanges: true)
             //WHEN
             let registeredValue = TreeNodeRegistry.shared.getRegisteredValueOfNodeWith(
                 serialNumber: node.serialNumber
@@ -56,7 +56,8 @@ struct TreeNodeTests {
                 type: "type",
                 label: "label",
                 value: value1,
-                serialNumber: 42
+                serialNumber: 42,
+                registerChanges: true
             )
 
             //WHEN
@@ -64,7 +65,8 @@ struct TreeNodeTests {
                 type: "type",
                 label: "label",
                 value: value2,
-                serialNumber: 42
+                serialNumber: 42,
+                registerChanges: true
             )
 
             //THEN
