@@ -5,7 +5,6 @@ import SwiftUI
 
 enum ZoomLevel {
     case fill
-    case scale(CGFloat)
 }
 
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
@@ -28,11 +27,11 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
 
 final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     private let zoomedOutFully: ZoomLevel = .fill
-    private let zoomedInByDoubleTap: ZoomLevel = .scale(2.0)
     private let scrollView = UIScrollView()
     private let contentView: UIView
     private let originalContentSize: CGSize
     private let zoomCalculationTolerance: CGFloat = 0.001
+    private let zoomScaleFactorOnDoubleTap: CGFloat = 2.0
 
     init(view: UIView) {
         self.scrollView.maximumZoomScale = 0.8
@@ -124,10 +123,8 @@ private extension ZoomableViewController {
 
     func zoomScale(for zoomLevel: ZoomLevel) -> CGFloat {
         switch zoomLevel {
-        case .fill:
-            return zoomScaleToFill(size: originalContentSize)
-        case .scale(let factor):
-            return zoomScaleToFill(size: originalContentSize) * factor
+            case .fill:
+                return zoomScaleToFill(size: originalContentSize)
         }
     }
 
@@ -136,10 +133,7 @@ private extension ZoomableViewController {
     }
 
     func applySteppedZoom(sender: UITapGestureRecognizer) {
-        let proposedNextZoomScale = min(currentZoomScale * 2.0, scrollView.maximumZoomScale)
-        print("proposedNextZoomScale", proposedNextZoomScale)
-        print("min", scrollView.minimumZoomScale)
-        print("max", scrollView.maximumZoomScale)
+        let proposedNextZoomScale = min(currentZoomScale * zoomScaleFactorOnDoubleTap, scrollView.maximumZoomScale)
 
         if canZoomIn(toZoomScale: proposedNextZoomScale) {
             zoomInAroundTapLocation(
@@ -173,8 +167,8 @@ private extension ZoomableViewController {
         )
 
         let origin = CGPoint(
-            x: tapLocationInView.x - size.width / 2.0,
-            y: tapLocationInView.y - size.height / 2.0
+            x: tapLocationInView.x - size.width / zoomScaleFactorOnDoubleTap,
+            y: tapLocationInView.y - size.height / zoomScaleFactorOnDoubleTap
         )
 
         let rect = CGRect(origin: origin, size: size)
