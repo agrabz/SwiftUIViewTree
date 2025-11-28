@@ -92,7 +92,6 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //TODO: smaller funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.backgroundColor = .clear
@@ -100,7 +99,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
 
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
         gestureRecognizer.numberOfTapsRequired = 2
         gestureRecognizer.numberOfTouchesRequired = 1
         scrollView.addGestureRecognizer(gestureRecognizer)
@@ -173,8 +172,7 @@ private extension ZoomableViewController {
         }
     }
 
-    // Double-tap to toggle between fit (.fill) and 2x (or configured) around the tap location
-    @objc func tap(sender: UITapGestureRecognizer) {
+    @objc func doubleTap(sender: UITapGestureRecognizer) {
         let currentScale = scrollView.zoomScale
         let tolerance: CGFloat = 0.001
         let targetZoomedInScale = max(scrollView.minimumZoomScale, min(secondaryScale, scrollView.maximumZoomScale))
