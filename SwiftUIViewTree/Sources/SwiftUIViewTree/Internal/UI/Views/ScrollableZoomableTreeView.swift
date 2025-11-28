@@ -1,25 +1,7 @@
 import SwiftUI
-//import Zoomable
 
 struct ScrollableZoomableTreeView: View {
-//    @State private var currentZoom: CGFloat = StatefulMagnifyGesture.idleZoom
-//    @State private var totalZoom: CGFloat = StatefulMagnifyGesture.minZoom
-//    @State private var offset: CGSize = .zero
     @State var tree: Tree
-
-//    private var magnifyGesture: StatefulMagnifyGesture {
-//        StatefulMagnifyGesture(
-//            currentZoom: $currentZoom,
-//            totalZoom: $totalZoom
-//        )
-//    }
-//
-//    private var dragGesture: DragToScrollGesture {
-//        DragToScrollGesture(
-//            offset: $offset,
-//            scale: getScale()
-//        )
-//    }
 
     init(tree: Tree) {
         self._tree = State(initialValue: tree)
@@ -58,8 +40,6 @@ struct ScrollableZoomableTreeView: View {
                             nodeCenters: nodeCenters
                         )
                     }
-                //                .offset(offset)
-                //                .scaleEffect(getScale())
                     .onAppear {
                         if isPerformanceLoggingEnabled {
                             print("ScrollableZoomableTreeView Appeared: \(Date())")
@@ -68,13 +48,6 @@ struct ScrollableZoomableTreeView: View {
             }
         }
         .ignoresSafeArea()
-//        .gesture(magnifyGesture)
-//        .simultaneousGesture(dragGesture)
     }
 }
 
-private extension ScrollableZoomableTreeView {
-//    func getScale() -> CGFloat {
-//        currentZoom + totalZoom
-//    }
-}
