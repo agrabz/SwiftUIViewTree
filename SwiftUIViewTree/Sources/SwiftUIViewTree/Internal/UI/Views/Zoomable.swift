@@ -10,9 +10,8 @@ enum ZoomLevel {
 
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
     private let host: UIHostingController<Content>
-    private var initialZoomLevel: ZoomLevel = .fill
-    private var primaryZoomLevel: ZoomLevel = .fill
-    private var secondaryZoomLevel: ZoomLevel = .scale(2.0) // default to 2x
+    private var zoomedOutFully: ZoomLevel = .fill
+    private var zoomedInByDoubleTap: ZoomLevel = .scale(2.0)
 
     init(@ViewBuilder content: () -> Content) {
         self.host = UIHostingController(rootView: content())
@@ -21,9 +20,8 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> ZoomableViewController {
         ZoomableViewController(
             view: self.host.view,
-            initialZoomLevel: self.initialZoomLevel,
-            primaryZoomLevel: self.primaryZoomLevel,
-            secondaryZoomLevel: self.secondaryZoomLevel
+            initialZoomLevel: self.zoomedOutFully,
+            secondaryZoomLevel: self.zoomedInByDoubleTap
         )
     }
 
@@ -35,19 +33,13 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
 private extension Zoomable {
     func initialZoomLevel(_ zoomLevel: ZoomLevel) -> Self {
         var copy = self
-        copy.initialZoomLevel = zoomLevel
-        return copy
-    }
-
-    func primaryZoomLevel(_ zoomLevel: ZoomLevel) -> Self {
-        var copy = self
-        copy.primaryZoomLevel = zoomLevel
+        copy.zoomedOutFully = zoomLevel
         return copy
     }
 
     func secondaryZoomLevel(_ zoomLevel: ZoomLevel) -> Self {
         var copy = self
-        copy.secondaryZoomLevel = zoomLevel
+        copy.zoomedInByDoubleTap = zoomLevel
         return copy
     }
 }
@@ -56,35 +48,28 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     let scrollView = UIScrollView()
     let contentView: UIView
     let originalContentSize: CGSize
-    let initialZoomLevel: ZoomLevel
-    let primaryZoomLevel: ZoomLevel
-    let secondaryZoomLevel: ZoomLevel
+    let zoomedOutFully: ZoomLevel
+    let zoomedInByDoubleTap: ZoomLevel
 
-    var initialScale: CGFloat {
-        scale(for: initialZoomLevel)
+    var zoomedOutScale: CGFloat {
+        scale(for: zoomedOutFully)
     }
 
-    var primaryScale: CGFloat {
-        scale(for: primaryZoomLevel)
-    }
-
-    var secondaryScale: CGFloat {
+    var zoomedInByDoubleTapScale: CGFloat {
         // Clamp to maximumZoomScale to respect limits
-        min(scale(for: secondaryZoomLevel), scrollView.maximumZoomScale)
+        min(scale(for: zoomedInByDoubleTap), scrollView.maximumZoomScale)
     }
 
     init(
         view: UIView,
         initialZoomLevel: ZoomLevel,
-        primaryZoomLevel: ZoomLevel,
         secondaryZoomLevel: ZoomLevel
     ) {
         self.scrollView.maximumZoomScale = 1
         self.contentView = view
         self.originalContentSize = view.intrinsicContentSize
-        self.initialZoomLevel = initialZoomLevel
-        self.primaryZoomLevel = primaryZoomLevel
-        self.secondaryZoomLevel = secondaryZoomLevel
+        self.zoomedOutFully = initialZoomLevel
+        self.zoomedInByDoubleTap = secondaryZoomLevel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -129,7 +114,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         scrollView.zoomScale = fillZoomLevel
 
         Task {
-            scrollView.setZoomScale(initialScale, animated: true)
+            scrollView.setZoomScale(zoomedOutScale, animated: true)
         }
     }
 
@@ -175,8 +160,8 @@ private extension ZoomableViewController {
     @objc func doubleTap(sender: UITapGestureRecognizer) {
         let currentScale = scrollView.zoomScale
         let tolerance: CGFloat = 0.001
-        let targetZoomedInScale = max(scrollView.minimumZoomScale, min(secondaryScale, scrollView.maximumZoomScale))
-        let targetFitScale = max(scrollView.minimumZoomScale, min(primaryScale, scrollView.maximumZoomScale))
+        let targetZoomedInScale = max(scrollView.minimumZoomScale, min(zoomedInByDoubleTapScale, scrollView.maximumZoomScale))
+        let targetFitScale = max(scrollView.minimumZoomScale, min(zoomedOutScale, scrollView.maximumZoomScale))
 
         let isCurrentlyZoomedIn = abs(currentScale - targetZoomedInScale) < tolerance || currentScale > targetFitScale + tolerance
 
