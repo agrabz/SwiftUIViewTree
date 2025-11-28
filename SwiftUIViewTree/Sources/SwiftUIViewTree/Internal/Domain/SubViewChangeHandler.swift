@@ -31,11 +31,6 @@ actor SubViewChangeHandler {
 }
 
 private extension SubViewChangeHandler {
-    struct SubTree {
-        let changedSubTree: Tree
-        let originalSubTree: Tree
-    }
-
     /// Build sub view tree without registering changes (changes would be off due to serialNumber differences)
     func getSubViewTree(
         originalSubView: any View,
@@ -50,14 +45,13 @@ private extension SubViewChangeHandler {
         return subviewTree
     }
 
-    func findMatchingSubViewTreeIn( //TODO: merge into findMatchingSubtree?
+    func findMatchingSubViewTreeIn(
         fullTree: Tree,
         subViewTree: Tree
     ) async throws -> SubTree {
-        //Right now we cannot properly differentiate between subviews that are the same, so we always return the first match. Later it should be adjusted with a @State UUID approach like .notifyViewTreeOnChanges(of: self, id: $id)
         guard
-            let originalBranchOfSubViewTree = await subViewTree.children.first?.children.first,
-            let (changed: changedFirstMatchingSubTree, original: originalMatchingSubtree) = await SubtreeMatcher.findMatchingSubtree(
+            let originalBranchOfSubViewTree = await subViewTree.children.first?.children.first, /// Scope down the search into the originalBranch only.
+            let subTree = await SubtreeMatcher.findMatchingSubtree(
                 in: fullTree,
                 matching: originalBranchOfSubViewTree
             )
@@ -71,10 +65,7 @@ private extension SubViewChangeHandler {
             }()
         }
 
-        return SubTree(
-            changedSubTree: changedFirstMatchingSubTree,
-            originalSubTree: originalMatchingSubtree
-        )
+        return subTree
     }
 
     func registerChangesOfSubtree(_ subTree: SubTree) async {
