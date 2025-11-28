@@ -128,7 +128,7 @@ private extension ZoomableViewController {
         case .fill:
             return zoomToFill(size: originalContentSize)
         case .scale(let factor):
-            // factor is relative to the fill scale so that .scale(2.0) means “2x the fit”
+            // factor is relative to the fill scale so that .scale(2.0) means “2x the fill”
             return zoomToFill(size: originalContentSize) * factor
         }
     }
@@ -137,14 +137,14 @@ private extension ZoomableViewController {
         let currentScale = scrollView.zoomScale
         let tolerance: CGFloat = 0.001
         let targetZoomedInScale = max(scrollView.minimumZoomScale, min(zoomedInByDoubleTapScale, scrollView.maximumZoomScale))
-        let targetFitScale = max(scrollView.minimumZoomScale, min(zoomedOutScale, scrollView.maximumZoomScale))
+        let targetFillScale = max(scrollView.minimumZoomScale, min(zoomedOutScale, scrollView.maximumZoomScale))
 
-        let isCurrentlyZoomedIn = abs(currentScale - targetZoomedInScale) < tolerance || currentScale > targetFitScale + tolerance
+        let isCurrentlyZoomedIn = abs(currentScale - targetZoomedInScale) < tolerance || currentScale > targetFillScale + tolerance
 
         if isCurrentlyZoomedIn {
-            // Zoom out to fit
-            if currentScale != targetFitScale {
-                scrollView.setZoomScale(targetFitScale, animated: true)
+            // Zoom out to fill
+            if currentScale != targetFillScale {
+                scrollView.setZoomScale(targetFillScale, animated: true)
             }
         } else {
             // Zoom in around the tap location
