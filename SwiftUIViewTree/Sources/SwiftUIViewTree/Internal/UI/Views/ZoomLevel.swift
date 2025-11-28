@@ -4,7 +4,6 @@ import UIKit
 import SwiftUI
 
 public enum ZoomLevel {
-    case fit
     case fill
     /// minimum between `fill` and `scaledFit(scale: maxScaledFit)`.
     case boundedFill(maxScaledFit: Float)
@@ -14,8 +13,8 @@ public enum ZoomLevel {
 
 public struct Zoomable<Content: View>: UIViewControllerRepresentable {
     private let host: UIHostingController<Content>
-    private var initialZoomLevel: ZoomLevel = .fit
-    private var primaryZoomLevel: ZoomLevel = .fit
+    private var initialZoomLevel: ZoomLevel = .fill
+    private var primaryZoomLevel: ZoomLevel = .fill
     private var secondaryZoomLevel: ZoomLevel = .scaledFit(scale: 2)
 
     public init(@ViewBuilder content: () -> Content) {
@@ -152,8 +151,6 @@ public class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 
     private func scale(for zoomLevel: ZoomLevel) -> CGFloat {
         switch zoomLevel {
-            case .fit:
-                zoomToFit(size: originalContentSize)
             case .fill:
                 zoomToFill(size: originalContentSize)
             case let .boundedFill(maxScaledFit):
