@@ -132,10 +132,14 @@ private extension ZoomableViewController {
     }
 
     @objc func doubleTap(sender: UITapGestureRecognizer) {
+        applySteppedZoom(sender: sender)
+    }
+
+    func applySteppedZoom(sender: UITapGestureRecognizer) {
         let currentScale = scrollView.zoomScale
         let tolerance: CGFloat = 0.001
 
-        let scaledTargetFillScale = max(
+        let clampedTargetFillScale = max(
             scrollView.minimumZoomScale,
             min(
                 zoomedOutScale,
@@ -151,25 +155,29 @@ private extension ZoomableViewController {
             )
         )
 
-        let isCurrentScaleAboveScaledTargetFillScale = currentScale > scaledTargetFillScale + tolerance
-        let isCurrentScaleAtCanonicalDoubleTapInScale = abs(currentScale - firstDoubleTapScale) < tolerance
-
-        let isCurrentlyZoomedIn = isCurrentScaleAtCanonicalDoubleTapInScale || isCurrentScaleAboveScaledTargetFillScale
+        let isCurrentlyZoomedIn = isCurrentlyZoomedIn(
+            currentScale: currentScale,
+            scaledTargetFillScale: clampedTargetFillScale,
+            firstDoubleTapScale: firstDoubleTapScale,
+            tolerance: tolerance
+        )
 
         if isCurrentlyZoomedIn {
             let proposedNextScale = min(currentScale * 2.0, scrollView.maximumZoomScale)
 
-            let canZoomInFurther = abs(proposedNextScale - currentScale) < tolerance
-
-            if canZoomInFurther {
-                zoomOutFully(
-                    currentScale: currentScale,
-                    targetFillScale: scaledTargetFillScale
-                )
-            } else {
+            if canZoomInFurther(
+                currentScale: currentScale,
+                proposedNextScale: proposedNextScale,
+                tolerance: tolerance
+            ) {
                 zoomInAroundTapLocation(
                     sender: sender,
                     targetZoomedInScale: proposedNextScale
+                )
+            } else {
+                zoomOutFully(
+                    currentScale: currentScale,
+                    targetFillScale: clampedTargetFillScale
                 )
             }
         } else {
@@ -178,6 +186,30 @@ private extension ZoomableViewController {
                 targetZoomedInScale: firstDoubleTapScale
             )
         }
+    }
+
+    func isCurrentlyZoomedIn(
+        currentScale: CGFloat,
+        scaledTargetFillScale: CGFloat,
+        firstDoubleTapScale: CGFloat,
+        tolerance: CGFloat
+    ) -> Bool {
+        let isCurrentScaleAboveScaledTargetFillScale = currentScale > scaledTargetFillScale + tolerance
+        let isCurrentScaleAtCanonicalDoubleTapInScale = abs(currentScale - firstDoubleTapScale) < tolerance
+
+        let isCurrentlyZoomedIn = isCurrentScaleAtCanonicalDoubleTapInScale || isCurrentScaleAboveScaledTargetFillScale
+
+        return isCurrentlyZoomedIn
+    }
+
+    func canZoomInFurther(
+        currentScale: CGFloat,
+        proposedNextScale: CGFloat,
+        tolerance: CGFloat
+    ) -> Bool {
+        let canZoomInFurther = abs(proposedNextScale - currentScale) > tolerance
+
+        return canZoomInFurther
     }
 
     func zoom(to tapLocationInView: CGPoint, scale: CGFloat, animated: Bool) {
