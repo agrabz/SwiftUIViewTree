@@ -17,6 +17,21 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
         self.host = UIHostingController(rootView: content())
     }
 
+    func makeUIViewController(context: Context) -> ZoomableViewController {
+        ZoomableViewController(
+            view: self.host.view,
+            initialZoomLevel: self.initialZoomLevel,
+            primaryZoomLevel: self.primaryZoomLevel,
+            secondaryZoomLevel: self.secondaryZoomLevel
+        )
+    }
+
+    func updateUIViewController(_ uiViewController: ZoomableViewController, context: Context) {
+        uiViewController.view.layoutIfNeeded()
+    }
+}
+
+private extension Zoomable {
     func initialZoomLevel(_ zoomLevel: ZoomLevel) -> Self {
         var copy = self
         copy.initialZoomLevel = zoomLevel
@@ -34,28 +49,27 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
         copy.secondaryZoomLevel = zoomLevel
         return copy
     }
-
-    func makeUIViewController(context: Context) -> ZoomableViewController {
-        ZoomableViewController(
-            view: self.host.view,
-            initialZoomLevel: self.initialZoomLevel,
-            primaryZoomLevel: self.primaryZoomLevel,
-            secondaryZoomLevel: self.secondaryZoomLevel
-        )
-    }
-
-    func updateUIViewController(_ uiViewController: ZoomableViewController, context: Context) {
-        uiViewController.view.layoutIfNeeded()
-    }
 }
 
-class ZoomableViewController : UIViewController, UIScrollViewDelegate {
+final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     let scrollView = UIScrollView()
     let contentView: UIView
     let originalContentSize: CGSize
     let initialZoomLevel: ZoomLevel
     let primaryZoomLevel: ZoomLevel
     let secondaryZoomLevel: ZoomLevel
+
+    var initialScale: CGFloat {
+        scale(for: initialZoomLevel)
+    }
+
+    var primaryScale: CGFloat {
+        scale(for: primaryZoomLevel)
+    }
+
+    var secondaryScale: CGFloat {
+        scale(for: secondaryZoomLevel)
+    }
 
     init(
         view: UIView,
@@ -122,6 +136,16 @@ class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         centerSmallContents()
     }
 
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        centerSmallContents()
+    }
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        contentView
+    }
+}
+
+private extension ZoomableViewController {
     func centerSmallContents() {
         let contentSize = contentView.frame.size
         let offsetX = max((scrollView.bounds.width - contentSize.width) * 0.5, 0)
@@ -129,25 +153,18 @@ class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
 
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? { contentView }
-    func scrollViewDidZoom(_ scrollView: UIScrollView) { centerSmallContents() }
-
     func zoomToFill(size: CGSize) -> CGFloat {
         let widthRatio = self.scrollView.frame.width / size.width
         let heightRatio = self.scrollView.frame.height / size.height
         return max(widthRatio, heightRatio)
     }
 
-    private func scale(for zoomLevel: ZoomLevel) -> CGFloat {
+    func scale(for zoomLevel: ZoomLevel) -> CGFloat {
         switch zoomLevel {
             case .fill:
                 zoomToFill(size: originalContentSize)
         }
     }
-
-    var initialScale: CGFloat { scale(for: initialZoomLevel) }
-    var primaryScale: CGFloat { scale(for: primaryZoomLevel) }
-    var secondaryScale: CGFloat { scale(for: secondaryZoomLevel) }
 
     @objc func tap(sender: Any) {
         let currentScale = scrollView.zoomScale
@@ -160,7 +177,7 @@ class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     }
 }
 
-extension CGSize {
+private extension CGSize {
     static func * (size: CGSize, scalar: CGFloat) -> CGSize {
         CGSize(width: size.width * scalar, height: size.height * scalar)
     }
