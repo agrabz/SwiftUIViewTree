@@ -82,11 +82,11 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.minimumZoomScale = zoomScaleToFill(size: originalContentSize)
-        centerSmallContents()
+        centerContent()
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        centerSmallContents()
+        centerContent()
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -99,11 +99,24 @@ private extension ZoomableViewController {
         scrollView.zoomScale
     }
 
-    func centerSmallContents() {
+    func centerContent() {
         let contentSize = contentView.frame.size
-        let offsetX = max((scrollView.bounds.width - contentSize.width) * 0.5, 0)
-        let offsetY = max((scrollView.bounds.height - contentSize.height) * 0.5, 0)
-        scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
+
+        let offsetX = max(
+            (scrollView.bounds.width - contentSize.width) * 0.5,
+            0
+        )
+        let offsetY = max(
+            (scrollView.bounds.height - contentSize.height) * 0.5,
+            0
+        )
+
+        scrollView.contentInset = UIEdgeInsets(
+            top: offsetY,
+            left: offsetX,
+            bottom: 0,
+            right: 0
+        )
     }
 
     func zoomScaleToFill(size: CGSize) -> CGFloat {
