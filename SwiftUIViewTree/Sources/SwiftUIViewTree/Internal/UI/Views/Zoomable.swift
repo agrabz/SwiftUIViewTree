@@ -5,7 +5,7 @@ import SwiftUI
 
 enum ZoomLevel {
     case fill
-    case scale(CGFloat) // absolute scale factor relative to content’s original size
+    case scale(CGFloat)
 }
 
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
@@ -134,20 +134,36 @@ private extension ZoomableViewController {
     @objc func doubleTap(sender: UITapGestureRecognizer) {
         let currentScale = scrollView.zoomScale
         let tolerance: CGFloat = 0.001
-        let targetZoomedInScale = max(scrollView.minimumZoomScale, min(zoomedInByDoubleTapScale, scrollView.maximumZoomScale))
+
+        // Scales constrained to min/max
         let targetFillScale = max(scrollView.minimumZoomScale, min(zoomedOutScale, scrollView.maximumZoomScale))
 
-        let isCurrentlyZoomedIn = abs(currentScale - targetZoomedInScale) < tolerance || currentScale > targetFillScale + tolerance
+        // Consider “zoomed in” if above fill, or near the canonical double-tap-in scale
+        let canonicalDoubleTapIn = max(scrollView.minimumZoomScale, min(zoomedInByDoubleTapScale, scrollView.maximumZoomScale))
+        let isCurrentlyZoomedIn = abs(currentScale - canonicalDoubleTapIn) < tolerance || currentScale > targetFillScale + tolerance
 
         if isCurrentlyZoomedIn {
-            zoomOutFully(
-                currentScale: currentScale,
-                targetFillScale: targetFillScale
-            )
+            // Compute the next step relative to the current scale.
+            // Example policy: double the current scale until hitting max.
+            let proposedNext = min(currentScale * 2.0, scrollView.maximumZoomScale)
+
+            // If we cannot increase (proposed == current within tolerance), zoom out fully.
+            if abs(proposedNext - currentScale) < tolerance {
+                zoomOutFully(
+                    currentScale: currentScale,
+                    targetFillScale: targetFillScale
+                )
+            } else {
+                zoomInAroundTapLocation(
+                    sender: sender,
+                    targetZoomedInScale: proposedNext
+                )
+            }
         } else {
+            // First zoom-in from fill: go to the canonical double-tap-in scale
             zoomInAroundTapLocation(
                 sender: sender,
-                targetZoomedInScale: targetZoomedInScale
+                targetZoomedInScale: canonicalDoubleTapIn
             )
         }
     }
@@ -171,7 +187,7 @@ private extension ZoomableViewController {
     }
 
     func zoomOutFully(currentScale: CGFloat, targetFillScale: CGFloat) {
-        if currentScale != targetFillScale {
+        if abs(currentScale - targetFillScale) > 0.0001 {
             scrollView.setZoomScale(targetFillScale, animated: true)
         }
     }
