@@ -152,12 +152,21 @@ private extension ZoomableViewController {
         }
     }
 
-    // Compute a rect centered at a point that results in the requested scale, then zoom to it.
-    func zoom(to point: CGPoint, scale: CGFloat, animated: Bool) {
-        // Desired visible size in content coordinates = scrollView.bounds.size / scale
-        let size = CGSize(width: scrollView.bounds.width / scale, height: scrollView.bounds.height / scale)
-        let origin = CGPoint(x: point.x - size.width / 2.0, y: point.y - size.height / 2.0)
+    func zoom(to tapLocationInView: CGPoint, scale: CGFloat, animated: Bool) {
+        let desiredVisibleWidthInContentCoordinates = scrollView.bounds.width / scale
+        let desiredVisibleHeightInContentCoordinates = scrollView.bounds.height / scale
+        let size = CGSize(
+            width: desiredVisibleWidthInContentCoordinates,
+            height: desiredVisibleHeightInContentCoordinates
+        )
+
+        let origin = CGPoint(
+            x: tapLocationInView.x - size.width / 2.0,
+            y: tapLocationInView.y - size.height / 2.0
+        )
+
         let rect = CGRect(origin: origin, size: size)
+
         scrollView.zoom(to: rect, animated: animated)
     }
 
@@ -168,8 +177,8 @@ private extension ZoomableViewController {
     }
 
     func zoomInAroundTapLocation(sender: UITapGestureRecognizer, targetZoomedInScale: CGFloat) {
-        let locationInView = sender.location(in: contentView)
-        zoom(to: locationInView, scale: targetZoomedInScale, animated: true)
+        let tapLocationInView = sender.location(in: contentView)
+        zoom(to: tapLocationInView, scale: targetZoomedInScale, animated: true)
     }
 }
 
