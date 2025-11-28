@@ -21,8 +21,3 @@ enum SubtreeMatcher {
         return nil
     }
 }
-
-struct SubTree {
-    let changedSubTree: Tree
-    let originalSubTree: Tree
-}
