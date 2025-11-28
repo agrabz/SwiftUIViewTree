@@ -108,12 +108,12 @@ public class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         super.didMove(toParent: parent)
         guard parent != nil else { return }
 
-        let fitZoomLevel = zoomToFit(size: originalContentSize)
-        scrollView.minimumZoomScale = fitZoomLevel
+        let fillZoomLevel = zoomToFill(size: originalContentSize)
+        scrollView.minimumZoomScale = fillZoomLevel
 
         scrollView.zoomScale = 1.0
         scrollView.contentSize = originalContentSize
-        scrollView.zoomScale = fitZoomLevel
+        scrollView.zoomScale = fillZoomLevel
 
         Task {
             scrollView.setZoomScale(initialScale, animated: true)
@@ -122,6 +122,7 @@ public class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        scrollView.minimumZoomScale = zoomToFill(size: originalContentSize)
         centerSmallContents()
     }
 
