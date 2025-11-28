@@ -35,7 +35,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     private let zoomCalculationTolerance: CGFloat = 0.001
 
     init(view: UIView) {
-        self.scrollView.maximumZoomScale = 1
+        self.scrollView.maximumZoomScale = 0.8
         self.contentView = view
         self.originalContentSize = view.intrinsicContentSize
         super.init(nibName: nil, bundle: nil)
@@ -137,6 +137,9 @@ private extension ZoomableViewController {
 
     func applySteppedZoom(sender: UITapGestureRecognizer) {
         let proposedNextZoomScale = min(currentZoomScale * 2.0, scrollView.maximumZoomScale)
+        print("proposedNextZoomScale", proposedNextZoomScale)
+        print("min", scrollView.minimumZoomScale)
+        print("max", scrollView.maximumZoomScale)
 
         if canZoomIn(toZoomScale: proposedNextZoomScale) {
             zoomInAroundTapLocation(
