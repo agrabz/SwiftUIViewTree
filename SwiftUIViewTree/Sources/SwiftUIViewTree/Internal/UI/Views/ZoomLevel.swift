@@ -3,6 +3,7 @@
 import UIKit
 import SwiftUI
 
+//TODO: still needed?
 enum ZoomLevel {
     case fill
 }
@@ -51,6 +52,7 @@ private extension Zoomable {
     }
 }
 
+//TODO: different file?
 final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     let scrollView = UIScrollView()
     let contentView: UIView
@@ -90,6 +92,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //TODO: smaller funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.backgroundColor = .clear
@@ -114,6 +117,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         ])
     }
 
+    //TODO: smaller funcs
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
         guard parent != nil else { return }
@@ -166,6 +170,7 @@ private extension ZoomableViewController {
         }
     }
 
+    //TODO: review
     @objc func tap(sender: Any) {
         let currentScale = scrollView.zoomScale
         let inPrimaryScale = abs(currentScale - primaryScale) < 1e-3
