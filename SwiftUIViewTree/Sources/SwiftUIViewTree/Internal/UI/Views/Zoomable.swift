@@ -52,7 +52,6 @@ private extension Zoomable {
     }
 }
 
-//TODO: different file?
 final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     let scrollView = UIScrollView()
     let contentView: UIView
@@ -80,7 +79,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         primaryZoomLevel: ZoomLevel,
         secondaryZoomLevel: ZoomLevel
     ) {
-        self.scrollView.maximumZoomScale = 10
+        self.scrollView.maximumZoomScale = 1
         self.contentView = view
         self.originalContentSize = view.intrinsicContentSize
         self.initialZoomLevel = initialZoomLevel
