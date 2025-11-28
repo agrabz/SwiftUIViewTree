@@ -9,7 +9,7 @@ actor SubViewChangeHandler {
         modifiedSubView: any View,
         uiState: inout TreeWindowUIModel.ComputedUIState,
     ) async {
-        /// Build sub view tree without registering changes (changes would be off due to serialNumber differences
+        /// Build sub view tree without registering changes (changes would be off due to serialNumber differences)
         var treeBuilder = await TreeBuilder()
         let subviewTree = await treeBuilder.getTreeFrom(
             originalView: originalSubView,
@@ -34,8 +34,7 @@ actor SubViewChangeHandler {
             return
         }
 
-        //TODO: would be nice, but probably bigger rework
-        /// Add originalSubView and modifiedSubViewTree to the tree
+        //TODO: would be nice, but probably bigger rework: Add originalSubView and modifiedSubViewTree to the tree
 
         /// Register real changes
         let flattenedChangedMatchingSubTree = await TreeFlattener.flatten(
