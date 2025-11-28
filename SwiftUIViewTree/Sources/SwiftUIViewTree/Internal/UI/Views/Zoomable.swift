@@ -135,35 +135,47 @@ private extension ZoomableViewController {
         let currentScale = scrollView.zoomScale
         let tolerance: CGFloat = 0.001
 
-        // Scales constrained to min/max
-        let targetFillScale = max(scrollView.minimumZoomScale, min(zoomedOutScale, scrollView.maximumZoomScale))
+        let scaledTargetFillScale = max(
+            scrollView.minimumZoomScale,
+            min(
+                zoomedOutScale,
+                scrollView.maximumZoomScale
+            )
+        )
 
-        // Consider “zoomed in” if above fill, or near the canonical double-tap-in scale
-        let canonicalDoubleTapIn = max(scrollView.minimumZoomScale, min(zoomedInByDoubleTapScale, scrollView.maximumZoomScale))
-        let isCurrentlyZoomedIn = abs(currentScale - canonicalDoubleTapIn) < tolerance || currentScale > targetFillScale + tolerance
+        let firstDoubleTapScale = max(
+            scrollView.minimumZoomScale,
+            min(
+                zoomedInByDoubleTapScale,
+                scrollView.maximumZoomScale
+            )
+        )
+
+        let isCurrentScaleAboveScaledTargetFillScale = currentScale > scaledTargetFillScale + tolerance
+        let isCurrentScaleAtCanonicalDoubleTapInScale = abs(currentScale - firstDoubleTapScale) < tolerance
+
+        let isCurrentlyZoomedIn = isCurrentScaleAtCanonicalDoubleTapInScale || isCurrentScaleAboveScaledTargetFillScale
 
         if isCurrentlyZoomedIn {
-            // Compute the next step relative to the current scale.
-            // Example policy: double the current scale until hitting max.
-            let proposedNext = min(currentScale * 2.0, scrollView.maximumZoomScale)
+            let proposedNextScale = min(currentScale * 2.0, scrollView.maximumZoomScale)
 
-            // If we cannot increase (proposed == current within tolerance), zoom out fully.
-            if abs(proposedNext - currentScale) < tolerance {
+            let canZoomInFurther = abs(proposedNextScale - currentScale) < tolerance
+
+            if canZoomInFurther {
                 zoomOutFully(
                     currentScale: currentScale,
-                    targetFillScale: targetFillScale
+                    targetFillScale: scaledTargetFillScale
                 )
             } else {
                 zoomInAroundTapLocation(
                     sender: sender,
-                    targetZoomedInScale: proposedNext
+                    targetZoomedInScale: proposedNextScale
                 )
             }
         } else {
-            // First zoom-in from fill: go to the canonical double-tap-in scale
             zoomInAroundTapLocation(
                 sender: sender,
-                targetZoomedInScale: canonicalDoubleTapIn
+                targetZoomedInScale: firstDoubleTapScale
             )
         }
     }
