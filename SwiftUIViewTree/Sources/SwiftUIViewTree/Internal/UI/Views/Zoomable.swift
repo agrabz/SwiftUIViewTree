@@ -73,7 +73,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         super.didMove(toParent: parent)
         guard parent != nil else { return }
 
-        let fillZoomLevel = zoomToFill(size: originalContentSize)
+        let fillZoomLevel = zoomScaleToFill(size: originalContentSize)
         scrollView.minimumZoomScale = fillZoomLevel
 
         scrollView.zoomScale = 1.0
@@ -87,7 +87,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.minimumZoomScale = zoomToFill(size: originalContentSize)
+        scrollView.minimumZoomScale = zoomScaleToFill(size: originalContentSize)
         centerSmallContents()
     }
 
@@ -102,20 +102,10 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 
 private extension ZoomableViewController {
     var zoomedOutScale: CGFloat {
-        scale(for: zoomedOutFully)
+        zoomScale(for: zoomedOutFully)
     }
 
-    var zoomedInByDoubleTapScale: CGFloat {
-        max(
-            scrollView.minimumZoomScale,
-            min(
-                scale(for: zoomedInByDoubleTap),
-                scrollView.maximumZoomScale
-            )
-        )
-    }
-
-    var currentScale: CGFloat {
+    var currentZoomScale: CGFloat {
         scrollView.zoomScale
     }
 
@@ -126,18 +116,18 @@ private extension ZoomableViewController {
         scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
 
-    func zoomToFill(size: CGSize) -> CGFloat {
+    func zoomScaleToFill(size: CGSize) -> CGFloat {
         let widthRatio = self.scrollView.frame.width / size.width
         let heightRatio = self.scrollView.frame.height / size.height
         return max(widthRatio, heightRatio)
     }
 
-    func scale(for zoomLevel: ZoomLevel) -> CGFloat {
+    func zoomScale(for zoomLevel: ZoomLevel) -> CGFloat {
         switch zoomLevel {
         case .fill:
-            return zoomToFill(size: originalContentSize)
+            return zoomScaleToFill(size: originalContentSize)
         case .scale(let factor):
-            return zoomToFill(size: originalContentSize) * factor
+            return zoomScaleToFill(size: originalContentSize) * factor
         }
     }
 
@@ -146,7 +136,7 @@ private extension ZoomableViewController {
     }
 
     func applySteppedZoom(sender: UITapGestureRecognizer) {
-        let clampedTargetFillScale = max(
+        let clampedTargetFillZoomScale = max(
             scrollView.minimumZoomScale,
             min(
                 zoomedOutScale,
@@ -154,29 +144,29 @@ private extension ZoomableViewController {
             )
         )
 
-        let proposedNextScale = min(currentScale * 2.0, scrollView.maximumZoomScale)
+        let proposedNextZoomScale = min(currentZoomScale * 2.0, scrollView.maximumZoomScale)
 
-        if canZoomInFurther(proposedNextScale: proposedNextScale) {
+        if canZoomInFurther(proposedNextZoomScale: proposedNextZoomScale) {
             zoomInAroundTapLocation(
                 sender: sender,
-                targetZoomedInScale: proposedNextScale
+                targetZoomedInScale: proposedNextZoomScale
             )
         } else {
-            zoomOutFully(targetFillScale: clampedTargetFillScale)
+            zoomOutFully(clampedTargetFillZoomScale: clampedTargetFillZoomScale)
         }
     }
 
     func canZoomInFurther(
-        proposedNextScale: CGFloat
+        proposedNextZoomScale: CGFloat
     ) -> Bool {
-        let canZoomInFurther = abs(proposedNextScale - currentScale) > zoomCalculationTolerance
+        let canZoomInFurther = abs(proposedNextZoomScale - currentZoomScale) > zoomCalculationTolerance
 
         return canZoomInFurther
     }
 
-    func zoom(to tapLocationInView: CGPoint, scale: CGFloat, animated: Bool) {
-        let desiredVisibleWidthInContentCoordinates = scrollView.bounds.width / scale
-        let desiredVisibleHeightInContentCoordinates = scrollView.bounds.height / scale
+    func zoom(to tapLocationInView: CGPoint, zoomScale: CGFloat, animated: Bool) {
+        let desiredVisibleWidthInContentCoordinates = scrollView.bounds.width / zoomScale
+        let desiredVisibleHeightInContentCoordinates = scrollView.bounds.height / zoomScale
         let size = CGSize(
             width: desiredVisibleWidthInContentCoordinates,
             height: desiredVisibleHeightInContentCoordinates
@@ -192,15 +182,15 @@ private extension ZoomableViewController {
         scrollView.zoom(to: rect, animated: animated)
     }
 
-    func zoomOutFully(targetFillScale: CGFloat) {
-        if abs(currentScale - targetFillScale) > 0.0001 {
-            scrollView.setZoomScale(targetFillScale, animated: true)
+    func zoomOutFully(clampedTargetFillZoomScale: CGFloat) {
+        if abs(currentZoomScale - clampedTargetFillZoomScale) > 0.0001 {
+            scrollView.setZoomScale(clampedTargetFillZoomScale, animated: true)
         }
     }
 
     func zoomInAroundTapLocation(sender: UITapGestureRecognizer, targetZoomedInScale: CGFloat) {
         let tapLocationInView = sender.location(in: contentView)
-        zoom(to: tapLocationInView, scale: targetZoomedInScale, animated: true)
+        zoom(to: tapLocationInView, zoomScale: targetZoomedInScale, animated: true)
     }
 }
 
