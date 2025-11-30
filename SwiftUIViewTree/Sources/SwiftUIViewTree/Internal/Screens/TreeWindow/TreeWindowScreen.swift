@@ -9,20 +9,16 @@ struct TreeWindowScreen<Content: View>: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                VStack {
-                    if shouldShowTree {
-                        HStack {
-                            originalContent
-                                .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.originalContent)
+                HStack {
+                    originalContent
+                        .frame(width: shouldShowTree ? (proxy.size.width * UIConstants.ScreenRatioOf.originalContent) : proxy.size.width)
 
-                            viewFor(uiState: treeWindowViewModel.uiState)
-                                .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree)
-                        }
-                        .transition(.move(edge: .trailing))
-                    } else {
-                        originalContent
+                    if shouldShowTree {
+                        viewFor(uiState: treeWindowViewModel.uiState)
+                            .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree)
                     }
                 }
+                .transition(.move(edge: .trailing))
 
                 ShouldShowTreeButton(shouldShowTree: self.$shouldShowTree)
                     .position(
