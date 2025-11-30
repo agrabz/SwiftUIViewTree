@@ -83,5 +83,6 @@ struct ShouldShowTreeButton: View {
                 .font(.largeTitle)
                 .foregroundColor(shouldShowTree ? .red : .green)
         }
+        .contentTransition(.symbolEffect)
     }
 }
