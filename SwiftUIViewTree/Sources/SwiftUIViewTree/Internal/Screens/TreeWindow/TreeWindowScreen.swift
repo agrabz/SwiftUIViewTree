@@ -18,6 +18,7 @@ struct TreeWindowScreen<Content: View>: View {
                             viewFor(uiState: treeWindowViewModel.uiState)
                                 .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree)
                         }
+                        .transition(.move(edge: .trailing))
                     } else {
                         originalContent
                     }
