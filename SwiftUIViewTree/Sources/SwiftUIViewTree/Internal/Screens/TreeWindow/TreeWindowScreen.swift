@@ -8,27 +8,19 @@ struct TreeWindowScreen<Content: View>: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-
-                Button {
-                    self.shouldShowTree.toggle()
-                } label: {
-                    Image(systemName: "arrow.2.circlepath.circle")
-                        .font(.largeTitle)
-                        .foregroundColor(.primary)
-                }
-
-                if shouldShowTree {
-                    HStack {
-                        originalContent
-                            .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.originalContent)
-
-                        viewFor(uiState: treeWindowViewModel.uiState)
-                            .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.viewTree)
-                    }
-                } else {
+            if shouldShowTree {
+                HStack {
                     originalContent
-                }
+                        .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.originalContent)
 
+                    viewFor(uiState: treeWindowViewModel.uiState)
+                        .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.viewTree)
+                }
+            } else {
+                originalContent
+            }
+
+            ShouldShowTreeButton(shouldShowTree: self.$shouldShowTree)
         }
     }
 
@@ -66,6 +58,21 @@ struct TreeWindowScreen<Content: View>: View {
                         print("ScrollableZoomableTreeView appeared from TreeWindowScreen at \(Date())")
                     }
                 }
+        }
+    }
+}
+struct ShouldShowTreeButton: View {
+    @Binding var shouldShowTree: Bool
+
+    var body: some View {
+        Button {
+            withAnimation {
+                self.shouldShowTree.toggle()
+            }
+        } label: {
+            Image(systemName: shouldShowTree ? "xmark.circle" : "plus.circle")
+                .font(.largeTitle)
+                .foregroundColor(shouldShowTree ? .red : .green)
         }
     }
 }
