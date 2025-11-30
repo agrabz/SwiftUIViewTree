@@ -3,6 +3,7 @@
 import UIKit
 import SwiftUI
 
+//TODO: bug with collapse, close, reopen, re-expand, scroll --> Zoomable doesn't update its boundaries. Workaround: close+reopen graph on expand/collapse
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
     private let host: UIHostingController<Content>
 
