@@ -75,7 +75,7 @@ struct ShouldShowTreeButton: View {
             withAnimation {
                 self.shouldShowTree.toggle()
             }
-        } label: {
+        } label: { //TODO: Label?
             Image(systemName: shouldShowTree ? "xmark.circle" : "plus.circle")
                 .font(.largeTitle)
                 .foregroundColor(shouldShowTree ? .red : .green)
