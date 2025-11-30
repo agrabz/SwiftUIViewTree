@@ -29,9 +29,9 @@ struct ContentView: View {
             }
             .padding()
         }
-//        .renderViewTree(of: self)
+        .renderViewTree(of: self)
 //        .renderViewTree(of: self, renderMode: .treeGraph)
-        .renderViewTree(of: self, renderMode: .none)
+//        .renderViewTree(of: self, renderMode: .none)
     }
 }
 
