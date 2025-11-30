@@ -2,18 +2,33 @@ import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
     @State private var treeWindowViewModel = TreeWindowViewModel.shared
+    @State private var shouldShowTree = true
 
     let originalContent: Content
 
     var body: some View {
-        HStack {
-            originalContent
-                .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.originalContent)
-                .disabled(TreeWindowViewModel.shared.isRecomputing)
-                .blur(radius: TreeWindowViewModel.shared.isRecomputing ? 2.0 : 0.0)
+        ZStack(alignment: .top) {
 
-            viewFor(uiState: treeWindowViewModel.uiState)
-                .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.viewTree)
+                Button {
+                    self.shouldShowTree.toggle()
+                } label: {
+                    Image(systemName: "arrow.2.circlepath.circle")
+                        .font(.largeTitle)
+                        .foregroundColor(.primary)
+                }
+
+                if shouldShowTree {
+                    HStack {
+                        originalContent
+                            .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.originalContent)
+
+                        viewFor(uiState: treeWindowViewModel.uiState)
+                            .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.viewTree)
+                    }
+                } else {
+                    originalContent
+                }
+
         }
     }
 
