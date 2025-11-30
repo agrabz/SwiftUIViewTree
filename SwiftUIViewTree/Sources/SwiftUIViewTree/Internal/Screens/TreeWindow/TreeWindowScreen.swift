@@ -7,20 +7,31 @@ struct TreeWindowScreen<Content: View>: View {
     let originalContent: Content
 
     var body: some View {
-        ZStack(alignment: .top) {
-            if shouldShowTree {
-                HStack {
-                    originalContent
-                        .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.originalContent)
+        GeometryReader { proxy in
+            ZStack(alignment: .topLeading) {
+                // Main content uses the available space, but button positioning is based on proxy.size
+                VStack {
+                    if shouldShowTree {
+                        HStack {
+                            originalContent
+                                .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.originalContent)
 
-                    viewFor(uiState: treeWindowViewModel.uiState)
-                        .frame(width: UIScreen.main.bounds.width * UIConstants.ScreenRatioOf.viewTree)
+                            viewFor(uiState: treeWindowViewModel.uiState)
+                                .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree)
+                        }
+                    } else {
+                        originalContent
+                    }
                 }
-            } else {
-                originalContent
+                // Absolute positioning for a stable location relative to the screen/container
+                ShouldShowTreeButton(shouldShowTree: self.$shouldShowTree)
+                    .position(
+                        x: proxy.size.width - 50, // adjust as needed
+                        y: 50 // adjust as needed
+                    )
             }
-
-            ShouldShowTreeButton(shouldShowTree: self.$shouldShowTree)
+//            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
+//            .contentShape(Rectangle()) // ensures ZStack fills hit-testing
         }
     }
 
