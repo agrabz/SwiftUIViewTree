@@ -29,22 +29,19 @@ struct Line: Shape {
             let start = startPoint
             let end = endPoint
 
-            let distance = end.x - start.x
-            let controlOffset = distance * 0.6
+            let yDistance = end.y - start.y
 
-
-            path.move(to: startPoint)
-//            path.addQuadCurve(
-//                to: endPoint,
-//                control: CGPoint(
-//                    x: (startPoint.x + endPoint.x) / 2,
-//                    y: startPoint.y - 50
-//                )
-//            )
+            path.move(to: start)
             path.addCurve(
                 to: end,
-                control1: CGPoint(x: start.x + controlOffset, y: start.y),
-                control2: CGPoint(x: end.x - controlOffset, y: end.y)
+                control1: CGPoint(
+                    x: start.x,
+                    y: start.y + abs(yDistance) * 0.5
+                ),
+                control2: CGPoint(
+                    x: end.x,
+                    y: end.y - abs(yDistance) * 0.3
+                )
             )
         }
     }
