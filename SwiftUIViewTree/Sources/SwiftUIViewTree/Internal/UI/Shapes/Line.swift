@@ -26,8 +26,29 @@ struct Line: Shape {
 
     func path(in rect: CGRect) -> Path {
         Path { path in
-            path.move(to: startPoint)
-            path.addLine(to: endPoint)
+            let start = CGPoint(
+                x: startPoint.x,
+                y: startPoint.y + 35
+            )
+            let end = CGPoint(
+                x: endPoint.x,
+                y: endPoint.y - 40
+            )
+
+            let yDistance = end.y - start.y
+
+            path.move(to: start)
+            path.addCurve(
+                to: end,
+                control1: CGPoint(
+                    x: start.x,
+                    y: start.y + abs(yDistance) * 0.5
+                ),
+                control2: CGPoint(
+                    x: end.x,
+                    y: end.y - abs(yDistance) * 0.3
+                )
+            )
         }
     }
 }
