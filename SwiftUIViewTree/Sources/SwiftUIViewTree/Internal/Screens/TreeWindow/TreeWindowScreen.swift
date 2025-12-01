@@ -75,11 +75,16 @@ struct ShouldShowTreeButton: View {
             withAnimation {
                 self.shouldShowTree.toggle()
             }
-        } label: { //TODO: Label?
-            Image(systemName: shouldShowTree ? "xmark.circle" : "plus.circle")
-                .font(.largeTitle)
-                .foregroundColor(shouldShowTree ? .red : .green)
+        } label: {
+            Label {
+                Text(shouldShowTree ? "Hide Tree" : "Show Tree")
+            } icon: {
+                Image(systemName: shouldShowTree ? "xmark.circle" : "plus.circle")
+            }
+            .font(.body)
+            .foregroundColor(shouldShowTree ? .red : .green)
         }
+        .buttonStyle(.bordered)
         .contentTransition(.symbolEffect)
     }
 }
