@@ -27,7 +27,10 @@ struct Line: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
             let start = startPoint
-            let end = endPoint
+            let end = CGPoint(
+                x: endPoint.x,
+                y: endPoint.y - 40
+            )
 
             let yDistance = end.y - start.y
 
