@@ -4,7 +4,7 @@ public extension View {
     //TODO: documentation
     func renderViewTree(
         of originalView: any View,
-        renderMode: RenderMode = .treeGraph
+        renderMode: RenderMode = .treeGraph(showTreeInitially: true)
     ) -> some View {
         TreeWindowViewModel.shared.computeViewTree(
             originalView: originalView,
@@ -27,19 +27,23 @@ public extension View {
 //TODO: documentation
 public enum RenderMode {
     //TODO: documentation
-    case none
+    case never
     //TODO: documentation
-    case treeGraph
+    case treeGraph(showTreeInitially: Bool)
 }
 
 private extension View {
     @ViewBuilder
     func viewFor(_ renderMode: RenderMode) -> some View {
         switch renderMode {
-            case .none:
+            case .never:
                 self
-            case .treeGraph:
-                modifier(RenderViewTreeModifier())
+            case .treeGraph(let showTree):
+                modifier(
+                    RenderViewTreeModifier(
+                        showTree: showTree
+                    )
+                )
         }
     }
 }

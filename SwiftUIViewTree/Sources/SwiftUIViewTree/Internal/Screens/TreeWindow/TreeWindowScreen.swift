@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
     @State private var treeWindowViewModel = TreeWindowViewModel.shared
-    @State private var shouldShowTree = true
+    @State var showTree: Bool
 
     let originalContent: Content
 
@@ -11,16 +11,16 @@ struct TreeWindowScreen<Content: View>: View {
             ZStack {
                 HStack {
                     originalContent
-                        .frame(width: shouldShowTree ? (proxy.size.width * UIConstants.ScreenRatioOf.originalContent) : proxy.size.width)
+                        .frame(width: showTree ? (proxy.size.width * UIConstants.ScreenRatioOf.originalContent) : proxy.size.width)
 
-                    if shouldShowTree {
+                    if showTree {
                         viewFor(uiState: treeWindowViewModel.uiState)
                             .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree)
                     }
                 }
                 .transition(.move(edge: .trailing))
 
-                ShouldShowTreeButton(shouldShowTree: self.$shouldShowTree)
+                ShouldShowTreeButton(shouldShowTree: self.$showTree)
                     .position(
                         x: proxy.size.width - 50,
                         y: 50
