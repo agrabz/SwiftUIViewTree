@@ -26,13 +26,25 @@ struct Line: Shape {
 
     func path(in rect: CGRect) -> Path {
         Path { path in
+            let start = startPoint
+            let end = endPoint
+
+            let distance = end.x - start.x
+            let controlOffset = distance * 0.6
+
+
             path.move(to: startPoint)
-            path.addQuadCurve(
-                to: endPoint,
-                control: CGPoint(
-                    x: (startPoint.x + endPoint.x) / 2,
-                    y: startPoint.y - 50
-                )
+//            path.addQuadCurve(
+//                to: endPoint,
+//                control: CGPoint(
+//                    x: (startPoint.x + endPoint.x) / 2,
+//                    y: startPoint.y - 50
+//                )
+//            )
+            path.addCurve(
+                to: end,
+                control1: CGPoint(x: start.x + controlOffset, y: start.y),
+                control2: CGPoint(x: end.x - controlOffset, y: end.y)
             )
         }
     }
