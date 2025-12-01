@@ -28,7 +28,7 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
 //        uiViewController.scrollView = UIScrollView()
         uiViewController.originalContentSize = self.host.view.intrinsicContentSize
         uiViewController.asd()
-        uiViewController.qwe()
+        uiViewController.qwe(isFirstTime: true)
 //        uiViewController.view.setNeedsLayout()
         uiViewController.view.layoutIfNeeded()
     }
@@ -92,21 +92,36 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         super.didMove(toParent: parent)
         guard parent != nil else { return }
 
-        qwe()
+        qwe(isFirstTime: true) //TODO: really?
     }
 
-    func qwe() {
+    func qwe(isFirstTime: Bool) {
         print(#function)
-        let fillZoomLevel = zoomScaleToFill(size: originalContentSize)
-        scrollView.minimumZoomScale = fillZoomLevel
+        if isFirstTime {
+            let fillZoomLevel = zoomScaleToFill(size: originalContentSize)
+            scrollView.minimumZoomScale = fillZoomLevel
 
-        scrollView.zoomScale = 1.0
-        scrollView.contentSize = originalContentSize
-        scrollView.zoomScale = fillZoomLevel
+            scrollView.zoomScale = 1.0
+            scrollView.contentSize = originalContentSize
+            scrollView.zoomScale = fillZoomLevel
 
-        Task { @MainActor in
-            scrollView.setZoomScale(fillZoomLevel, animated: true)
-//            scrollToTheCenterHorizontallyAndToTheTopVertically()
+            Task { @MainActor in
+                scrollView.setZoomScale(fillZoomLevel, animated: true) //TODO: this should only run first, not on recalculations
+                scrollToTheCenterHorizontallyAndToTheTopVertically()
+            }
+        } else {
+            let fillZoomLevel = zoomScaleToFill(size: originalContentSize)
+            scrollView.minimumZoomScale = fillZoomLevel
+
+            //TODO: probably some formula should be applied here: calculate how much smaller/bigger is the new contentSize compared to the previously. take that as a factor and multiple it with 1.0. or dunno :)
+//            scrollView.zoomScale = 1.0
+            scrollView.contentSize = originalContentSize
+//            scrollView.zoomScale = fillZoomLevel
+
+            Task { @MainActor in
+//                scrollView.setZoomScale(fillZoomLevel, animated: true) //TODO: this should only run first, not on recalculations
+//                scrollToTheCenterHorizontallyAndToTheTopVertically()
+            }
         }
     }
 
