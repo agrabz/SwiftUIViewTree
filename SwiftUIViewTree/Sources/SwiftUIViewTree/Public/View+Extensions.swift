@@ -3,13 +3,14 @@ import SwiftUI
 public extension View {
     //TODO: documentation
     func renderViewTree(
-        of originalView: any View
+        of originalView: any View,
+        renderMode: RenderMode = .treeGraph(showTreeInitially: true)
     ) -> some View {
         TreeWindowViewModel.shared.computeViewTree(
             originalView: originalView,
             modifiedView: self
         )
-        return modifier(RenderViewTreeModifier())
+        return viewFor(renderMode)
     }
 
     //TODO: documentation
@@ -20,5 +21,29 @@ public extension View {
         )
 
         return self
+    }
+}
+
+//TODO: documentation
+public enum RenderMode {
+    //TODO: documentation
+    case never
+    //TODO: documentation
+    case treeGraph(showTreeInitially: Bool)
+}
+
+private extension View {
+    @ViewBuilder
+    func viewFor(_ renderMode: RenderMode) -> some View {
+        switch renderMode {
+            case .never:
+                self
+            case .treeGraph(let showTree):
+                modifier(
+                    RenderViewTreeModifier(
+                        showTree: showTree
+                    )
+                )
+        }
     }
 }

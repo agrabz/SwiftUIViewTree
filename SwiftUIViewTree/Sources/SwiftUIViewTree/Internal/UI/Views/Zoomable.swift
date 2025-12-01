@@ -3,6 +3,9 @@
 import UIKit
 import SwiftUI
 
+//TODO: bug with collapse see below
+/// Zoomable takes the content's size as a static, non-changing value. Therefore collapsing causes weird UX by shrinking the view tree, but keeping the scroll's dimensions. Recalculation is not that obvious therefore leaving it as it is for now. Workaround is to close the tree and reopen it. When the view shrinks it's easy to live with, but when you collapse a node, close the tree, reopen the tree, re-expand the node, you'll have unreachable regions.
+/// Workaround: close+reopen graph on expand/collapse.
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
     private let host: UIHostingController<Content>
 
@@ -25,7 +28,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     private let scrollView = UIScrollView()
     private let contentView: UIView
     private let originalContentSize: CGSize
-    private let zoomCalculationTolerance: CGFloat = 0.001
+    private let zoomFloatingPointCalculationTolerance: CGFloat = 0.001
     private let zoomScaleFactorOnDoubleTap: CGFloat = 2.0
 
     init(view: UIView) {
@@ -41,7 +44,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.backgroundColor = .clear
+        scrollView.backgroundColor = .systemPink.withAlphaComponent(0.2)
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
@@ -122,7 +125,7 @@ private extension ZoomableViewController {
     func canZoomIn(
         toZoomScale proposedNextZoomScale: CGFloat
     ) -> Bool {
-        let canZoomInFurther = abs(proposedNextZoomScale - currentZoomScale) > zoomCalculationTolerance
+        let canZoomInFurther = abs(proposedNextZoomScale - currentZoomScale) > zoomFloatingPointCalculationTolerance
 
         return canZoomInFurther
     }
@@ -185,11 +188,5 @@ private extension ZoomableViewController {
             max(value, lowerLimit),
             upperLimit
         )
-    }
-}
-
-private extension CGSize {
-    static func * (size: CGSize, scalar: CGFloat) -> CGSize {
-        CGSize(width: size.width * scalar, height: size.height * scalar)
     }
 }
