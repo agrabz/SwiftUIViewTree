@@ -114,9 +114,9 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
         print(#function)
         super.viewDidLayoutSubviews()
         scrollView.minimumZoomScale = zoomScaleToFill(size: originalContentSize)
-//        asd()
-//        qwe()
-//        scrollToTheCenterHorizontallyAndToTheTopVertically()
+        asd()
+        qwe()
+        scrollToTheCenterHorizontallyAndToTheTopVertically()
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
