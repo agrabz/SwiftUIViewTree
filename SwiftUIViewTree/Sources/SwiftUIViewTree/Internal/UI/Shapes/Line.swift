@@ -27,7 +27,13 @@ struct Line: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
             path.move(to: startPoint)
-            path.addLine(to: endPoint)
+            path.addQuadCurve(
+                to: endPoint,
+                control: CGPoint(
+                    x: (startPoint.x + endPoint.x) / 2,
+                    y: startPoint.y - 50
+                )
+            )
         }
     }
 }
