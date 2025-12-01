@@ -26,7 +26,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     private let scrollView = UIScrollView()
     private let contentView: UIView
     private let originalContentSize: CGSize
-    private let zoomCalculationTolerance: CGFloat = 0.001
+    private let zoomFloatingPointCalculationTolerance: CGFloat = 0.001
     private let zoomScaleFactorOnDoubleTap: CGFloat = 2.0
 
     init(view: UIView) {
@@ -123,7 +123,7 @@ private extension ZoomableViewController {
     func canZoomIn(
         toZoomScale proposedNextZoomScale: CGFloat
     ) -> Bool {
-        let canZoomInFurther = abs(proposedNextZoomScale - currentZoomScale) > zoomCalculationTolerance
+        let canZoomInFurther = abs(proposedNextZoomScale - currentZoomScale) > zoomFloatingPointCalculationTolerance
 
         return canZoomInFurther
     }
