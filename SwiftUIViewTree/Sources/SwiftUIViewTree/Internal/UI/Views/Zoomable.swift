@@ -3,7 +3,9 @@
 import UIKit
 import SwiftUI
 
-//TODO: bug with collapse, close, reopen, re-expand, scroll --> Zoomable doesn't update its boundaries. Workaround: close+reopen graph on expand/collapse
+//TODO: bug with collapse see below
+/// Zoomable takes the content's size as a static, non-changing value. Therefore collapsing causes weird UX by shrinking the view tree, but keeping the scroll's dimensions. Recalculation is not that obvious therefore leaving it as it is for now. Workaround is to close the tree and reopen it. When the view shrinks it's easy to live with, but when you collapse a node, close the tree, reopen the tree, re-expand the node, you'll have unreachable regions.
+/// Workaround: close+reopen graph on expand/collapse.
 struct Zoomable<Content: View>: UIViewControllerRepresentable {
     private let host: UIHostingController<Content>
 
@@ -42,7 +44,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.backgroundColor = .clear
+        scrollView.backgroundColor = .systemPink.withAlphaComponent(0.2)
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
