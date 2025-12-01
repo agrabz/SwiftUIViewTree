@@ -11,17 +11,7 @@ struct LinesView: View {
                     self.lineFromParent(
                         to: childTree,
                         in: proxy
-                    )?.stroke(
-                        .black,
-                        style: .init(
-                            lineWidth: 3.0,
-                            lineCap: .round,
-                            lineJoin: .round
-//                            miterLimit: .,
-//                            dash: <#T##[CGFloat]#>,
-//                            dashPhase: <#T##CGFloat#>
-                        )
-                    )
+                    )?.stroke(.black, lineWidth: 3.0)
 
                     LinesView(
                         parentTree: childTree,
