@@ -24,8 +24,8 @@ struct Zoomable<Content: View>: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: ZoomableViewController, context: Context) {
         print(#function)
         uiViewController.contentView.removeFromSuperview()
-        uiViewController.scrollView.removeFromSuperview()
-        uiViewController.scrollView = UIScrollView()
+//        uiViewController.scrollView.removeFromSuperview()
+//        uiViewController.scrollView = UIScrollView()
         uiViewController.originalContentSize = self.host.view.intrinsicContentSize
         uiViewController.asd()
         uiViewController.qwe()
@@ -106,7 +106,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
 
         Task { @MainActor in
             scrollView.setZoomScale(fillZoomLevel, animated: true)
-            scrollToTheCenterHorizontallyAndToTheTopVertically()
+//            scrollToTheCenterHorizontallyAndToTheTopVertically()
         }
     }
 
