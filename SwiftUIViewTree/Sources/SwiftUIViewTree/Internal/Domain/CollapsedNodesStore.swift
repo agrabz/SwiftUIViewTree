@@ -1,9 +1,9 @@
-
 import Foundation
 import Synchronization
 
+@MainActor
 @Observable
-final class CollapsedNodesStore: Sendable {
+final class CollapsedNodesStore {
     @TaskLocal static var shared = CollapsedNodesStore()
 
     private let _collapsedNodeIDs = Mutex<Set<TreeNode.ID>>([])
@@ -24,6 +24,9 @@ final class CollapsedNodesStore: Sendable {
         }
     }
 
+    // New: a simple counter that changes on any toggle so SwiftUI can observe it.
+    var changeToken: Int = 0
+
     func isCollapsed(nodeID: TreeNode.ID) -> Bool {
         collapsedNodeIDs.contains(nodeID)
     }
@@ -34,5 +37,7 @@ final class CollapsedNodesStore: Sendable {
         } else {
             collapsedNodeIDs.insert(nodeID)
         }
+        // bump token to notify observers
+        changeToken &+= 1
     }
 }
