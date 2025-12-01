@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ScrollableZoomableTreeView: View {
     @State var tree: Tree
-    @State private var collapsedStore = CollapsedNodesStore.shared
 
     init(tree: Tree) {
         self._tree = State(initialValue: tree)
@@ -20,7 +19,7 @@ struct ScrollableZoomableTreeView: View {
             let _ = print()
         }
 
-        Zoomable(changeToken: collapsedStore.changeToken) {
+        Zoomable {
             ZStack {
                 LinearGradient(
                     gradient:
@@ -52,3 +51,4 @@ struct ScrollableZoomableTreeView: View {
         .ignoresSafeArea()
     }
 }
+
