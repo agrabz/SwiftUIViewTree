@@ -22,7 +22,16 @@ actor SubViewChangeHandler {
             return
         }
 
-        //TODO: would be nice, but probably bigger rework: Add originalSubView and modifiedSubViewTree to the tree
+        //TODO: would be nice, but probably bigger rework: Add modifiedSubViewTree to the tree. `subViewTree` already contains it (along with the original). Hard thing is to map State to Binding
+
+        if let updatedTree = await SubtreeMatcher.replaceMatchingSubTree(
+            with: subViewTree,
+            matching: await subViewTree.children.first!.children.first!,
+            in: fullTree
+        ) {
+            print("updatedTree", updatedTree)
+            uiState.treeBreakDownOfOriginalContent = updatedTree
+        }
 
         await registerChangesOfSubtree(subTree)
 
