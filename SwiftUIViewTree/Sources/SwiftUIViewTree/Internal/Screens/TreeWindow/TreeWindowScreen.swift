@@ -52,8 +52,6 @@ struct TreeWindowScreen<Content: View>: View {
                     ScrollableZoomableTreeView(
                         tree: computedUIState.treeBreakDownOfOriginalContent
                     )
-                    .disabled(TreeWindowViewModel.shared.isRecomputing)
-                    .blur(radius: TreeWindowViewModel.shared.isRecomputing ? 2.0 : 0.0)
 
                     if TreeWindowViewModel.shared.isRecomputing {
                         ViewTreeTraversalProgressView()

@@ -6,8 +6,6 @@ import SwiftUI
 final class TreeWindowViewModel {
     /// Unlike usual view models, TreeWindowViewModel is used as a singleton, because its work is triggered before the creation of its view (TreeWindowScreen)
     static var shared: TreeWindowViewModel = .init()
-    /// Change this value to simulate longer/shorter computation times
-    static let waitTimeInSeconds = 1.0
 
     private(set) var uiState: TreeWindowUIModel = .computingTree
     private(set) var isRecomputing = false
@@ -33,26 +31,22 @@ final class TreeWindowViewModel {
         originalView: any View,
         modifiedView: any View
     ) {
-        //TODO: review if this Task can be placed somewhere else, so we might not need the sleep below?
-        Task {
-            switch uiState {
-                case .computingTree:
-                    break
-                case .treeComputed:
-                    withAnimation {
-                        isRecomputing = true
-                    }
-            }
+        switch uiState {
+            case .computingTree:
+                break
+            case .treeComputed:
+                withAnimation {
+                    isRecomputing = true
+                }
+        }
 
+        Task {
             var treeBuilder = TreeBuilder()
             let newTree = treeBuilder.getTreeFrom(
                 originalView: originalView,
                 modifiedView: modifiedView,
                 registerChanges: true
             )
-
-            //TODO: without this delay, the view doesn't update properly in some cases (small-medium views only?)
-            try? await Task.sleep(for: .seconds(Self.waitTimeInSeconds))
 
             withAnimation {
                 isRecomputing = false
