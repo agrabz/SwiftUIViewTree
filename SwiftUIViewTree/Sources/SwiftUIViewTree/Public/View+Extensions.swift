@@ -3,6 +3,8 @@ import SwiftUI
 public extension View {
     /// Renders the view tree of the SwiftUI view it is used on. The view tree is essentially the programmatic structure of the view.
     ///
+    /// It is suggested to use this function on a full-screen view for the best UX.
+    ///
     /// On value changes the specific node's background gets changed, plus the old and the new values gets printed to the console.
     /// The canvas of the graph can be scrolled and zoomed (both pinch and double tap).
     /// Tapping on any node will display its details - might be useful if you don't want to zoom in, but want to make sure that you're checking the node that interests you.
@@ -26,7 +28,11 @@ public extension View {
         return viewFor(renderMode)
     }
 
-    //TODO: documentation
+    /// Connects the subview with the view tree. It is important if you want to track the changes of your subview as well.
+    ///
+    /// Due to the nature of SwiftUI, a subview change doesn't automatically result in its parent's redrawal. Therefore the two have to be connected via this function.
+    ///
+    /// - See Also: `renderViewTree(of:renderMode:)`
     func notifyViewTreeOnChanges(of originalSubView: any View) -> some View {
         TreeWindowViewModel.shared.computeSubViewChanges(
             originalSubView: originalSubView,

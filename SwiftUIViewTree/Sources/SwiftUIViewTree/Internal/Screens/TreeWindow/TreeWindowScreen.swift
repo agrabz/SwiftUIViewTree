@@ -15,7 +15,7 @@ struct TreeWindowScreen<Content: View>: View {
 
                     if showTree {
                         viewFor(uiState: treeWindowViewModel.uiState)
-                            .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree)
+                            .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
                     }
                 }
                 .transition(.move(edge: .trailing))
