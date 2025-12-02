@@ -24,7 +24,7 @@ final class TreeNode: Sendable {
     }
 
     @ObservationIgnored
-    var prefixedType: String {
+    var shortenedType: String {
         if self.type.count > 20 {
             String(self.type.prefix(20)) + "..."
         } else {
@@ -33,7 +33,7 @@ final class TreeNode: Sendable {
     }
 
     @ObservationIgnored
-    var prefixedLabel: String {
+    var shortenedLabel: String {
         if self.label.count > 20 {
             String(self.label.prefix(20)) + "..."
         } else {
@@ -42,7 +42,7 @@ final class TreeNode: Sendable {
     }
 
     @ObservationIgnored
-    var prefixedValue: String {
+    var shortenedValue: String {
         if self.value.count > 20 {
             String(self.value.prefix(20)) + "..."
         } else {

@@ -11,9 +11,9 @@ struct PrintNodeDetailsGesture: Gesture {
                     """
                         
                     Node Details:
-                        Label: \(node.label)
-                        Type: \(node.type)
-                        Value: \(node.value)
+                        Label: \(node.shortenedLabel)
+                        Type: \(node.shortenedType)
+                        Value: \(node.shortenedValue)
 
                     """
                 )

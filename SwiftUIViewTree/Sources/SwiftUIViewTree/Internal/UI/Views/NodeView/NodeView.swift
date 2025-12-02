@@ -16,7 +16,7 @@ struct NodeView: View {
 
         VStack {
             HStack {
-                Text(self.node.prefixedLabel)
+                Text(self.node.shortenedLabel)
                     .font(.headline)
                     .fontWeight(.black)
 
@@ -26,10 +26,10 @@ struct NodeView: View {
             }
 
             HStack {
-                Text(self.node.prefixedType)
+                Text(self.node.shortenedType)
                     .font(.caption)
                     .bold()
-                Text(self.node.prefixedValue)
+                Text(self.node.shortenedValue)
                     .font(.caption)
                     .fontDesign(.monospaced)
                     .italic()
