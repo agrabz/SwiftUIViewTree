@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TreeWindowScreen<Content: View>: View {
-    @State private var treeWindowViewModel = TreeWindowViewModel.shared
+    @State private var treeWindowViewModel = TreeWindowViewModel()
     @State var showTree: Bool
 
     let originalContent: Content
@@ -53,7 +53,7 @@ struct TreeWindowScreen<Content: View>: View {
                         tree: computedUIState.treeBreakDownOfOriginalContent
                     )
 
-                    if TreeWindowViewModel.shared.isRecomputing {
+                    if treeWindowViewModel.isRecomputing {
                         ViewTreeTraversalProgressView()
                     }
                 }
