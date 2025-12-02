@@ -1,7 +1,14 @@
 import SwiftUI
 
 public extension View {
-    //TODO: documentation
+    /// Renders the view tree of the SwiftUI view it is used on.
+    ///
+    /// - Parameters:
+    ///   - originalView: The view whose view tree you would like to see. Pass in `self`.
+    ///   - renderMode: The `RenderMode` of the view tree.
+    ///
+    /// - See Also: `RenderMode`
+    /// - See Also: `notifyViewTreeOnChanges`
     func renderViewTree(
         of originalView: any View,
         renderMode: RenderMode = .treeGraph(showTreeInitially: true)
