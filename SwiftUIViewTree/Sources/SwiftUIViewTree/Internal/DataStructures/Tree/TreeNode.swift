@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class TreeNode: Sendable {
+final class TreeNode: Sendable { //TODO: test new values
     struct ID: Hashable {
         let rawValue: Int
     }
