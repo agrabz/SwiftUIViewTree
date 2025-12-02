@@ -24,6 +24,38 @@ final class TreeNode: Sendable {
     }
 
     @ObservationIgnored
+    var prefixedType: String {
+        if self.type.count > 20 {
+            String(self.type.prefix(20)) + "..."
+        } else {
+            self.type
+        }
+    }
+
+    @ObservationIgnored
+    var prefixedLabel: String {
+        if self.label.count > 20 {
+            String(self.label.prefix(20)) + "..."
+        } else {
+            self.label
+        }
+    }
+
+    @ObservationIgnored
+    var prefixedValue: String {
+        if self.value.count > 20 {
+            String(self.value.prefix(20)) + "..."
+        } else {
+            self.value
+        }
+    }
+
+    @ObservationIgnored
+    var isCollapsed: Bool {
+        CollapsedNodesStore.shared.isCollapsed(nodeID: self.id)
+    }
+
+    @ObservationIgnored
     private var availableColors = LinkedColorList()
 
     @ObservationIgnored
@@ -67,7 +99,7 @@ final class TreeNode: Sendable {
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
-            if value != oldValue { //TODO: there are more subview related things being logged than visible --> expand subview to be originalView+modifiedView?
+            if value != oldValue {
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
                     previousNodeValue: oldValue
