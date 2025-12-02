@@ -73,18 +73,18 @@ private extension SubViewChangeHandler {
         let flattenedChangedMatchingSubTree = await TreeFlattener.flatten(
             subTree.changedSubTree
         )
-        let flattenedOriginalMatchingSubTree = await TreeFlattener.flatten(
-            subTree.originalSubTree
+        let flattenedPreviousMatchingSubTree = await TreeFlattener.flatten(
+            subTree.previousSubTree
         )
 
-        for (changedNode, originalNode) in zip(
+        for (changedNode, previousNode) in zip(
             flattenedChangedMatchingSubTree,
-            flattenedOriginalMatchingSubTree
+            flattenedPreviousMatchingSubTree
         ) {
             _ = await TreeNode(
-                type: originalNode.type,
-                label: originalNode.label,
-                value: originalNode.value,
+                type: previousNode.type,
+                label: previousNode.label,
+                value: previousNode.value,
                 serialNumber: changedNode.serialNumber,
                 registerChanges: true
             )

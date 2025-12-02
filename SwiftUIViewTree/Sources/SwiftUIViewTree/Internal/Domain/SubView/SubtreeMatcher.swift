@@ -11,7 +11,7 @@ enum SubtreeMatcher {
             if current == target {
                 return SubTree(
                     changedSubTree: current,
-                    originalSubTree: target
+                    previousSubTree: target
                 )
             }
 
