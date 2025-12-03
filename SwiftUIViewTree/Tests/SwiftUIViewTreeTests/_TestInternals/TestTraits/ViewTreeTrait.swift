@@ -34,7 +34,7 @@ extension Trait where Self == ViewTreeTrait {
     static func viewTree(
         collapsedNodesStore: CollapsedNodesStore = .init(),
         treeNodeRegistry: TreeNodeRegistry = .init(),
-        viewTreeLogger: ViewTreeLoggerProtocol = ViewTreeLogger(),
+        viewTreeLogger: ViewTreeLoggerProtocol = MockViewTreeLogger(),
     ) -> ViewTreeTrait {
         ViewTreeTrait(
             collapsedNodeStore: collapsedNodesStore,
