@@ -35,19 +35,7 @@ struct TreeWindowScreen<Content: View>: View {
         switch treeWindowViewModel.uiState {
             case .computingTree:
                 ViewTreeTraversalProgressView()
-                    .onDisappear {
-                        if isPerformanceLoggingEnabled {
-                            print("ViewTreeTraversalProgressView disappeared at \(Date())")
-                        }
-                    }
             case .treeComputed(let computedUIState):
-                if isViewPrintChangesEnabled {
-                    let _ = print()
-                    let _ = print("ChildrenNodeView")
-                    let _ = Self._printChanges()
-                    let _ = print()
-                }
-
                 ZStack {
                     ScrollableZoomableTreeView(
                         tree: computedUIState.treeBreakDownOfOriginalContent
@@ -55,11 +43,6 @@ struct TreeWindowScreen<Content: View>: View {
 
                     if TreeWindowViewModel.shared.isRecomputing {
                         ViewTreeTraversalProgressView()
-                    }
-                }
-                .onAppear {
-                    if isPerformanceLoggingEnabled {
-                        print("ScrollableZoomableTreeView appeared from TreeWindowScreen at \(Date())")
                     }
                 }
         }

@@ -6,13 +6,6 @@ struct ChildrenNodeView: View {
     var body: some View {
         HStack(alignment: .top) {
             ForEach(children, id: \.parentNode.id) { child in
-                if child.parentNode.label == "modifiers" && isViewPrintChangesEnabled {
-                    let _ = print()
-                    let _ = print("ChildrenNodeView")
-                    let _ = Self._printChanges()
-                    let _ = print()
-                }
-
                 TreeView(
                     tree: .init(
                         get: {
