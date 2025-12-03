@@ -1,6 +1,10 @@
 
 import SwiftUI
 
+protocol P {}
+extension String: P {}
+
+
 @MainActor
 struct TreeBuilder {
     private let validationList: [any TreeNodeValidatorProtocol] = [
@@ -76,7 +80,7 @@ private extension TreeBuilder {
                     serialNumber: nodeSerialNumberCounter.counter,
                     registerChanges: registerChanges
                 )
-            ) // as Any? see type(of:) docs
+            )
             childTree.children = convertToTreesRecursively(
                 mirror: childMirror,
                 source: source,
