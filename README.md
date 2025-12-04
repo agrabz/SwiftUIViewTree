@@ -4,7 +4,7 @@
 
 Use `.renderViewTree(of: self)` to see the view tree visually next to your original view.
 
-<img width="2622" height="1206" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-29 at 10 39 17" src="https://github.com/user-attachments/assets/0a3396c7-c9ba-4558-8973-d20124597b18" />
+<img width="2730" height="1368" alt="RocketSim_Screenshot_iPhone_16_Pro_6 3_2025-12-05_00 07 15" src="https://github.com/user-attachments/assets/dce23278-cb45-450e-ba30-b017092f2d82" />
 
 The screenshot above is produced by the code below:
 
@@ -40,8 +40,13 @@ Without the `.renderViewTree(of: self)` line the view would be just like:
 
 You can also pinch to zoom and scroll to any direction:
 
-https://github.com/user-attachments/assets/b0756ae5-9318-4f92-a82c-59788132cdbe
+![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_00 12 28](https://github.com/user-attachments/assets/a7059181-f7b0-4458-9f55-171749bd65f1)
 
+## Double tap to zoom
+
+You can apply stepped zoom by doulbe tapping on the view tree's canvas.
+
+![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_00 14 28](https://github.com/user-attachments/assets/81387caa-f021-43fd-8fc6-5ff6e882f5e8)
 
 ## Node color change on updates
 
