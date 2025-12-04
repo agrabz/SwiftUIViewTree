@@ -3,61 +3,23 @@ import SwiftUI
 struct NodeView: View {
     @Binding var node: TreeNode
 
-    private var nodeLabel: String {
-        if node.label.count > 20 {
-            String(node.label.prefix(20)) + "..."
-        } else {
-            node.label
-        }
-    }
-
-    private var nodeType: String {
-        if node.type.count > 20 {
-            String(node.type.prefix(20)) + "..."
-        } else {
-            node.type
-        }
-    }
-
-    private var nodeValue: String {
-        if node.value.count > 20 {
-            String(node.value.prefix(20)) + "..."
-        } else {
-            node.value
-        }
-    }
-
-    private var isCollapsed: Bool {
-        CollapsedNodesStore.shared.isCollapsed(nodeID: node.id)
-    }
-
     var body: some View {
-        if node.label == "modifiers" && isViewPrintChangesEnabled {
-            let _ = print()
-            let _ = print("NodeView")
-            let _ = Self._printChanges()
-            let _ = print("----- NodeView DONE -----") //As this view is the last in the hierarchy, this helps to see when all changes have been printed
-            let _ = print()
-            let _ = print()
-            let _ = print()
-        }
-
         VStack {
             HStack {
-                Text(self.nodeLabel)
+                Text(self.node.shortenedLabel)
                     .font(.headline)
                     .fontWeight(.black)
 
                 if self.node.isParent {
-                    Image(systemName: self.isCollapsed ? "chevron.right" : "chevron.down")
+                    Image(systemName: self.node.isCollapsed ? "chevron.right" : "chevron.down")
                 }
             }
 
             HStack {
-                Text(self.nodeType)
+                Text(self.node.shortenedType)
                     .font(.caption)
                     .bold()
-                Text(self.nodeValue)
+                Text(self.node.shortenedValue)
                     .font(.caption)
                     .fontDesign(.monospaced)
                     .italic()
@@ -79,7 +41,7 @@ struct NodeView: View {
                 .stroke(.black, lineWidth: 0.5)
         }
         .overlay(alignment: .topTrailing) {
-            if isCollapsed {
+            if self.node.isCollapsed {
                 NodeBadge(count: node.descendantCount)
             }
         }

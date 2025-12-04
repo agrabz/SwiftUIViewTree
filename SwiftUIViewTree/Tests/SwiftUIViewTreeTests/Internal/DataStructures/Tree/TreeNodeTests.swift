@@ -97,6 +97,92 @@ struct TreeNodeTests {
     }
 
     @MainActor
+    struct ShortenedVariables {
+        @Test
+        func `longer than 20 characters gets shortened`() throws {
+            //GIVEN
+            let string = "01234567890123456789+"
+            try #require(string.count > 20)
+
+            //WHEN
+            let node = TreeNode.createMock(
+                type: string,
+                label: string,
+                value: string
+            )
+
+            //THEN
+            #expect(node.shortenedType == "\(string.prefix(20))...")
+            #expect(node.shortenedLabel == "\(string.prefix(20))...")
+            #expect(node.shortenedValue == "\(string.prefix(20))...")
+        }
+
+        @Test(
+            arguments: [
+            //GIVEN
+            "0123456789012345678",
+            "01234567890123456789"
+        ])
+        func `less or equal than 20 characters does NOT get shortened`(string: String) throws {
+            try #require(string.count <= 20)
+
+            //WHEN
+            let node = TreeNode.createMock(
+                type: string,
+                label: string,
+                value: string
+            )
+
+            //THEN
+            #expect(node.shortenedType == string)
+            #expect(node.shortenedLabel == string)
+            #expect(node.shortenedValue == string)
+        }
+    }
+
+    @MainActor
+    struct IsCollapsed {
+        @Test
+        func `isCollapsed is false on init`() throws {
+            //GIVEN
+            let node: TreeNode
+
+            //WHEN
+            node = TreeNode.createMock()
+
+            //THEN
+            #expect(node.isCollapsed == false)
+        }
+
+        @Test
+        func `isCollapsed true when collapsing it`() throws {
+            //GIVEN
+            let node = TreeNode.createMock()
+
+            //WHEN
+            CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
+
+            //THEN
+            #expect(node.isCollapsed == true)
+        }
+
+        @Test
+        func `isCollapsed is false when collapsing then re-expanding it`() throws {
+            //GIVEN
+            let node = TreeNode.createMock()
+
+            CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
+            #expect(node.isCollapsed == true)
+
+            //WHEN
+            CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
+
+            //THEN
+            #expect(node.isCollapsed == false)
+        }
+    }
+
+    @MainActor
     struct IsParent {
         @Test
         func `true`() async throws {

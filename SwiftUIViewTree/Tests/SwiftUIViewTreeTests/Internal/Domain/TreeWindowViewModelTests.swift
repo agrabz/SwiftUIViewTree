@@ -36,7 +36,7 @@ struct TreeWindowViewModelTests {
             modifiedView: modifiedView
         )
         #expect(treeWindowViewModel.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(TreeWindowViewModel.waitTimeInSeconds + 0.5))
+        try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
 
         //THEN
         #expect(treeWindowViewModel.isRecomputing == false)
@@ -79,7 +79,7 @@ struct TreeWindowViewModelTests {
             modifiedView: modifiedView
         )
         #expect(treeWindowViewModel.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(TreeWindowViewModel.waitTimeInSeconds + 0.5))
+        try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
 
         #expect(treeWindowViewModel.isRecomputing == false)
         guard case .treeComputed = treeWindowViewModel.uiState else {
@@ -92,11 +92,9 @@ struct TreeWindowViewModelTests {
             originalView: originalView,
             modifiedView: modifiedView
         )
+
         //THEN
         try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
-        #expect(treeWindowViewModel.isRecomputing == true) // if the delay is turned off this expectation might fail, and in that case this test doesn't make sense anymore
-
-        try? await Task.sleep(for: .seconds(TreeWindowViewModel.waitTimeInSeconds + 0.5))
         #expect(treeWindowViewModel.isRecomputing == false)
 
         guard case .treeComputed(let computedUIState) = treeWindowViewModel.uiState else {

@@ -24,6 +24,26 @@ final class TreeNode: Sendable {
     }
 
     @ObservationIgnored
+    var shortenedType: String {
+        self.shorten(self.type)
+    }
+
+    @ObservationIgnored
+    var shortenedLabel: String {
+        self.shorten(self.label)
+    }
+
+    @ObservationIgnored
+    var shortenedValue: String {
+        self.shorten(self.value)
+    }
+
+    @ObservationIgnored
+    var isCollapsed: Bool {
+        CollapsedNodesStore.shared.isCollapsed(nodeID: self.id)
+    }
+
+    @ObservationIgnored
     private var availableColors = LinkedColorList()
 
     @ObservationIgnored
@@ -67,7 +87,7 @@ final class TreeNode: Sendable {
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
-            if value != oldValue { //TODO: there are more subview related things being logged than visible --> expand subview to be originalView+modifiedView?
+            if value != oldValue {
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
                     previousNodeValue: oldValue
@@ -107,5 +127,17 @@ extension TreeNode: @MainActor Equatable {
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
         lhs.type == rhs.type &&
         lhs.label == rhs.label
+    }
+}
+
+private extension TreeNode {
+    static let prefixValue = 20
+
+    func shorten(_ string: String) -> String {
+        if string.count > Self.prefixValue {
+            String(string.prefix(Self.prefixValue)) + "..."
+        } else {
+            string
+        }
     }
 }
