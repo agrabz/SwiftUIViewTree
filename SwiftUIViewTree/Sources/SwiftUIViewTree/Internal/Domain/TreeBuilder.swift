@@ -1,10 +1,6 @@
 
 import SwiftUI
 
-protocol P {}
-extension String: P {}
-
-
 @MainActor
 struct TreeBuilder {
     private let validationList: [any TreeNodeValidatorProtocol] = [

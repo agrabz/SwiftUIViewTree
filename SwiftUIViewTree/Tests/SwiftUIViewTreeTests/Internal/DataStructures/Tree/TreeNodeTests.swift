@@ -141,6 +141,48 @@ struct TreeNodeTests {
     }
 
     @MainActor
+    struct IsCollapsed {
+        @Test
+        func `isCollapsed is false on init`() throws {
+            //GIVEN
+            let node: TreeNode
+
+            //WHEN
+            node = TreeNode.createMock()
+
+            //THEN
+            #expect(node.isCollapsed == false)
+        }
+
+        @Test
+        func `isCollapsed true when collapsing it`() throws {
+            //GIVEN
+            let node = TreeNode.createMock()
+
+            //WHEN
+            CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
+
+            //THEN
+            #expect(node.isCollapsed == true)
+        }
+
+        @Test
+        func `isCollapsed is false when collapsing then re-expanding it`() throws {
+            //GIVEN
+            let node = TreeNode.createMock()
+
+            CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
+            #expect(node.isCollapsed == true)
+
+            //WHEN
+            CollapsedNodesStore.shared.toggleCollapse(nodeID: node.id)
+
+            //THEN
+            #expect(node.isCollapsed == false)
+        }
+    }
+
+    @MainActor
     struct IsParent {
         @Test
         func `true`() async throws {
