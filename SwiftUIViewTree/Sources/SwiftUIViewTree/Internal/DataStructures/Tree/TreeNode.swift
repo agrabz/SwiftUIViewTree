@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class TreeNode: Sendable { //TODO: test new values
+final class TreeNode: Sendable {
     struct ID: Hashable {
         let rawValue: Int
     }
@@ -131,13 +131,11 @@ extension TreeNode: @MainActor Equatable {
 }
 
 private extension TreeNode {
-    enum Constants {
-        static let prefixValue = 20
-    }
+    static let prefixValue = 20
 
     func shorten(_ string: String) -> String {
-        if string.count > Constants.prefixValue {
-            String(string.prefix(Constants.prefixValue)) + "..."
+        if string.count > Self.prefixValue {
+            String(string.prefix(Self.prefixValue)) + "..."
         } else {
             string
         }
