@@ -99,9 +99,10 @@ struct TreeNodeTests {
     @MainActor
     struct ShortenedVariables {
         @Test
-        func `longer than 20 characters`() async throws {
+        func `longer than 20 characters gets shortened`() throws {
             //GIVEN
             let string = "01234567890123456789+"
+            try #require(string.count > 20)
 
             //WHEN
             let node = TreeNode.createMock(
@@ -114,6 +115,25 @@ struct TreeNodeTests {
             #expect(node.shortenedType == "\(string.prefix(20))...")
             #expect(node.shortenedLabel == "\(string.prefix(20))...")
             #expect(node.shortenedValue == "\(string.prefix(20))...")
+        }
+
+        @Test
+        func `shorter than 20 characters does NOT get shortened`() throws {
+            //GIVEN
+            let string = "0123456789012345678"
+            try #require(string.count < 20)
+
+            //WHEN
+            let node = TreeNode.createMock(
+                type: string,
+                label: string,
+                value: string
+            )
+
+            //THEN
+            #expect(node.shortenedType == string)
+            #expect(node.shortenedLabel == string)
+            #expect(node.shortenedValue == string)
         }
     }
 
