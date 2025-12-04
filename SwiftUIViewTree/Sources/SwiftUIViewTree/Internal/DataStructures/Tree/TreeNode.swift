@@ -25,29 +25,17 @@ final class TreeNode: Sendable { //TODO: test new values
 
     @ObservationIgnored
     var shortenedType: String {
-        if self.type.count > 20 {
-            String(self.type.prefix(20)) + "..."
-        } else {
-            self.type
-        }
+        self.shorten(self.type)
     }
 
     @ObservationIgnored
     var shortenedLabel: String {
-        if self.label.count > 20 {
-            String(self.label.prefix(20)) + "..."
-        } else {
-            self.label
-        }
+        self.shorten(self.label)
     }
 
     @ObservationIgnored
     var shortenedValue: String {
-        if self.value.count > 20 {
-            String(self.value.prefix(20)) + "..."
-        } else {
-            self.value
-        }
+        self.shorten(self.value)
     }
 
     @ObservationIgnored
@@ -139,5 +127,19 @@ extension TreeNode: @MainActor Equatable {
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
         lhs.type == rhs.type &&
         lhs.label == rhs.label
+    }
+}
+
+private extension TreeNode {
+    enum Constants {
+        static let prefixValue = 20
+    }
+
+    func shorten(_ string: String) -> String {
+        if string.count > Constants.prefixValue {
+            String(string.prefix(Constants.prefixValue)) + "..."
+        } else {
+            string
+        }
     }
 }
