@@ -117,11 +117,14 @@ struct TreeNodeTests {
             #expect(node.shortenedValue == "\(string.prefix(20))...")
         }
 
-        @Test
-        func `shorter than 20 characters does NOT get shortened`() throws {
+        @Test(
+            arguments: [
             //GIVEN
-            let string = "0123456789012345678"
-            try #require(string.count < 20)
+            "0123456789012345678",
+            "01234567890123456789"
+        ])
+        func `less or equal than 20 characters does NOT get shortened`(string: String) throws {
+            try #require(string.count <= 20)
 
             //WHEN
             let node = TreeNode.createMock(
