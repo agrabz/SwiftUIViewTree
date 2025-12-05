@@ -88,9 +88,7 @@ final class TreeNode: Sendable {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
             if value != oldValue {
-                /// SwiftUI uses reference types under the hood sometimes for things like `LocalizedTextStorage`.
-                /// These may change for less obvious reasons and keeping track of them is most probably not super useful, nor helpful.
-                if MemoryAddress.hasDiffInMemoryAddress(lhs: value, rhs: oldValue) {
+                if !Configuration.shared.isMemoryAddressDiffingEnabled && MemoryAddress.hasDiffInMemoryAddress(lhs: value, rhs: oldValue) {
                     return
                 }
 

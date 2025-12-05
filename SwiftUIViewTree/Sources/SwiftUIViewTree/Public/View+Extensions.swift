@@ -13,18 +13,24 @@ public extension View {
     /// - Parameters:
     ///   - originalView: The view whose view tree you would like to see. Pass in `self`.
     ///   - renderMode: Indicates how you want to see the view tree. Default value is `.treeGraph(showTreeInitially: true)`.
+    ///   - settings: Indicates what features you want to turn on/off that are by default disabled/enabled.
     ///
     /// - See Also: `RenderMode`
+    /// - See Also: `SwiftUIViewTreeSetting`
     /// - See Also: `notifyViewTreeOnChanges`
     /// - See Also: ``https://github.com/agrabz/SwiftUIViewTree``
     func renderViewTree(
         of originalView: any View,
-        renderMode: RenderMode = .treeGraph(showTreeInitially: true)
+        renderMode: RenderMode = .treeGraph(showTreeInitially: true),
+        settings: [SwiftUIViewTreeSetting] = []
     ) -> some View {
+        SwiftUIViewTreeConfiguration.shared.applySettings(settings)
+
         TreeWindowViewModel.shared.computeViewTree(
             originalView: originalView,
             modifiedView: self
         )
+
         return viewFor(renderMode)
     }
 
@@ -55,6 +61,13 @@ public enum RenderMode {
     /// Passing in `false` will show the "Show Tree" button floating over your original view. Tapping it will show the view tree as a graph, while the button will transform into "Hide Tree".
     /// Passing in `true` will show the tree graph next to your original view, together with the "Hide Tree" button. Tapping it will hide the tree graph, while the button will transform into "Show Tree".
     case treeGraph(showTreeInitially: Bool)
+}
+
+public enum SwiftUIViewTreeSetting {
+    /// SwiftUI uses reference types under the hood sometimes for things like `LocalizedTextStorage`.
+    /// The `Mirror` provided APIs include the memory addresses of these types.
+    /// These may change for less obvious reasons and keeping track of them is most probably not super useful, nor helpful, therefore by default this is turned off.
+    case enableMemoryAddressDiffing
 }
 
 private extension View {

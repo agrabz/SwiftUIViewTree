@@ -32,6 +32,7 @@ struct ContentView: View {
         }
         .bold(isTapped)
         .renderViewTree(of: self)
+//        .renderViewTree(of: self, settings: [.enableMemoryAddressDiffing])
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: true))
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: false))
 //        .renderViewTree(of: self, renderMode: .never)
