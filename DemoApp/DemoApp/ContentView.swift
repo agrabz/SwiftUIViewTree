@@ -25,12 +25,12 @@ struct ContentView: View {
                     .imageScale(.large)
                     .foregroundStyle(.tint)
 
-//                SubviewToTestWith(isTapped: $isTapped)
-                Text(isTapped ? "Yo what?" : "Hello, World!")
+                SubviewToTestWith(isTapped: $isTapped)
+//                Text(isTapped ? "Yo what?" : "Hello, World!")
+//                    .bold(isTapped)
             }
             .padding()
         }
-        .bold(isTapped)
         .renderViewTree(of: self)
 //        .renderViewTree(of: self, settings: [.enableMemoryAddressDiffing])
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: true))

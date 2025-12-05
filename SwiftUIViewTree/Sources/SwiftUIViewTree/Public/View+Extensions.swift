@@ -37,6 +37,8 @@ public extension View {
     /// Connects the subview with the view tree. It is important if you want to track the changes of your subview as well.
     ///
     /// Due to the nature of SwiftUI, a subview change doesn't automatically result in its parent's redrawal. Therefore the two have to be connected via this function.
+    /// Note that right now a subview only shows its "original" branch, not its "modified" branch.
+    /// Showing the "modified" branch on the tree is up on the roadmap.
     ///
     /// - See Also: `renderViewTree(of:renderMode:)`
     func notifyViewTreeOnChanges(of originalSubView: any View) -> some View {
