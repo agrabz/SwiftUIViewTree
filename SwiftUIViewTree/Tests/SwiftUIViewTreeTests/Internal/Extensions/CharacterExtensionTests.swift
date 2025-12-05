@@ -8,7 +8,7 @@ struct CharacterExtensionTests {
         //GIVEN
         arguments: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     )
-    func isHexDigit_numbers_areHex(char: Character) async throws {
+    func `WHEN number THEN true`(char: Character) async throws {
         //WHEN
         let result = char.isHexDigit
 
@@ -20,7 +20,7 @@ struct CharacterExtensionTests {
         //GIVEN
         arguments: ["a", "b", "c", "d", "e", "f"]
     )
-    func isHexDigit_lowercaseLetters_areHex(char: Character) async throws {
+    func `WHEN a...f THEN true`(char: Character) async throws {
         //WHEN
         let result = char.isHexDigit
 
@@ -32,7 +32,7 @@ struct CharacterExtensionTests {
         //GIVEN
         arguments: ["A", "B", "C", "D", "E", "F"]
     )
-    func isHexDigit_uppercaseLetters_areHex(char: Character) async throws {
+    func `WHEN A...F THEN true`(char: Character) async throws {
         //WHEN
         let result = char.isHexDigit
 
@@ -44,7 +44,7 @@ struct CharacterExtensionTests {
         //GIVEN
         arguments: ["g", "h", "z", "G", "H", "Z"]
     )
-    func isHexDigit_lettersOutsideHex_areNotHex(char: Character) async throws {
+    func `WHEN not valid hex letters THEN false`(char: Character) async throws {
         //WHEN
         let result = char.isHexDigit
 
@@ -56,7 +56,7 @@ struct CharacterExtensionTests {
         //GIVEN
         arguments: ["x", "X", " ", "-", "+", "/", ":", "@", "[", "]", "{", "}", "_"]
     )
-    func isHexDigit_symbols_areNotHex(char: Character) async throws {
+    func `WHEN not valid hex symbols THEN false`(char: Character) async throws {
         //WHEN
         let result = char.isHexDigit
 
@@ -68,7 +68,7 @@ struct CharacterExtensionTests {
         //GIVEN
         arguments: ["\n", "\t"]
     )
-    func isHexDigit_whitespace_areNotHex(char: Character) async throws {
+    func `WHEN whitespace THEN false`(char: Character) async throws {
         //WHEN
         let result = char.isHexDigit
 
