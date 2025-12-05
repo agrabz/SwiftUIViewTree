@@ -40,13 +40,13 @@ Without the `.renderViewTree(of: self)` line the view would be just like:
 
 You can also pinch to zoom and scroll to any direction:
 
-![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_00 12 28](https://github.com/user-attachments/assets/a7059181-f7b0-4458-9f55-171749bd65f1)
+![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_09 58 15](https://github.com/user-attachments/assets/26fa2e99-4288-4ea8-8d7e-7733270d0c41)
 
 ## Double tap to zoom
 
 You can apply stepped zoom by doulbe tapping on the view tree's canvas.
 
-![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_00 14 28](https://github.com/user-attachments/assets/81387caa-f021-43fd-8fc6-5ff6e882f5e8)
+![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_10 13 34](https://github.com/user-attachments/assets/68be4b60-af0f-485a-aea6-dcd44e7c5674)
 
 ## Node color change on updates
 
