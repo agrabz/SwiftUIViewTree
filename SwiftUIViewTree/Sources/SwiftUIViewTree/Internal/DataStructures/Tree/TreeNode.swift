@@ -147,23 +147,23 @@ private extension TreeNode {
 }
 
 private extension TreeNode {
-    enum MemoryChars {
+    enum MemoryAddress {
         enum OpeningChars {
             static let first: Character = "0"
             static let second: Character = "x"
         }
+
         enum TerminatorChars: Character, CaseIterable {
             case space = " "
             case x = ">"
         }
-    }
 
-    enum MemoryAddressLookUpResult {
-        case found(index: Int)
-        case invalidMemoryAddress
-        case notFound
+        enum LookUpResult {
+            case found(index: Int)
+            case invalidMemoryAddress
+            case notFound
+        }
     }
-
 
     func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
         guard lhs != rhs else { return false }
@@ -201,7 +201,7 @@ private extension TreeNode {
         }
     }
 
-    func lookBackwardForMemoryStartChars(indexToStartCheckingFrom: Int, stringElementArray: [Character]) -> MemoryAddressLookUpResult {
+    func lookBackwardForMemoryStartChars(indexToStartCheckingFrom: Int, stringElementArray: [Character]) -> MemoryAddress.LookUpResult {
         for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
             if indexMatchesMemoryAddressStart(index: index, stringElementArray: stringElementArray) {
                 return .found(index: index - 1)
@@ -217,8 +217,8 @@ private extension TreeNode {
 
     func indexMatchesMemoryAddressStart(index: Int, stringElementArray: [Character]) -> Bool {
         index > 0 &&
-        stringElementArray.safeGetElement(at: index-1) == MemoryChars.OpeningChars.first &&
-        stringElementArray.safeGetElement(at: index) == MemoryChars.OpeningChars.second
+        stringElementArray.safeGetElement(at: index-1) == MemoryAddress.OpeningChars.first &&
+        stringElementArray.safeGetElement(at: index) == MemoryAddress.OpeningChars.second
     }
 
     func isValidMemoryAddress(indexToStartCheckingFrom: Int, fullStringAsElementArray stringElementArray: [Character]) -> Bool {
@@ -237,7 +237,7 @@ private extension TreeNode {
     }
 
     func isTerminationCharacter(stringElementArray: [Character], index: Int) -> Bool {
-        let terminatorChars = MemoryChars.TerminatorChars.allCases.map(\.rawValue)
+        let terminatorChars = MemoryAddress.TerminatorChars.allCases.map(\.rawValue)
 
         for terminatorChar in terminatorChars {
             if stringElementArray.safeGetElement(at: index) == terminatorChar {
@@ -251,6 +251,6 @@ private extension TreeNode {
     func isNotValidMemoryAddressCharacter(stringElementArray: [Character], index: Int) -> Bool {
         let isHex = stringElementArray.safeGetElement(at: index)?.isHexDigit == true
 
-        return !isHex && stringElementArray.safeGetElement(at: index) != MemoryChars.OpeningChars.second
+        return !isHex && stringElementArray.safeGetElement(at: index) != MemoryAddress.OpeningChars.second
     }
 }
