@@ -187,17 +187,13 @@ private extension TreeNode {
         // Look backwards for "0x"
         var memoryAddressStartIndex = -1
         for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
-            if
-                index > 0 &&
-                    stringElementArray.safeGetElement(at: index-1) == MemoryChars.firstOpeningChar &&
-                    stringElementArray.safeGetElement(at: index) == MemoryChars.secondOpeningChar
-            {
+            if indexMatchesMemoryAddressStart(index: index, stringElementArray: stringElementArray) {
                 memoryAddressStartIndex = index - 1
                 break
             }
             // If we hit a terminator before finding 0x, we're not in a memory address
             for terminatorChar in terminatorChars {
-                if stringElementArray[index] == terminatorChar {
+                if stringElementArray.safeGetElement(at: index) == terminatorChar {
                     return false
                 }
             }
@@ -223,5 +219,11 @@ private extension TreeNode {
 
         // Reached end of string, still could be a memory address
         return true
+    }
+
+    func indexMatchesMemoryAddressStart(index: Int, stringElementArray: [Character]) -> Bool {
+        index > 0 &&
+        stringElementArray.safeGetElement(at: index-1) == MemoryChars.firstOpeningChar &&
+        stringElementArray.safeGetElement(at: index) == MemoryChars.secondOpeningChar
     }
 }
