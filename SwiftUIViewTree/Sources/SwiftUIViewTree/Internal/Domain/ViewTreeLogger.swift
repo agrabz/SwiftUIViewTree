@@ -10,7 +10,7 @@ struct ViewTreeLogger: ViewTreeLoggerProtocol {
         print("\"\(node.label)\":", "\"\(node.type)\"")
         print("🟥Old value:", "\"\(previousNodeValue)\"")
         print("🟩New value:", "\"\(node.value)\"") //TODO: values are sometimes very long. some better highlighting will be needed.
-        findDifferences(string1: previousNodeValue, string2: node.value)
+        findDiffBetween(lhs: previousNodeValue, rhs: node.value)
 //        print("Diff: \(node.value.diff(from: previousNodeValue)) ?? "<no diff>"") //TODO: values are sometimes very long. some better highlighting will be needed.
         print()
     }
@@ -21,9 +21,9 @@ protocol ViewTreeLoggerProtocol: Sendable {
     func logChangesOf(node: TreeNode, previousNodeValue: String)
 }
 
-func findDifferences(string1: String, string2: String) {
-    let arr1 = Array(string1)
-    let arr2 = Array(string2)
+func findDiffBetween(lhs: String, rhs: String) {
+    let arr1 = Array(lhs)
+    let arr2 = Array(rhs)
     let maxLen = max(arr1.count, arr2.count)
 
     var diffStart: Int? = nil
