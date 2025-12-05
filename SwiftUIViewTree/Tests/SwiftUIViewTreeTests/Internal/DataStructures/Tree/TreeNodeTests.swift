@@ -90,8 +90,8 @@ struct TreeNodeTests {
             ))
             func `logger is NOT called WHEN value has memory address AND memory configuration is enabled`() throws {
                 //GIVEN
-                let value1 = "0x0123456789aB"
-                let value2 = "0xF9876543210A"
+                let value1 = MemoryAddressTests.mock1
+                let value2 = MemoryAddressTests.mock2
 
                 let node1 = TreeNode.createMock(
                     type: "type",
