@@ -177,7 +177,7 @@ private extension TreeNode {
         return false
     }
 
-    func isInsideMemoryAddress(fullString: String, at indexToStartCheckingFrom: Int) -> Bool {
+    func isInsideMemoryAddress(fullString: String, at indexToStartCheckingFrom: Int) -> Bool { //TODO: implementation could be simplified by taking into account that a 62bit memory address is always 2+16 character long
         let stringElementArray = Array(fullString)
 
         guard indexToStartCheckingFrom < stringElementArray.count else { return false }
