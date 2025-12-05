@@ -102,6 +102,49 @@ final class TreeNode: Sendable {
         }
     }
 
+    /// To be able to set the value from async, non MainActor isolated contexts, we have to have this setter.
+    /// "await node.value = await someOtherValue" is not valid
+    func setValueWithAnimation(to: String) {
+        withAnimation {
+            self.value = to
+        }
+    }
+}
+
+extension TreeNode {
+    static let rootNode = TreeNode(
+        type: "Root node",
+        label: "Root node",
+        value: "Root node",
+        serialNumber: -1,
+        registerChanges: true
+    )
+}
+
+extension TreeNode: @MainActor CustomStringConvertible {
+    var description: String {
+        "(\(self.serialNumber)) \(self.label): \(self.type) = \(self.value)"
+    }
+}
+
+extension TreeNode: @MainActor Equatable {
+    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        lhs.type == rhs.type &&
+        lhs.label == rhs.label
+    }
+}
+
+private extension TreeNode {
+    static let prefixValue = 20
+
+    func shorten(_ string: String) -> String {
+        if string.count > Self.prefixValue {
+            String(string.prefix(Self.prefixValue)) + "..."
+        } else {
+            string
+        }
+    }
+
     func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
         guard lhs != rhs else { return false }
 
@@ -168,54 +211,5 @@ final class TreeNode: Sendable {
 
         // Reached end of string, still could be a memory address
         return true
-    }
-
-    /// To be able to set the value from async, non MainActor isolated contexts, we have to have this setter.
-    /// "await node.value = await someOtherValue" is not valid
-    func setValueWithAnimation(to: String) {
-        withAnimation {
-            self.value = to
-        }
-    }
-}
-
-extension Character {
-    var isHexDigit: Bool {
-        return self.isNumber || ("a"..."f").contains(self) || ("A"..."F").contains(self)
-    }
-}
-
-extension TreeNode {
-    static let rootNode = TreeNode(
-        type: "Root node",
-        label: "Root node",
-        value: "Root node",
-        serialNumber: -1,
-        registerChanges: true
-    )
-}
-
-extension TreeNode: @MainActor CustomStringConvertible {
-    var description: String {
-        "(\(self.serialNumber)) \(self.label): \(self.type) = \(self.value)"
-    }
-}
-
-extension TreeNode: @MainActor Equatable {
-    static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
-        lhs.type == rhs.type &&
-        lhs.label == rhs.label
-    }
-}
-
-private extension TreeNode {
-    static let prefixValue = 20
-
-    func shorten(_ string: String) -> String {
-        if string.count > Self.prefixValue {
-            String(string.prefix(Self.prefixValue)) + "..."
-        } else {
-            string
-        }
     }
 }
