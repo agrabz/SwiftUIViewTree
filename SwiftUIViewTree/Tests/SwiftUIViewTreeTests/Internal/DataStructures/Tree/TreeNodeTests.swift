@@ -79,6 +79,46 @@ struct TreeNodeTests {
                 }
                 #expect(spyViewTreeLogger.hasBeenCalled == true)
             }
+
+            @Test(.viewTree(
+                viewTreeLogger: SpyViewTreeLogger(),
+                configuration: {
+                    let config = Configuration()
+                    config.applySettings([])
+                    return config
+                }()
+            ))
+            func `logger is NOT called WHEN value has memory address AND memory configuration is enabled`() throws {
+                //GIVEN
+                let value1 = MemoryAddressTests.mock1
+                let value2 = MemoryAddressTests.mock2
+
+                let node1 = TreeNode.createMock(
+                    type: "type",
+                    label: "label",
+                    value: value1,
+                    serialNumber: 42,
+                    registerChanges: true
+                )
+
+                //WHEN
+                _ = TreeNode.createMock(
+                    type: "type",
+                    label: "label",
+                    value: value2,
+                    serialNumber: 42,
+                    registerChanges: true
+                )
+
+                //THEN
+                #expect(TreeNodeRegistry.shared.allChangedNodes.contains(where: { $0.serialNumber == node1.serialNumber }) == false)
+                guard let spyViewTreeLogger = ViewTreeLogger.shared as? SpyViewTreeLogger else {
+                    Issue.record("ViewTreeLogger is not spy: \(ViewTreeLogger.shared)")
+                    return
+                }
+                #expect(spyViewTreeLogger.hasBeenCalled == false)
+
+            }
         }
 
         @MainActor

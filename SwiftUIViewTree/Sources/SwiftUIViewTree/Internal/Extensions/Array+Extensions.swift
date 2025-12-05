@@ -6,3 +6,19 @@ extension Array {
         return self[index]
     }
 }
+
+extension Array {
+    func safeGetSubSequence(in range: ClosedRange<Int>) -> SubSequence? {
+        guard self.indices.contains(range) else {
+            return nil
+        }
+        return self[range]
+    }
+
+    func safeGetSubSequenceOrEmpty(in range: ClosedRange<Int>) -> SubSequence {
+        guard let subSequence = self.safeGetSubSequence(in: range) else {
+            return []
+        }
+        return subSequence
+    }
+}

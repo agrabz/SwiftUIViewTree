@@ -7,7 +7,7 @@ struct SubviewToTestWith: View {
 
     var body: some View {
         Text(isTapped ? "Yo what?" : "Hello, World!")
-            .bold(isTapped ? true : false)
+            .bold(isTapped)
             .notifyViewTreeOnChanges(of: self)
 //            .renderViewTree(of: self)
         }
@@ -26,10 +26,13 @@ struct ContentView: View {
                     .foregroundStyle(.tint)
 
                 SubviewToTestWith(isTapped: $isTapped)
+//                Text(isTapped ? "Yo what?" : "Hello, World!")
+//                    .bold(isTapped)
             }
             .padding()
         }
         .renderViewTree(of: self)
+//        .renderViewTree(of: self, settings: [.enableMemoryAddressDiffing])
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: true))
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: false))
 //        .renderViewTree(of: self, renderMode: .never)

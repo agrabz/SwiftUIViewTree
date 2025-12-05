@@ -88,6 +88,10 @@ final class TreeNode: Sendable {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
             if value != oldValue {
+                if !Configuration.shared.isMemoryAddressDiffingEnabled && MemoryAddress.hasDiffInMemoryAddress(lhs: value, rhs: oldValue) {
+                    return
+                }
+
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
                     previousNodeValue: oldValue
