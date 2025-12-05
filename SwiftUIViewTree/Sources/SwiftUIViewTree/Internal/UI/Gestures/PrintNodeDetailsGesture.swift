@@ -26,7 +26,6 @@ struct PrintNodeFullDetailsGesture: Gesture {
 
     var body: some Gesture {
         LongPressGesture()
-//        TapGesture(count: 3)
             .onEnded { _ in
                 print(
                     """

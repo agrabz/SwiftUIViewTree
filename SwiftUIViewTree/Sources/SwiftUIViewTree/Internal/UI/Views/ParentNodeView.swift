@@ -6,12 +6,15 @@ struct ParentNodeView: View {
     var body: some View {
         NodeView(node: $parentNode)
             .gesture(
-                CollapseNodeGesture(
-                    node: $parentNode
-                )
-                .exclusively(
-                    before: PrintNodeShortenedDetailsGesture(node: $parentNode)
-                )
+                PrintNodeFullDetailsGesture(node: $parentNode)
+                    .exclusively(
+                        before: CollapseNodeGesture(
+                            node: $parentNode
+                        )
+                        .exclusively(
+                            before: PrintNodeShortenedDetailsGesture(node: $parentNode)
+                        )
+                    )
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
                 [parentNode.id: anchor]
