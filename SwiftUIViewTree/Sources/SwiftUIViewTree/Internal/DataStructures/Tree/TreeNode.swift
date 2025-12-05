@@ -153,8 +153,8 @@ private extension TreeNode {
         let maxLength = max(lhsStringElementArray.count, rhsStringElementArray.count)
 
         for index in 0..<maxLength {
-            let lhsChar = index < lhsStringElementArray.count ? lhsStringElementArray[index] : nil //TODO: safeGet
-            let rhsChar = index < rhsStringElementArray.count ? rhsStringElementArray[index] : nil
+            let lhsChar = index < lhsStringElementArray.count ? lhsStringElementArray.safeGetElement(at: index) : nil
+            let rhsChar = index < rhsStringElementArray.count ? rhsStringElementArray.safeGetElement(at: index) : nil
 
             if lhsChar != rhsChar {
                 // Found a difference, check if we're inside a memory address
@@ -179,8 +179,8 @@ private extension TreeNode {
         for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
             if
                 index > 0 &&
-                    stringElementArray[index-1] == "0" && //TODO: safeGet
-                    stringElementArray[index] == "x"
+                    stringElementArray.safeGetElement(at: index-1) == "0" &&
+                    stringElementArray.safeGetElement(at: index) == "x"
             {
                 memoryAddressStartIndex = index - 1
                 break
@@ -198,13 +198,13 @@ private extension TreeNode {
         // Look forwards for terminator (space or >)
         for index in (indexToStartCheckingFrom+1)..<stringElementArray.count {
             for terminatorChar in terminatorChars {
-                if stringElementArray[index] == terminatorChar {  //TODO: safeGet
+                if stringElementArray.safeGetElement(at: index) == terminatorChar {
                     return true
                 }
             }
 
             // If we hit something that's not a valid hex char, not a memory address
-            if !stringElementArray[index].isHexDigit && stringElementArray[index] != "x" {  //TODO: safeGet
+            if (!(stringElementArray.safeGetElement(at: index)?.isHexDigit == true)) && stringElementArray.safeGetElement(at: index) != "x" {  //TODO: pfhujj
                 return false
             }
         }
