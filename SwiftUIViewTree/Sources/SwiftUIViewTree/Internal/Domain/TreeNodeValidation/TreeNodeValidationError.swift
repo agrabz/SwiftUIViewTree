@@ -5,8 +5,6 @@ enum TreeNodeValidationError: String, Error {
     case location = "location"
     case atomicBox = "AtomicBox"
     case atomicBuffer = "AtomicBuffer"
-    case localizedTextStorage = "LocalizedTextStorage"
-    case storage = "Storage"
 
     var description: String {
         Self.prefix + self.rawValue

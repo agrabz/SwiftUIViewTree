@@ -88,7 +88,9 @@ final class TreeNode: Sendable {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
             if value != oldValue {
-                if hasDiffInMemoryAddress(lhs: value, rhs: oldValue) {
+                /// SwiftUI uses reference types under the hood sometimes for things like `LocalizedTextStorage`.
+                /// These may change for less obvious reasons and keeping track of them is most probably not super useful, nor helpful.
+                if MemoryAddress.hasDiffInMemoryAddress(lhs: value, rhs: oldValue) {
                     return
                 }
 
@@ -146,26 +148,26 @@ private extension TreeNode {
     }
 }
 
-private extension TreeNode {
-    enum MemoryAddress {
-        enum OpeningChars {
-            static let first: Character = "0"
-            static let second: Character = "x"
-        }
 
-        enum TerminatorChars: Character, CaseIterable {
-            case space = " "
-            case x = ">"
-        }
-
-        enum LookUpResult {
-            case found(index: Int)
-            case invalidMemoryAddress
-            case notFound
-        }
+enum MemoryAddress {
+    enum OpeningChars {
+        static let first: Character = "0"
+        static let second: Character = "x"
     }
 
-    func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
+    enum TerminatorChars: Character, CaseIterable {
+        case space = " "
+        case x = ">"
+    }
+
+    enum LookUpResult {
+        case found(index: Int)
+        case invalidMemoryAddress
+        case notFound
+    }
+
+
+    static func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
         guard lhs != rhs else { return false }
 
         let lhsStringElementArray = Array(lhs)
@@ -186,7 +188,7 @@ private extension TreeNode {
         return false
     }
 
-    func isInsideMemoryAddress(fullString: String, at indexToStartCheckingFrom: Int) -> Bool { //TODO: implementation could be simplified by taking into account that a 62bit memory address is always 2+16 character long
+    static func isInsideMemoryAddress(fullString: String, at indexToStartCheckingFrom: Int) -> Bool { //TODO: implementation could be simplified by taking into account that a 62bit memory address is always 2+16 character long
         let stringElementArray = Array(fullString)
 
         guard indexToStartCheckingFrom < stringElementArray.count else { return false }
@@ -201,7 +203,7 @@ private extension TreeNode {
         }
     }
 
-    func lookBackwardForMemoryStartChars(indexToStartCheckingFrom: Int, stringElementArray: [Character]) -> MemoryAddress.LookUpResult {
+    static func lookBackwardForMemoryStartChars(indexToStartCheckingFrom: Int, stringElementArray: [Character]) -> MemoryAddress.LookUpResult {
         for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
             if indexMatchesMemoryAddressStart(index: index, stringElementArray: stringElementArray) {
                 return .found(index: index - 1)
@@ -215,13 +217,13 @@ private extension TreeNode {
         return .notFound
     }
 
-    func indexMatchesMemoryAddressStart(index: Int, stringElementArray: [Character]) -> Bool {
+    static func indexMatchesMemoryAddressStart(index: Int, stringElementArray: [Character]) -> Bool {
         index > 0 &&
         stringElementArray.safeGetElement(at: index-1) == MemoryAddress.OpeningChars.first &&
         stringElementArray.safeGetElement(at: index) == MemoryAddress.OpeningChars.second
     }
 
-    func isValidMemoryAddress(indexToStartCheckingFrom: Int, fullStringAsElementArray stringElementArray: [Character]) -> Bool {
+    static func isValidMemoryAddress(indexToStartCheckingFrom: Int, fullStringAsElementArray stringElementArray: [Character]) -> Bool {
         for index in (indexToStartCheckingFrom+1)..<stringElementArray.count {
             if isTerminationCharacter(stringElementArray: stringElementArray, index: index) {
                 return true
@@ -236,7 +238,7 @@ private extension TreeNode {
         return true
     }
 
-    func isTerminationCharacter(stringElementArray: [Character], index: Int) -> Bool {
+    static func isTerminationCharacter(stringElementArray: [Character], index: Int) -> Bool {
         let terminatorChars = MemoryAddress.TerminatorChars.allCases.map(\.rawValue)
 
         for terminatorChar in terminatorChars {
@@ -248,7 +250,7 @@ private extension TreeNode {
         return false
     }
 
-    func isNotValidMemoryAddressCharacter(stringElementArray: [Character], index: Int) -> Bool {
+    static func isNotValidMemoryAddressCharacter(stringElementArray: [Character], index: Int) -> Bool {
         let isHex = stringElementArray.safeGetElement(at: index)?.isHexDigit == true
 
         return !isHex && stringElementArray.safeGetElement(at: index) != MemoryAddress.OpeningChars.second

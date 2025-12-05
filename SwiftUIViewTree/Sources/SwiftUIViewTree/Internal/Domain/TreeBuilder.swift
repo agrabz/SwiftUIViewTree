@@ -7,8 +7,6 @@ struct TreeBuilder {
         LocationLabelTreeNodeValidator(),
         AtomicBoxTypeTreeNodeValidator(),
         AtomicBufferTypeTreeNodeValidator(),
-        LocalizedTextStorageTreeNodeValidator(),
-        StorageTreeNodeValidator(),
     ]
     private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
