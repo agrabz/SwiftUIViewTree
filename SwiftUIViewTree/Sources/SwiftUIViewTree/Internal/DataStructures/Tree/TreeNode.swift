@@ -148,14 +148,22 @@ private extension TreeNode {
 
 private extension TreeNode {
     enum MemoryChars {
+        enum OpeningChars {
+            static let first: Character = "0"
+            static let second: Character = "x"
+        }
         enum TerminatorChars: Character, CaseIterable {
             case space = " "
             case x = ">"
         }
-
-        static let firstOpeningChar: Character = "0" //TODO: opening chars
-        static let secondOpeningChar: Character = "x"
     }
+
+    enum MemoryAddressLookUpResult {
+        case found(index: Int)
+        case invalidMemoryAddress
+        case notFound
+    }
+
 
     func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
         guard lhs != rhs else { return false }
@@ -169,7 +177,6 @@ private extension TreeNode {
             let rhsChar = index < rhsStringElementArray.count ? rhsStringElementArray.safeGetElement(at: index) : nil
 
             if lhsChar != rhsChar {
-                // Found a difference, check if we're inside a memory address
                 if isInsideMemoryAddress(fullString: lhs, at: index) || isInsideMemoryAddress(fullString: rhs, at: index) {
                     return true
                 }
@@ -184,7 +191,6 @@ private extension TreeNode {
 
         guard indexToStartCheckingFrom < stringElementArray.count else { return false }
 
-        // Look backwards for "0x"
         let result = lookBackwardForMemoryStartChars(indexToStartCheckingFrom: indexToStartCheckingFrom, stringElementArray: stringElementArray)
 
         return switch result {
@@ -195,24 +201,14 @@ private extension TreeNode {
         }
     }
 
-    enum MemoryAddressLookUpResult {
-        case found(index: Int)
-        case invalidMemoryAddress
-        case notFound
-    }
-
     func lookBackwardForMemoryStartChars(indexToStartCheckingFrom: Int, stringElementArray: [Character]) -> MemoryAddressLookUpResult {
-        let terminatorChars = MemoryChars.TerminatorChars.allCases.map(\.rawValue) //TODO: to many declarations
-
         for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
             if indexMatchesMemoryAddressStart(index: index, stringElementArray: stringElementArray) {
                 return .found(index: index - 1)
             }
-            // If we hit a terminator before finding 0x, we're not in a memory address
-            for terminatorChar in terminatorChars {
-                if stringElementArray.safeGetElement(at: index) == terminatorChar {
-                    return .invalidMemoryAddress
-                }
+
+            if isTerminationCharacter(stringElementArray: stringElementArray, index: index) {
+                return .invalidMemoryAddress
             }
         }
 
@@ -221,29 +217,40 @@ private extension TreeNode {
 
     func indexMatchesMemoryAddressStart(index: Int, stringElementArray: [Character]) -> Bool {
         index > 0 &&
-        stringElementArray.safeGetElement(at: index-1) == MemoryChars.firstOpeningChar &&
-        stringElementArray.safeGetElement(at: index) == MemoryChars.secondOpeningChar
+        stringElementArray.safeGetElement(at: index-1) == MemoryChars.OpeningChars.first &&
+        stringElementArray.safeGetElement(at: index) == MemoryChars.OpeningChars.second
     }
 
     func isValidMemoryAddress(indexToStartCheckingFrom: Int, fullStringAsElementArray stringElementArray: [Character]) -> Bool {
-        let terminatorChars = MemoryChars.TerminatorChars.allCases.map(\.rawValue)
-
         for index in (indexToStartCheckingFrom+1)..<stringElementArray.count {
-            for terminatorChar in terminatorChars {
-                if stringElementArray.safeGetElement(at: index) == terminatorChar {
-                    return true
-                }
+            if isTerminationCharacter(stringElementArray: stringElementArray, index: index) {
+                return true
             }
 
-            let isHex = stringElementArray.safeGetElement(at: index)?.isHexDigit == true
-
-            // If we hit something that's not a valid hex char, not a memory address
-            if !isHex && stringElementArray.safeGetElement(at: index) != MemoryChars.secondOpeningChar {
+            if isNotValidMemoryAddressCharacter(stringElementArray: stringElementArray, index: index) {
                 return false
             }
         }
 
-        // Reached end of string, still could be a memory address
+        // End of string is also valid termination
         return true
+    }
+
+    func isTerminationCharacter(stringElementArray: [Character], index: Int) -> Bool {
+        let terminatorChars = MemoryChars.TerminatorChars.allCases.map(\.rawValue)
+
+        for terminatorChar in terminatorChars {
+            if stringElementArray.safeGetElement(at: index) == terminatorChar {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    func isNotValidMemoryAddressCharacter(stringElementArray: [Character], index: Int) -> Bool {
+        let isHex = stringElementArray.safeGetElement(at: index)?.isHexDigit == true
+
+        return !isHex && stringElementArray.safeGetElement(at: index) != MemoryChars.OpeningChars.second
     }
 }
