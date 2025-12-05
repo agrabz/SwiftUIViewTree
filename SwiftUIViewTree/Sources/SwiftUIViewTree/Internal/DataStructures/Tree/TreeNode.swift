@@ -87,10 +87,11 @@ final class TreeNode: Sendable {
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
-            if value != oldValue { //TODO: except memory addresses
-                if hasDiffInMemoryAddress(value, oldValue) {
+            if value != oldValue {
+                if hasDiffInMemoryAddress(lhs: value, rhs: oldValue) {
                     return
                 }
+
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
                     previousNodeValue: oldValue
@@ -101,20 +102,20 @@ final class TreeNode: Sendable {
         }
     }
 
-    func hasDiffInMemoryAddress(_ s: String, _ f: String) -> Bool {
-        guard s != f else { return false }
+    func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
+        guard lhs != rhs else { return false }
 
-        let arr1 = Array(s)
-        let arr2 = Array(f)
-        let maxLen = max(arr1.count, arr2.count)
+        let lhsStringElementArray = Array(lhs)
+        let rhsStringElementArray = Array(rhs)
+        let maxLength = max(lhsStringElementArray.count, rhsStringElementArray.count)
 
-        for i in 0..<maxLen {
-            let char1 = i < arr1.count ? arr1[i] : nil
-            let char2 = i < arr2.count ? arr2[i] : nil
+        for index in 0..<maxLength {
+            let lhsChar = index < lhsStringElementArray.count ? lhsStringElementArray[index] : nil //TODO: safeGet
+            let rhsChar = index < rhsStringElementArray.count ? rhsStringElementArray[index] : nil
 
-            if char1 != char2 {
+            if lhsChar != rhsChar {
                 // Found a difference, check if we're inside a memory address
-                if isInsideMemoryAddress(s, at: i) || isInsideMemoryAddress(f, at: i) {
+                if isInsideMemoryAddress(fullString: lhs, at: index) || isInsideMemoryAddress(fullString: rhs, at: index) {
                     return true
                 }
             }
@@ -123,32 +124,44 @@ final class TreeNode: Sendable {
         return false
     }
 
-    func isInsideMemoryAddress(_ str: String, at index: Int) -> Bool {
-        let arr = Array(str)
-        guard index < arr.count else { return false }
+    func isInsideMemoryAddress(fullString: String, at indexToStartCheckingFrom: Int) -> Bool {
+        let stringElementArray = Array(fullString)
+
+        guard indexToStartCheckingFrom < stringElementArray.count else { return false }
+
+        let terminatorChars: [Character] = [" ", ">"]
 
         // Look backwards for "0x"
-        var start = -1
-        for i in stride(from: index, through: 0, by: -1) {
-            if i > 0 && arr[i-1] == "0" && arr[i] == "x" {
-                start = i - 1
+        var memoryAddressStartIndex = -1
+        for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
+            if
+                index > 0 &&
+                    stringElementArray[index-1] == "0" && //TODO: safeGet
+                    stringElementArray[index] == "x"
+            {
+                memoryAddressStartIndex = index - 1
                 break
             }
             // If we hit a terminator before finding 0x, we're not in a memory address
-            if arr[i] == " " || arr[i] == ">" {
-                return false
+            for terminatorChar in terminatorChars {
+                if stringElementArray[index] == terminatorChar {
+                    return false
+                }
             }
         }
 
-        guard start >= 0 else { return false }
+        guard memoryAddressStartIndex >= 0 else { return false }
 
         // Look forwards for terminator (space or >)
-        for i in (index+1)..<arr.count {
-            if arr[i] == " " || arr[i] == ">" {
-                return true
+        for index in (indexToStartCheckingFrom+1)..<stringElementArray.count {
+            for terminatorChar in terminatorChars {
+                if stringElementArray[index] == terminatorChar {  //TODO: safeGet
+                    return true
+                }
             }
+
             // If we hit something that's not a valid hex char, not a memory address
-            if !arr[i].isHexDigit && arr[i] != "x" {
+            if !stringElementArray[index].isHexDigit && stringElementArray[index] != "x" {  //TODO: safeGet
                 return false
             }
         }
