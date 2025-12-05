@@ -1,32 +1,40 @@
 
 import SwiftUI
 
-struct PrintNodeDetailsGesture: Gesture {
-    let printFullDetails: Bool
+struct PrintNodeShortenedDetailsGesture: Gesture {
     @Binding var node: TreeNode
 
-    var printableLabel: String {
-        printFullDetails ? node.label : node.shortenedLabel
-    }
-
-    var printableType: String {
-        printFullDetails ? node.type : node.shortenedType
-    }
-
-    var printableValue: String {
-        printFullDetails ? node.value : node.shortenedValue
-    }
-
     var body: some Gesture {
-        TapGesture(count: printFullDetails ? 3 : 1)
+        TapGesture(count: 1)
             .onEnded { _ in
                 print(
                     """
                         
                     Node Details:
-                        Label: \(self.printableLabel)
-                        Type: \(self.printableType)
-                        Value: \(self.printableValue)
+                        Label: \(node.shortenedLabel)
+                        Type: \(node.shortenedType)
+                        Value: \(node.shortenedValue)
+
+                    """
+                )
+            }
+    }
+}
+
+struct PrintNodeFullDetailsGesture: Gesture {
+    @Binding var node: TreeNode
+
+    var body: some Gesture {
+        LongPressGesture()
+//        TapGesture(count: 3)
+            .onEnded { _ in
+                print(
+                    """
+                        
+                    Node Details:
+                        Label: \(node.label)
+                        Type: \(node.type)
+                        Value: \(node.value)
 
                     """
                 )

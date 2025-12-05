@@ -10,16 +10,7 @@ struct ParentNodeView: View {
                     node: $parentNode
                 )
                 .exclusively(
-                    before: PrintNodeDetailsGesture(
-                        printFullDetails: false,
-                        node: $parentNode
-                    )
-                )
-                .exclusively(
-                    before: PrintNodeDetailsGesture(
-                        printFullDetails: true,
-                        node: $parentNode
-                    )
+                    before: PrintNodeShortenedDetailsGesture(node: $parentNode)
                 )
             )
             .anchorPreference(key: NodeCenterPreferenceKey.self, value: .center) { anchor in
