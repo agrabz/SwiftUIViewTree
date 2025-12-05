@@ -5,7 +5,7 @@ struct PrintNodeShortenedDetailsGesture: Gesture {
     @Binding var node: TreeNode
 
     var body: some Gesture {
-        TapGesture(count: 1)
+        TapGesture()
             .onEnded { _ in
                 print(
                     """
