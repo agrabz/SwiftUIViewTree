@@ -6,10 +6,9 @@ struct ViewTreeLogger: ViewTreeLoggerProtocol {
 
     func logChangesOf(node: TreeNode, previousNodeValue: String) {
         print()
-        print("🚨Changes detected")
-        print("\"\(node.label)\":", "\"\(node.type)\"")
+        print("🚨Changes detected in \"\(node.label)\":", "\"\(node.type)\"")
         print("🟥Old value:", "\"\(previousNodeValue)\"")
-        print("🟩New value:", "\"\(node.value)\"") //TODO: values are sometimes very long. some better highlighting will be needed.
+        print("🟩New value:", "\"\(node.value)\"")
         printDiffOf(lhs: previousNodeValue, rhs: node.value)
         print()
     }
