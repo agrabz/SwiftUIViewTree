@@ -16,7 +16,6 @@ enum MemoryAddress {
         case notFound
     }
 
-
     static func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
         guard lhs != rhs else { return false }
 

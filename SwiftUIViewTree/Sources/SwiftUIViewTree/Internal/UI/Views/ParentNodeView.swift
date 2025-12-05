@@ -11,6 +11,13 @@ struct ParentNodeView: View {
                 )
                 .exclusively(
                     before: PrintNodeDetailsGesture(
+                        printFullDetails: false,
+                        node: $parentNode
+                    )
+                )
+                .exclusively(
+                    before: PrintNodeDetailsGesture(
+                        printFullDetails: true,
                         node: $parentNode
                     )
                 )

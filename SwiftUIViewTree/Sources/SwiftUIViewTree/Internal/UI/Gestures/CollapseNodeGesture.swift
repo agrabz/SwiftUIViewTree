@@ -5,7 +5,7 @@ struct CollapseNodeGesture: Gesture {
     @Binding var node: TreeNode
 
     var body: some Gesture {
-        TapGesture(count: 2) //TODO: change to 3 and 2 should be full detail printing, maybe?
+        TapGesture(count: 3)
             .onEnded { _ in
                 guard self.node.isParent else { return }
 
