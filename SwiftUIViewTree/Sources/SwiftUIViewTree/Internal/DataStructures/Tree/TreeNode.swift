@@ -135,6 +135,16 @@ extension TreeNode: @MainActor Equatable {
 }
 
 private extension TreeNode {
+    enum MemoryChars {
+        enum TerminatorChars: Character, CaseIterable {
+            case space = " "
+            case x = ">"
+        }
+
+        static let firstOpeningChar: Character = "0"
+        static let secondOpeningChar: Character = "x"
+    }
+
     static let prefixValue = 20
 
     func shorten(_ string: String) -> String {
@@ -172,15 +182,15 @@ private extension TreeNode {
 
         guard indexToStartCheckingFrom < stringElementArray.count else { return false }
 
-        let terminatorChars: [Character] = [" ", ">"]
+        let terminatorChars = MemoryChars.TerminatorChars.allCases.map(\.rawValue)
 
         // Look backwards for "0x"
         var memoryAddressStartIndex = -1
         for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
             if
                 index > 0 &&
-                    stringElementArray.safeGetElement(at: index-1) == "0" &&
-                    stringElementArray.safeGetElement(at: index) == "x"
+                    stringElementArray.safeGetElement(at: index-1) == MemoryChars.firstOpeningChar &&
+                    stringElementArray.safeGetElement(at: index) == MemoryChars.secondOpeningChar
             {
                 memoryAddressStartIndex = index - 1
                 break
@@ -195,7 +205,7 @@ private extension TreeNode {
 
         guard memoryAddressStartIndex >= 0 else { return false }
 
-        // Look forwards for terminator (space or >)
+        // Look forwards for terminator
         for index in (indexToStartCheckingFrom+1)..<stringElementArray.count {
             for terminatorChar in terminatorChars {
                 if stringElementArray.safeGetElement(at: index) == terminatorChar {
@@ -204,7 +214,9 @@ private extension TreeNode {
             }
 
             // If we hit something that's not a valid hex char, not a memory address
-            if (!(stringElementArray.safeGetElement(at: index)?.isHexDigit == true)) && stringElementArray.safeGetElement(at: index) != "x" {  //TODO: pfhujj
+            let isHex = stringElementArray.safeGetElement(at: index)?.isHexDigit == true
+
+            if !isHex && stringElementArray.safeGetElement(at: index) != MemoryChars.secondOpeningChar {
                 return false
             }
         }
