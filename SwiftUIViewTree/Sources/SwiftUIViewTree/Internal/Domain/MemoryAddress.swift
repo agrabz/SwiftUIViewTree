@@ -1,21 +1,5 @@
 
 enum MemoryAddress {
-    enum OpeningChars {
-        static let first: Character = "0"
-        static let second: Character = "x"
-    }
-
-    enum TerminatorChars: Character, CaseIterable {
-        case space = " "
-        case x = ">"
-    }
-
-    enum LookUpResult {
-        case found(index: Int)
-        case invalidMemoryAddress
-        case notFound
-    }
-
     static func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
         guard lhs != rhs else { return false }
 
@@ -35,6 +19,24 @@ enum MemoryAddress {
         }
 
         return false
+    }
+}
+
+private extension MemoryAddress {
+    enum OpeningChars {
+        static let first: Character = "0"
+        static let second: Character = "x"
+    }
+
+    enum TerminatorChars: Character, CaseIterable {
+        case space = " "
+        case x = ">"
+    }
+
+    enum LookUpResult {
+        case found(index: Int)
+        case invalidMemoryAddress
+        case notFound
     }
 
     static func isInsideMemoryAddress(fullString: String, at indexToStartCheckingFrom: Int) -> Bool { //TODO: implementation could be simplified by taking into account that a 62bit memory address is always 2+16 character long
