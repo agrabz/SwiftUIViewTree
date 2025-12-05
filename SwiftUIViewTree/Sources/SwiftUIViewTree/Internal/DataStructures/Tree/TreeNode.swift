@@ -135,16 +135,6 @@ extension TreeNode: @MainActor Equatable {
 }
 
 private extension TreeNode {
-    enum MemoryChars {
-        enum TerminatorChars: Character, CaseIterable {
-            case space = " "
-            case x = ">"
-        }
-
-        static let firstOpeningChar: Character = "0"
-        static let secondOpeningChar: Character = "x"
-    }
-
     static let prefixValue = 20
 
     func shorten(_ string: String) -> String {
@@ -153,6 +143,18 @@ private extension TreeNode {
         } else {
             string
         }
+    }
+}
+
+private extension TreeNode {
+    enum MemoryChars {
+        enum TerminatorChars: Character, CaseIterable {
+            case space = " "
+            case x = ">"
+        }
+
+        static let firstOpeningChar: Character = "0" //TODO: opening chars
+        static let secondOpeningChar: Character = "x"
     }
 
     func hasDiffInMemoryAddress(lhs: String, rhs: String) -> Bool {
@@ -182,26 +184,39 @@ private extension TreeNode {
 
         guard indexToStartCheckingFrom < stringElementArray.count else { return false }
 
-        let terminatorChars = MemoryChars.TerminatorChars.allCases.map(\.rawValue)
-
         // Look backwards for "0x"
-        var memoryAddressStartIndex = -1
+        let result = lookBackwardForMemoryStartChars(indexToStartCheckingFrom: indexToStartCheckingFrom, stringElementArray: stringElementArray)
+
+        return switch result {
+            case .found(let index):
+                isValidMemoryAddress(indexToStartCheckingFrom: index, fullStringAsElementArray: stringElementArray)
+            case .invalidMemoryAddress, .notFound:
+                false
+        }
+    }
+
+    enum MemoryAddressLookUpResult {
+        case found(index: Int)
+        case invalidMemoryAddress
+        case notFound
+    }
+
+    func lookBackwardForMemoryStartChars(indexToStartCheckingFrom: Int, stringElementArray: [Character]) -> MemoryAddressLookUpResult {
+        let terminatorChars = MemoryChars.TerminatorChars.allCases.map(\.rawValue) //TODO: to many declarations
+
         for index in stride(from: indexToStartCheckingFrom, through: 0, by: -1) {
             if indexMatchesMemoryAddressStart(index: index, stringElementArray: stringElementArray) {
-                memoryAddressStartIndex = index - 1
-                break
+                return .found(index: index - 1)
             }
             // If we hit a terminator before finding 0x, we're not in a memory address
             for terminatorChar in terminatorChars {
                 if stringElementArray.safeGetElement(at: index) == terminatorChar {
-                    return false
+                    return .invalidMemoryAddress
                 }
             }
         }
 
-        guard memoryAddressStartIndex >= 0 else { return false }
-
-        return isValidMemoryAddress(indexToStartCheckingFrom: indexToStartCheckingFrom, fullStringAsElementArray: stringElementArray)
+        return .notFound
     }
 
     func indexMatchesMemoryAddressStart(index: Int, stringElementArray: [Character]) -> Bool {

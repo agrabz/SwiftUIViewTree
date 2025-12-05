@@ -42,7 +42,13 @@ private extension ViewTreeLogger {
             let lhsDiff = lhsStringElementArray.count > diffStart ? String(lhsStringElementArray.safeGetSubSequenceOrEmpty(in: lhsDiffRange)) : ""
             let rhsDiff = rhsStringElementArray.count > diffStart ? String(rhsStringElementArray.safeGetSubSequenceOrEmpty(in: rhsDiffRange)) : ""
 
-            print("🔺Diff at [\(diffStart)]: '...\(lhsDiff)...' --> '...\(rhsDiff)...'")
+            print("🔺Diff at [\(diffStart)]: '...\(lhsDiff)...' --> '...\(rhsDiff)...'") //TODO: diffs are sometimes too verbose:
+///            🔺Diff at [57]: '...false, _location: Optional(SwiftUI.StoredLocation<Swift.Bool>)))...' --> '...true, _location: Optional(SwiftUI.StoredLocation<Swift.Bool>)))...'
+///
+///             Would be enough:
+///             
+///            🔺Diff at [57]: '...false...' --> '...true...'
+
         } else {
             print("Strings are identical")
         }
