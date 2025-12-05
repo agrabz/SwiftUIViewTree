@@ -22,33 +22,33 @@ protocol ViewTreeLoggerProtocol: Sendable {
 }
 
 func findDiffBetween(lhs: String, rhs: String) {
-    let arr1 = Array(lhs)
-    let arr2 = Array(rhs)
-    let maxLen = max(arr1.count, arr2.count)
+    let lhsStringElementArray = Array(lhs)
+    let rhsStringElementArray = Array(rhs)
+    let maxLength = max(lhsStringElementArray.count, rhsStringElementArray.count)
 
     var diffStart: Int? = nil
     var diffEnd: Int? = nil
 
-    for i in 0..<maxLen {
-        let char1 = i < arr1.count ? arr1[i] : nil
-        let char2 = i < arr2.count ? arr2[i] : nil
+    for index in 0..<maxLength { //TODO: this finds all the diff but remembers to the last one only, would be nice to diff them all
+        let lhsChar = index < lhsStringElementArray.count ? lhsStringElementArray[index] : nil //TODO: safeGet
+        let rhsChar = index < rhsStringElementArray.count ? rhsStringElementArray[index] : nil
 
-        if char1 != char2 {
+        if lhsChar != rhsChar {
             if diffStart == nil {
-                diffStart = i
+                diffStart = index
             }
-            diffEnd = i
+            diffEnd = index
         }
     }
 
-    if let start = diffStart, let end = diffEnd {
-        let range1 = max(0, start)...min(end, arr1.count - 1)
-        let range2 = max(0, start)...min(end, arr2.count - 1)
+    if let diffStart, let diffEnd {
+        let lhsDiffRange = max(0, diffStart)...min(diffEnd, lhsStringElementArray.count - 1)
+        let rhsDiffRange = max(0, diffStart)...min(diffEnd, rhsStringElementArray.count - 1)
 
-        let diff1 = arr1.count > start ? String(arr1[range1]) : ""
-        let diff2 = arr2.count > start ? String(arr2[range2]) : ""
+        let lhsDiff = lhsStringElementArray.count > diffStart ? String(lhsStringElementArray[lhsDiffRange]) : "" //TODO: safeGet
+        let rhsDiff = rhsStringElementArray.count > diffStart ? String(rhsStringElementArray[rhsDiffRange]) : ""
 
-        print("𝚫Diff at [\(start)]: '...\(diff1)...' --> '...\(diff2)...'")
+        print("𝚫Diff at [\(diffStart)]: '...\(lhsDiff)...' --> '...\(rhsDiff)...'")
     } else {
         print("Strings are identical")
     }
