@@ -24,8 +24,8 @@ private extension ViewTreeLogger {
         var diffEnd: Int? = nil
 
         for index in 0..<maxLength { //TODO: this finds all the diff but remembers to the last one only, would be nice to diff them all
-            let lhsChar = index < lhsStringElementArray.count ? lhsStringElementArray[index] : nil //TODO: safeGet
-            let rhsChar = index < rhsStringElementArray.count ? rhsStringElementArray[index] : nil
+            let lhsChar = index < lhsStringElementArray.count ? lhsStringElementArray.safeGetElement(at: index) : nil
+            let rhsChar = index < rhsStringElementArray.count ? rhsStringElementArray.safeGetElement(at: index) : nil
 
             if lhsChar != rhsChar {
                 if diffStart == nil {
@@ -39,8 +39,8 @@ private extension ViewTreeLogger {
             let lhsDiffRange = max(0, diffStart)...min(diffEnd, lhsStringElementArray.count - 1)
             let rhsDiffRange = max(0, diffStart)...min(diffEnd, rhsStringElementArray.count - 1)
 
-            let lhsDiff = lhsStringElementArray.count > diffStart ? String(lhsStringElementArray[lhsDiffRange]) : "" //TODO: safeGet
-            let rhsDiff = rhsStringElementArray.count > diffStart ? String(rhsStringElementArray[rhsDiffRange]) : ""
+            let lhsDiff = lhsStringElementArray.count > diffStart ? String(lhsStringElementArray.safeGetSubSequenceOrEmpty(in: lhsDiffRange)) : ""
+            let rhsDiff = rhsStringElementArray.count > diffStart ? String(rhsStringElementArray.safeGetSubSequenceOrEmpty(in: rhsDiffRange)) : ""
 
             print("🔺Diff at [\(diffStart)]: '...\(lhsDiff)...' --> '...\(rhsDiff)...'")
         } else {
