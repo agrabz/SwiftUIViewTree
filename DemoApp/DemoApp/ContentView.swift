@@ -7,7 +7,7 @@ struct SubviewToTestWith: View {
 
     var body: some View {
         Text(isTapped ? "Yo what?" : "Hello, World!")
-            .bold(isTapped ? true : false)
+            .bold(isTapped)
             .notifyViewTreeOnChanges(of: self)
 //            .renderViewTree(of: self)
         }
@@ -25,10 +25,12 @@ struct ContentView: View {
                     .imageScale(.large)
                     .foregroundStyle(.tint)
 
-                SubviewToTestWith(isTapped: $isTapped)
+//                SubviewToTestWith(isTapped: $isTapped)
+                Text(isTapped ? "Yo what?" : "Hello, World!")
             }
             .padding()
         }
+        .bold(isTapped)
         .renderViewTree(of: self)
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: true))
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: false))
