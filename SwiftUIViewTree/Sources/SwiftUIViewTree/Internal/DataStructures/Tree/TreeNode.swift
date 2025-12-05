@@ -87,7 +87,10 @@ final class TreeNode: Sendable {
         do {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
         } catch {
-            if value != oldValue {
+            if value != oldValue { //TODO: except memory addresses
+                if hasDiffInMemoryAddress(value, oldValue) {
+                    return
+                }
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
                     previousNodeValue: oldValue
@@ -98,12 +101,74 @@ final class TreeNode: Sendable {
         }
     }
 
+    func hasDiffInMemoryAddress(_ s: String, _ f: String) -> Bool {
+        guard s != f else { return false }
+
+        let arr1 = Array(s)
+        let arr2 = Array(f)
+        let maxLen = max(arr1.count, arr2.count)
+
+        for i in 0..<maxLen {
+            let char1 = i < arr1.count ? arr1[i] : nil
+            let char2 = i < arr2.count ? arr2[i] : nil
+
+            if char1 != char2 {
+                // Found a difference, check if we're inside a memory address
+                if isInsideMemoryAddress(s, at: i) || isInsideMemoryAddress(f, at: i) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    func isInsideMemoryAddress(_ str: String, at index: Int) -> Bool {
+        let arr = Array(str)
+        guard index < arr.count else { return false }
+
+        // Look backwards for "0x"
+        var start = -1
+        for i in stride(from: index, through: 0, by: -1) {
+            if i > 0 && arr[i-1] == "0" && arr[i] == "x" {
+                start = i - 1
+                break
+            }
+            // If we hit a terminator before finding 0x, we're not in a memory address
+            if arr[i] == " " || arr[i] == ">" {
+                return false
+            }
+        }
+
+        guard start >= 0 else { return false }
+
+        // Look forwards for terminator (space or >)
+        for i in (index+1)..<arr.count {
+            if arr[i] == " " || arr[i] == ">" {
+                return true
+            }
+            // If we hit something that's not a valid hex char, not a memory address
+            if !arr[i].isHexDigit && arr[i] != "x" {
+                return false
+            }
+        }
+
+        // Reached end of string, still could be a memory address
+        return true
+    }
+
     /// To be able to set the value from async, non MainActor isolated contexts, we have to have this setter.
     /// "await node.value = await someOtherValue" is not valid
     func setValueWithAnimation(to: String) {
         withAnimation {
             self.value = to
         }
+    }
+}
+
+extension Character {
+    var isHexDigit: Bool {
+        return self.isNumber || ("a"..."f").contains(self) || ("A"..."F").contains(self)
     }
 }
 
