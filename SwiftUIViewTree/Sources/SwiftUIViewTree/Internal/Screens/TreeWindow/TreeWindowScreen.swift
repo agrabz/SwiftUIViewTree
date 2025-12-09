@@ -79,9 +79,11 @@ struct TreeWindowScreen<Content: View>: View {
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
         }
     }
+}
 
+private extension TreeWindowScreen {
     @ViewBuilder
-    private func viewFor(uiState: TreeWindowUIModel) -> some View {
+    func viewFor(uiState: TreeWindowUIModel) -> some View {
         switch treeWindowViewModel.uiState {
             case .computingTree:
                 ViewTreeTraversalProgressView()
@@ -99,7 +101,7 @@ struct TreeWindowScreen<Content: View>: View {
     }
 
     @ViewBuilder
-    private func horizontallyAlignedWindow(proxy: GeometryProxy) -> some View {
+    func horizontallyAlignedWindow(proxy: GeometryProxy) -> some View {
         HStack {
             windowContent(for: .horizontal, proxy: proxy)
         }
@@ -107,7 +109,7 @@ struct TreeWindowScreen<Content: View>: View {
     }
 
     @ViewBuilder
-    private func verticallyAlignedWindow(proxy: GeometryProxy) -> some View {
+    func verticallyAlignedWindow(proxy: GeometryProxy) -> some View {
         VStack {
             windowContent(for: .vertical, proxy: proxy)
         }
