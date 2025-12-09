@@ -117,11 +117,20 @@ struct TreeWindowScreen<Content: View>: View {
     @ViewBuilder
     func windowContent(for axis: Axis, proxy: GeometryProxy) -> some View {
         originalContent
-            .framePer(condition: showTree, proxy: proxy, factor: UIConstants.ScreenRatioOf.originalContent, axis: axis)
+            .framePer(
+                condition: showTree,
+                proxy: proxy,
+                factor: UIConstants.ScreenRatioOf.OriginalContent.of(axis),
+                axis: axis
+            )
 
         if showTree {
             viewFor(uiState: treeWindowViewModel.uiState)
-                .framePer(proxy: proxy, factor: UIConstants.ScreenRatioOf.viewTree, axis: axis) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
+                .framePer(
+                    proxy: proxy,
+                    factor: UIConstants.ScreenRatioOf.ViewTree.of(axis),
+                    axis: axis
+                ) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
         }
     }
 }
