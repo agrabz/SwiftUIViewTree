@@ -101,13 +101,7 @@ struct TreeWindowScreen<Content: View>: View {
     @ViewBuilder
     private func horizontallyAlignedWindow(proxy: GeometryProxy) -> some View {
         HStack {
-            originalContent
-                .framePer(condition: showTree, proxy: proxy, factor: UIConstants.ScreenRatioOf.originalContent, axis: .horizontal)
-
-            if showTree {
-                viewFor(uiState: treeWindowViewModel.uiState)
-                    .framePer(proxy: proxy, factor: UIConstants.ScreenRatioOf.viewTree, axis: .horizontal) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
-            }
+            windowContent(for: .horizontal, proxy: proxy)
         }
         .transition(.move(edge: .trailing))
     }
@@ -115,27 +109,21 @@ struct TreeWindowScreen<Content: View>: View {
     @ViewBuilder
     private func verticallyAlignedWindow(proxy: GeometryProxy) -> some View {
         VStack {
-            originalContent
-                .framePer(condition: showTree, proxy: proxy, factor: UIConstants.ScreenRatioOf.originalContent, axis: .vertical)
-
-            if showTree {
-                viewFor(uiState: treeWindowViewModel.uiState)
-                    .framePer(proxy: proxy, factor: UIConstants.ScreenRatioOf.viewTree, axis: .vertical) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
-            }
+            windowContent(for: .vertical, proxy: proxy)
         }
         .transition(.move(edge: .bottom))
     }
 
-//    @ViewBuilder
-//    func windowContent() -> some View {
-//        originalContent
-//            .frame(height: showTree ? (proxy.size.height * UIConstants.ScreenRatioOf.originalContent) : proxy.size.height)
-//
-//        if showTree {
-//            viewFor(uiState: treeWindowViewModel.uiState)
-//                .frame(height: proxy.size.height * UIConstants.ScreenRatioOf.viewTree) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
-//        }
-//    }
+    @ViewBuilder
+    func windowContent(for axis: Axis, proxy: GeometryProxy) -> some View {
+        originalContent
+            .framePer(condition: showTree, proxy: proxy, factor: UIConstants.ScreenRatioOf.originalContent, axis: axis)
+
+        if showTree {
+            viewFor(uiState: treeWindowViewModel.uiState)
+                .framePer(proxy: proxy, factor: UIConstants.ScreenRatioOf.viewTree, axis: axis) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
+        }
+    }
 }
 
 extension View {
