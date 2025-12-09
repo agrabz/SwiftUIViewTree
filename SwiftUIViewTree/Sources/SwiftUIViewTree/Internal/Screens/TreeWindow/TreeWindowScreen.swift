@@ -65,27 +65,9 @@ struct TreeWindowScreen<Content: View>: View {
         GeometryReader { proxy in
             ZStack {
                 if OrientationInfo.isLandscape {
-                    HStack {
-                        originalContent
-                            .frame(width: showTree ? (proxy.size.width * UIConstants.ScreenRatioOf.originalContent) : proxy.size.width)
-
-                        if showTree {
-                            viewFor(uiState: treeWindowViewModel.uiState)
-                                .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
-                        }
-                    }
-                    .transition(.move(edge: .trailing))
+                    horizontallyAlignedWindow(proxy: proxy)
                 } else {
-                    VStack {
-                        originalContent
-                            .frame(height: showTree ? (proxy.size.height * UIConstants.ScreenRatioOf.originalContent) : proxy.size.height)
-
-                        if showTree {
-                            viewFor(uiState: treeWindowViewModel.uiState)
-                                .frame(height: proxy.size.height * UIConstants.ScreenRatioOf.viewTree) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
-                        }
-                    }
-                    .transition(.move(edge: .bottom))
+                    verticallyAlignedWindow(proxy: proxy)
                 }
 
                 ShouldShowTreeButton(shouldShowTree: self.$showTree)
@@ -114,5 +96,33 @@ struct TreeWindowScreen<Content: View>: View {
                     }
                 }
         }
+    }
+
+    @ViewBuilder
+    private func horizontallyAlignedWindow(proxy: GeometryProxy) -> some View {
+        HStack {
+            originalContent
+                .frame(width: showTree ? (proxy.size.width * UIConstants.ScreenRatioOf.originalContent) : proxy.size.width)
+
+            if showTree {
+                viewFor(uiState: treeWindowViewModel.uiState)
+                    .frame(width: proxy.size.width * UIConstants.ScreenRatioOf.viewTree) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
+            }
+        }
+        .transition(.move(edge: .trailing))
+    }
+
+    @ViewBuilder
+    private func verticallyAlignedWindow(proxy: GeometryProxy) -> some View {
+        VStack {
+            originalContent
+                .frame(height: showTree ? (proxy.size.height * UIConstants.ScreenRatioOf.originalContent) : proxy.size.height)
+
+            if showTree {
+                viewFor(uiState: treeWindowViewModel.uiState)
+                    .frame(height: proxy.size.height * UIConstants.ScreenRatioOf.viewTree) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
+            }
+        }
+        .transition(.move(edge: .bottom))
     }
 }
