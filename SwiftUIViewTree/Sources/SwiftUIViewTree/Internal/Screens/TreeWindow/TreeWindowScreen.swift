@@ -11,6 +11,14 @@ final class OrientationInfo { //TODO: review concurrency errors
 
     static let shared = OrientationInfo()
 
+    static var isLandscape: Bool {
+        shared.orientation == .landscape
+    }
+
+    static var isPortrait: Bool {
+        !isLandscape
+    }
+
     var orientation: Orientation
 
     @ObservationIgnored
@@ -56,7 +64,7 @@ struct TreeWindowScreen<Content: View>: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                if OrientationInfo.shared.orientation == .landscape {
+                if OrientationInfo.isLandscape {
                     HStack {
                         originalContent
                             .frame(width: showTree ? (proxy.size.width * UIConstants.ScreenRatioOf.originalContent) : proxy.size.width)
