@@ -72,8 +72,8 @@ struct TreeWindowScreen<Content: View>: View {
 
                 ShouldShowTreeButton(shouldShowTree: self.$showTree)
                     .position(
-                        x: proxy.size.width - 80,
-                        y: OrientationInfo.isLandscape ? 50 : ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + 50)
+                        x: ShouldShowTreeButton.xPosition(proxy: proxy),
+                        y: ShouldShowTreeButton.yPosition(proxy: proxy)
                     )
             }
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
