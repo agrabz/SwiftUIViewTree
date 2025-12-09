@@ -3,32 +3,32 @@ import Foundation
 import SwiftUI
 
 enum UIConstants {
-    enum ScreenRatioOf {
-        enum OriginalContent {
-            static let horizontal: CGFloat = 1/4
-            static let vertical: CGFloat = 1/2
-
-            static func of(_ axis: Axis) -> CGFloat {
-                switch axis {
-                    case .horizontal:
-                        Self.horizontal
-                    case .vertical:
-                        Self.vertical
-                }
+    enum ScreenRatio {
+        static func of(_ section: Section, on axis: Axis) -> CGFloat {
+            switch (section, axis) {
+                case (.originalContent, .horizontal):
+                    Section.OriginalContent.horizontal
+                case (.originalContent, .vertical):
+                    Section.OriginalContent.vertical
+                case (.viewTree, .horizontal):
+                    Section.ViewTree.horizontal
+                case (.viewTree, .vertical):
+                    Section.ViewTree.vertical
             }
         }
 
-        enum ViewTree {
-            static let horizontal: CGFloat = 3/4
-            static let vertical: CGFloat = 1/2
+        enum Section {
+            case originalContent
+            case viewTree
 
-            static func of(_ axis: Axis) -> CGFloat { //TODO: duplicate
-                switch axis {
-                    case .horizontal:
-                        Self.horizontal
-                    case .vertical:
-                        Self.vertical
-                }
+            enum OriginalContent {
+                static let horizontal: CGFloat = 1/4
+                static let vertical: CGFloat = 1/2
+            }
+
+            enum ViewTree {
+                static let horizontal: CGFloat = 3/4
+                static let vertical: CGFloat = 1/2
             }
         }
     }

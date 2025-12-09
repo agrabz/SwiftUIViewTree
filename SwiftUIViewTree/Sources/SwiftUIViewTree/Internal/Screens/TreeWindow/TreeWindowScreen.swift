@@ -120,7 +120,7 @@ struct TreeWindowScreen<Content: View>: View {
             .framePer(
                 condition: showTree,
                 proxy: proxy,
-                factor: UIConstants.ScreenRatioOf.OriginalContent.of(axis),
+                factor: UIConstants.ScreenRatio.of(.originalContent, on: axis),
                 axis: axis
             )
 
@@ -128,7 +128,7 @@ struct TreeWindowScreen<Content: View>: View {
             viewFor(uiState: treeWindowViewModel.uiState)
                 .framePer(
                     proxy: proxy,
-                    factor: UIConstants.ScreenRatioOf.ViewTree.of(axis),
+                    factor: UIConstants.ScreenRatio.of(.viewTree, on: axis),
                     axis: axis
                 ) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
         }
