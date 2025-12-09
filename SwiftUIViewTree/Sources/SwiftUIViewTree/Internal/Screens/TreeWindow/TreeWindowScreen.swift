@@ -1,60 +1,6 @@
 
 import SwiftUI
 
-@Observable
-@MainActor
-final class OrientationInfo { //TODO: review concurrency errors
-    enum Orientation {
-        case portrait
-        case landscape
-    }
-
-    static let shared = OrientationInfo()
-
-    static var isLandscape: Bool {
-        shared.orientation == .landscape
-    }
-
-    static var isPortrait: Bool {
-        !isLandscape
-    }
-
-    var orientation: Orientation
-
-    @ObservationIgnored
-    private var _observer: NSObjectProtocol?
-
-    init() {
-        // fairly arbitrary starting value for 'flat' orientations
-        if UIDevice.current.orientation.isLandscape {
-            self.orientation = .landscape
-        }
-        else {
-            self.orientation = .portrait
-        }
-
-        // unowned self because we unregister before self becomes invalid
-        _observer = NotificationCenter.default
-            .addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: nil) { [weak self] note in
-            guard let self, let device = note.object as? UIDevice else {
-                return
-            }
-            if device.orientation.isPortrait {
-                self.orientation = .portrait
-            }
-            else if device.orientation.isLandscape {
-                self.orientation = .landscape
-            }
-        }
-    }
-
-    isolated deinit {
-        if let observer = _observer {
-            NotificationCenter.default.removeObserver(observer)
-        }
-    }
-}
-
 struct TreeWindowScreen<Content: View>: View {
     @State private var treeWindowViewModel = TreeWindowViewModel.shared
     @State var showTree: Bool
