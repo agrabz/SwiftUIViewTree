@@ -11,11 +11,14 @@ let package = Package(
     products: [
         .library(
             name: "SwiftUIViewTree",
-            targets: ["SwiftUIViewTree"]),
+            targets: ["SwiftUIViewTree"]
+        ),
     ],
     targets: [
         .target(
-            name: "SwiftUIViewTree"),
+            name: "SwiftUIViewTree",
+            path: "SwiftUIViewTree/Sources"
+        ),
         .testTarget(
             name: "SwiftUIViewTreeTests",
             dependencies: ["SwiftUIViewTree"]
