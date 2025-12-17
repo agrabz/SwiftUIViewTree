@@ -10,11 +10,7 @@ struct TreeWindowScreen<Content: View>: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                if OrientationInfo.isLandscape {
-                    horizontallyAlignedWindow(proxy: proxy)
-                } else {
-                    verticallyAlignedWindow(proxy: proxy)
-                }
+                self.window(proxy: proxy)
 
                 ShouldShowTreeButton(shouldShowTree: self.$showTree)
                     .position(
@@ -43,6 +39,15 @@ private extension TreeWindowScreen {
                         ViewTreeTraversalProgressView()
                     }
                 }
+        }
+    }
+
+    @ViewBuilder
+    func window(proxy: GeometryProxy) -> some View {
+        if OrientationInfo.isLandscape {
+            horizontallyAlignedWindow(proxy: proxy)
+        } else {
+            verticallyAlignedWindow(proxy: proxy)
         }
     }
 
