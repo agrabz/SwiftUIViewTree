@@ -36,7 +36,7 @@ private extension ViewTreeLogger {
         }
 
         if let diffStart, let diffEnd {
-            let lhsDiffRange = max(0, diffStart)...min(diffEnd, lhsStringElementArray.count - 1)
+            let lhsDiffRange = max(0, diffStart)...min(diffEnd, lhsStringElementArray.count - 1) //TODO: Fatal error: Range requires lowerBound <= upperBound
             let rhsDiffRange = max(0, diffStart)...min(diffEnd, rhsStringElementArray.count - 1)
 
             let lhsDiff = lhsStringElementArray.count > diffStart ? String(lhsStringElementArray.safeGetSubSequenceOrEmpty(in: lhsDiffRange)) : ""
