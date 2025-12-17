@@ -10,7 +10,7 @@ final class OrientationInfo {
         case landscape
     }
 
-    static let shared = OrientationInfo()
+    private static let shared = OrientationInfo()
 
     static var isLandscape: Bool {
         shared.orientation == .landscape
@@ -20,12 +20,12 @@ final class OrientationInfo {
         !isLandscape
     }
 
-    var orientation: Orientation
+    private var orientation: Orientation
 
     @ObservationIgnored
     private var _observer: NSObjectProtocol?
 
-    init() {
+    private init() {
         if UIDevice.current.orientation.isLandscape {
             self.orientation = .landscape
         } else {
