@@ -3,13 +3,18 @@ import SwiftUI
 
 struct ShouldShowTreeButton: View {
     @Binding var shouldShowTree: Bool
+    var proxy: GeometryProxy
 
-    static func xPosition(proxy: GeometryProxy) -> CGFloat {
+    func xPosition() -> CGFloat {
         OrientationInfo.isLandscape ? proxy.size.width - 50 : proxy.size.width - 80
     }
 
-    static func yPosition(proxy: GeometryProxy) -> CGFloat {
-        OrientationInfo.isLandscape ? 50 : ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + 30)
+    func yPosition() -> CGFloat {
+        if OrientationInfo.isLandscape {
+            50
+        } else {
+            (shouldShowTree ? ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + 30) : 50) //TODO: maybe this is not nice - should check in real projects - maybe make the position configurable?
+        }
     }
 
     var body: some View {
@@ -28,5 +33,9 @@ struct ShouldShowTreeButton: View {
         }
         .buttonStyle(.bordered)
         .contentTransition(.symbolEffect)
+        .position(
+            x: xPosition(),
+            y: yPosition()
+        )
     }
 }
