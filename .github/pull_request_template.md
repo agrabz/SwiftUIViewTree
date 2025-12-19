@@ -1,10 +1,9 @@
-# Checklist:
+# Checklist
 
 - [ ] Performance did not regress. If it did, then it is explained below in the Decisions section.
-- [ ] Nodes still change their colors when their values get updated.
-- [ ] Parent nodes (except Root Node) are collapsible. Child nodes are not.
 - [ ] Comments are only added if they are really necessary. Descriptive function and variable names are preferred.
 - [ ] Build warnings eliminated.
+- [ ] Unit tests are written.
 
 # Description
 Please insert a meaningful description for the reviewers also screenshots when applicable.
@@ -16,9 +15,6 @@ Please insert a meaningful description for the reviewers also screenshots when a
 # Screenshot/Demos
 If make sense, please add screenshots or screen recordings to help the reviewers understand the changes better.
 
-<details>
-  <summary>iPhone Screenshots/Recordings</summary>
+## iPhone Screenshots/Recordings
 
-  <!-- place your iPhone screenshots here -->
-
-</details>
+## iPad Screenshots/Recordings
