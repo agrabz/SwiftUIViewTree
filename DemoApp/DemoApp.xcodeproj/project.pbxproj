@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B3BCD262E77605500233FA3 /* SwiftUIViewTree in Frameworks */ = {isa = PBXBuildFile; productRef = 0B3BCD252E77605500233FA3 /* SwiftUIViewTree */; };
 		0BFEAAA32EF2F3DE00C6A6C4 /* SwiftUIViewTree in Frameworks */ = {isa = PBXBuildFile; productRef = 0BFEAAA22EF2F3DE00C6A6C4 /* SwiftUIViewTree */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +27,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B3BCD262E77605500233FA3 /* SwiftUIViewTree in Frameworks */,
 				0BFEAAA32EF2F3DE00C6A6C4 /* SwiftUIViewTree in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,7 +70,6 @@
 			);
 			name = DemoApp;
 			packageProductDependencies = (
-				0B3BCD252E77605500233FA3 /* SwiftUIViewTree */,
 				0BFEAAA22EF2F3DE00C6A6C4 /* SwiftUIViewTree */,
 			);
 			productName = DemoApp;
@@ -341,10 +338,6 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0B3BCD252E77605500233FA3 /* SwiftUIViewTree */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIViewTree;
-		};
 		0BFEAAA22EF2F3DE00C6A6C4 /* SwiftUIViewTree */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIViewTree;
