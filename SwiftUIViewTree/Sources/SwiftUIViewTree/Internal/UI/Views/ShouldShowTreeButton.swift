@@ -15,7 +15,7 @@ struct ShouldShowTreeButton: View {
 
     func yPosition() -> CGFloat {
         if OrientationInfo.isLandscape {
-            50
+            Position.Y.landscape
         } else {
             if shouldShowTree { //TODO: maybe this condition is not nice - should check in real projects - maybe even make the position configurable?
                 ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + Position.Y.Portrait.shouldShowTreeTopInset)
@@ -58,6 +58,8 @@ private extension ShouldShowTreeButton {
         }
 
         enum Y {
+            static let landscape: CGFloat = 50
+
             @MainActor
             enum Portrait {
                 static let shouldShowTreeTopInset: CGFloat = (isPhone ? 30 : 50)
