@@ -36,7 +36,7 @@ struct ShouldShowTreeButton: View {
             } icon: {
                 Image(systemName: shouldShowTree ? "xmark.circle" : "plus.circle")
             }
-            .font(UIDevice.current.userInterfaceIdiom == .phone ? .headline : .title2)
+            .font(isPhone ? .headline : .title2)
             .fontWeight(.bold)
             .foregroundColor(shouldShowTree ? .red : .green)
         }
@@ -53,14 +53,14 @@ private extension ShouldShowTreeButton {
     enum Position {
         @MainActor
         enum X {
-            static let landscapeTrailingInset: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 120
-            static let portraitTrailingInset: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 100
+            static let landscapeTrailingInset: CGFloat = isPhone ? 80 : 120
+            static let portraitTrailingInset: CGFloat = isPhone ? 80 : 100
         }
 
         enum Y {
             @MainActor
             enum Portrait {
-                static let shouldShowTreeTopInset: CGFloat = (UIDevice.current.userInterfaceIdiom == .phone ? 30 : 50)
+                static let shouldShowTreeTopInset: CGFloat = (isPhone ? 30 : 50)
                 static let shouldNotShowTreeTopInset: CGFloat = 50
             }
         }
