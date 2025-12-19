@@ -6,14 +6,22 @@ struct ShouldShowTreeButton: View {
     var proxy: GeometryProxy
 
     func xPosition() -> CGFloat {
-        OrientationInfo.isLandscape ? proxy.size.width - (UIDevice.current.userInterfaceIdiom == .phone ? 50 : 80) : proxy.size.width - (UIDevice.current.userInterfaceIdiom == .phone ? 80 : 100)
+        if OrientationInfo.isLandscape {
+            proxy.size.width - Position.X.landscape //TODO: name to indicate subtraction
+        } else {
+            proxy.size.width - Position.X.portrait
+        }
     }
 
     func yPosition() -> CGFloat {
         if OrientationInfo.isLandscape {
             50
         } else {
-            (shouldShowTree ? ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + (UIDevice.current.userInterfaceIdiom == .phone ? 30 : 50)) : 50) //TODO: maybe this is not nice - should check in real projects - maybe make the position configurable?
+            if shouldShowTree {
+                ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + Position.Y.Portrait.shouldShowTree)
+            } else {
+                Position.Y.Portrait.shouldNotShowTree
+            } //TODO: maybe this is not nice - should check in real projects - maybe make the position configurable?
         }
     }
 
@@ -37,5 +45,23 @@ struct ShouldShowTreeButton: View {
             x: xPosition(),
             y: yPosition()
         )
+    }
+}
+
+private extension ShouldShowTreeButton {
+    enum Position {
+        @MainActor
+        enum X {
+            static let landscape: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 120
+            static let portrait: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 100
+        }
+
+        enum Y {
+            @MainActor
+            enum Portrait {
+                static let shouldShowTree: CGFloat = (UIDevice.current.userInterfaceIdiom == .phone ? 30 : 50) //TODO: naming
+                static let shouldNotShowTree: CGFloat = 50
+            }
+        }
     }
 }
