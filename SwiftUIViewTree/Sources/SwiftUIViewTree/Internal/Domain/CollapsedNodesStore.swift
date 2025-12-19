@@ -2,23 +2,25 @@
 import Foundation
 import Synchronization
 
+@MainActor
 @Observable
 final class CollapsedNodesStore: Sendable {
     @TaskLocal static var shared = CollapsedNodesStore()
 
-    private let _collapsedNodeIDs = Mutex<Set<TreeNode.ID>>([])
+    @ObservationIgnored private let lock = NSLock()
+    @ObservationIgnored private var _collapsedNodeIDs = Set<TreeNode.ID>([])
 
     private var collapsedNodeIDs: Set<TreeNode.ID> {
         get {
             self.access(keyPath: \.collapsedNodeIDs)
-            return _collapsedNodeIDs.withLock { set in
-                set
+            return lock.withLock {
+                _collapsedNodeIDs
             }
         }
         set {
             self.withMutation(keyPath: \.collapsedNodeIDs) {
-                _collapsedNodeIDs.withLock { set in
-                    set = newValue
+                lock.withLock {
+                    _collapsedNodeIDs = newValue
                 }
             }
         }

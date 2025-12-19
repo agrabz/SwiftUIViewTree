@@ -3,6 +3,7 @@ import Foundation
 import SwiftUI
 
 enum UIConstants {
+    @MainActor
     enum ScreenRatio {
         static func of(_ section: Section, on axis: Axis) -> CGFloat {
             switch (section, axis) {
@@ -21,13 +22,27 @@ enum UIConstants {
             case originalContent
             case viewTree
 
+            @MainActor
             enum OriginalContent {
-                static let horizontal: CGFloat = 1/4
+                static var horizontal: CGFloat {
+                    if isPhone {
+                        1/4
+                    } else {
+                        1/2
+                    }
+                }
                 static let vertical: CGFloat = 1/2
             }
 
+            @MainActor
             enum ViewTree {
-                static let horizontal: CGFloat = 3/4
+                static var horizontal: CGFloat {
+                    if isPhone {
+                        3/4
+                    } else {
+                        1/2
+                    }
+                }
                 static let vertical: CGFloat = 1/2
             }
         }

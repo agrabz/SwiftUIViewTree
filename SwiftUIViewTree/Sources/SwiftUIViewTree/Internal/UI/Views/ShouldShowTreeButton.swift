@@ -6,14 +6,22 @@ struct ShouldShowTreeButton: View {
     var proxy: GeometryProxy
 
     func xPosition() -> CGFloat {
-        OrientationInfo.isLandscape ? proxy.size.width - 50 : proxy.size.width - 80
+        if OrientationInfo.isLandscape {
+            proxy.size.width - Position.X.landscapeTrailingInset
+        } else {
+            proxy.size.width - Position.X.portraitTrailingInset
+        }
     }
 
     func yPosition() -> CGFloat {
         if OrientationInfo.isLandscape {
-            50
+            Position.Y.landscape
         } else {
-            (shouldShowTree ? ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + 30) : 50) //TODO: maybe this is not nice - should check in real projects - maybe make the position configurable?
+            if shouldShowTree { //TODO: maybe this condition is not nice - should check in real projects - maybe even make the position configurable?
+                ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + Position.Y.Portrait.shouldShowTreeTopInset)
+            } else {
+                Position.Y.Portrait.shouldNotShowTreeTopInset
+            }
         }
     }
 
@@ -28,7 +36,8 @@ struct ShouldShowTreeButton: View {
             } icon: {
                 Image(systemName: shouldShowTree ? "xmark.circle" : "plus.circle")
             }
-            .font(.body.bold())
+            .font(isPhone ? .headline : .title2)
+            .fontWeight(.bold)
             .foregroundColor(shouldShowTree ? .red : .green)
         }
         .buttonStyle(.bordered)
@@ -37,5 +46,25 @@ struct ShouldShowTreeButton: View {
             x: xPosition(),
             y: yPosition()
         )
+    }
+}
+
+private extension ShouldShowTreeButton {
+    enum Position {
+        @MainActor
+        enum X {
+            static let landscapeTrailingInset: CGFloat = isPhone ? 50 : 120
+            static let portraitTrailingInset: CGFloat = isPhone ? 80 : 100
+        }
+
+        enum Y {
+            static let landscape: CGFloat = 50
+
+            @MainActor
+            enum Portrait {
+                static let shouldShowTreeTopInset: CGFloat = (isPhone ? 30 : 50)
+                static let shouldNotShowTreeTopInset: CGFloat = 50
+            }
+        }
     }
 }
