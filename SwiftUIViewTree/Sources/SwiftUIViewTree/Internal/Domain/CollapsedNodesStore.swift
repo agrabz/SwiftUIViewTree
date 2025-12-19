@@ -2,12 +2,13 @@
 import Foundation
 import Synchronization
 
+@MainActor
 @Observable
 final class CollapsedNodesStore: Sendable {
     @TaskLocal static var shared = CollapsedNodesStore()
 
-    private let lock = NSLock()
-    private let _collapsedNodeIDs = Set<TreeNode.ID>([])
+    @ObservationIgnored private let lock = NSLock()
+    @ObservationIgnored private var _collapsedNodeIDs = Set<TreeNode.ID>([])
 
     private var collapsedNodeIDs: Set<TreeNode.ID> {
         get {
@@ -19,7 +20,7 @@ final class CollapsedNodesStore: Sendable {
         set {
             self.withMutation(keyPath: \.collapsedNodeIDs) {
                 lock.withLock {
-                    collapsedNodeIDs = newValue
+                    _collapsedNodeIDs = newValue
                 }
             }
         }
