@@ -53,7 +53,7 @@ private extension ShouldShowTreeButton {
     enum Position {
         @MainActor
         enum X {
-            static let landscapeTrailingInset: CGFloat = isPhone ? 80 : 120
+            static let landscapeTrailingInset: CGFloat = isPhone ? 50 : 120
             static let portraitTrailingInset: CGFloat = isPhone ? 80 : 100
         }
 
