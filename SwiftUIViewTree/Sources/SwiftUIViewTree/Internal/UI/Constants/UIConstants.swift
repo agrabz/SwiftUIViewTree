@@ -22,12 +22,24 @@ enum UIConstants {
             case viewTree
 
             enum OriginalContent {
-                static let horizontal: CGFloat = 1/4
+                static var horizontal: CGFloat {
+                    if UIDevice.current.userInterfaceIdiom == .phone {
+                        1/4
+                    } else {
+                        1/2
+                    }
+                }
                 static let vertical: CGFloat = 1/2
             }
 
             enum ViewTree {
-                static let horizontal: CGFloat = 3/4
+                static var horizontal: CGFloat {
+                    if UIDevice.current.userInterfaceIdiom == .phone {
+                        3/4
+                    } else {
+                        1/2
+                    }
+                }
                 static let vertical: CGFloat = 1/2
             }
         }
