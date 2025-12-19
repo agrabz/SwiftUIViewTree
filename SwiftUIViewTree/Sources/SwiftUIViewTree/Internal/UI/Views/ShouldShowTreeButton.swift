@@ -36,7 +36,8 @@ struct ShouldShowTreeButton: View {
             } icon: {
                 Image(systemName: shouldShowTree ? "xmark.circle" : "plus.circle")
             }
-            .font(.body.bold())
+            .font(UIDevice.current.userInterfaceIdiom == .phone ? .headline : .title2)
+            .fontWeight(.bold)
             .foregroundColor(shouldShowTree ? .red : .green)
         }
         .buttonStyle(.bordered)
