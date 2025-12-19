@@ -7,9 +7,9 @@ struct ShouldShowTreeButton: View {
 
     func xPosition() -> CGFloat {
         if OrientationInfo.isLandscape {
-            proxy.size.width - Position.X.landscape //TODO: name to indicate subtraction
+            proxy.size.width - Position.X.landscapeTrailingInset
         } else {
-            proxy.size.width - Position.X.portrait
+            proxy.size.width - Position.X.portraitTrailingInset
         }
     }
 
@@ -17,11 +17,11 @@ struct ShouldShowTreeButton: View {
         if OrientationInfo.isLandscape {
             50
         } else {
-            if shouldShowTree {
-                ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + Position.Y.Portrait.shouldShowTree)
+            if shouldShowTree { //TODO: maybe this condition is not nice - should check in real projects - maybe even make the position configurable?
+                ((proxy.size.height * UIConstants.ScreenRatio.of(.viewTree, on: .vertical)) + Position.Y.Portrait.shouldShowTreeTopInset)
             } else {
-                Position.Y.Portrait.shouldNotShowTree
-            } //TODO: maybe this is not nice - should check in real projects - maybe make the position configurable?
+                Position.Y.Portrait.shouldNotShowTreeTopInset
+            }
         }
     }
 
@@ -52,15 +52,15 @@ private extension ShouldShowTreeButton {
     enum Position {
         @MainActor
         enum X {
-            static let landscape: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 120
-            static let portrait: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 100
+            static let landscapeTrailingInset: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 120
+            static let portraitTrailingInset: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 80 : 100
         }
 
         enum Y {
             @MainActor
             enum Portrait {
-                static let shouldShowTree: CGFloat = (UIDevice.current.userInterfaceIdiom == .phone ? 30 : 50) //TODO: naming
-                static let shouldNotShowTree: CGFloat = 50
+                static let shouldShowTreeTopInset: CGFloat = (UIDevice.current.userInterfaceIdiom == .phone ? 30 : 50)
+                static let shouldNotShowTreeTopInset: CGFloat = 50
             }
         }
     }
