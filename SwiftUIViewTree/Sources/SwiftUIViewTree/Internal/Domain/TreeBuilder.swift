@@ -40,12 +40,6 @@ struct TreeBuilder {
 }
 
 private extension TreeBuilder {
-    func validateChild(_ child: Mirror.Child) throws(TreeNodeValidationError) {
-        for validation in validationList {
-            try validation.validate(child)
-        }
-    }
-
     mutating func convertToTreesRecursively(
         mirror: Mirror,
         source: any View,
@@ -55,14 +49,9 @@ private extension TreeBuilder {
             do throws(TreeNodeValidationError) {
                 try validateChild(child)
             } catch {
-                return Tree(
-                    node: TreeNode(
-                        type: error.description,
-                        label: error.description,
-                        value: error.description,
-                        serialNumber: nodeSerialNumberCounter.counter,
-                        registerChanges: registerChanges
-                    )
+                return getValidatedChild(
+                    from: error,
+                    registerChanges: registerChanges
                 )
             }
 
@@ -92,6 +81,27 @@ private extension TreeBuilder {
             return childTree
         }
         return result
+    }
+
+    func validateChild(_ child: Mirror.Child) throws(TreeNodeValidationError) {
+        for validation in validationList {
+            try validation.validate(child)
+        }
+    }
+
+    mutating func getValidatedChild(
+        from treeNodeValidationError: TreeNodeValidationError,
+        registerChanges: Bool
+    ) -> Tree {
+        Tree(
+            node: TreeNode(
+                type: treeNodeValidationError.description,
+                label: treeNodeValidationError.description,
+                value: treeNodeValidationError.description,
+                serialNumber: nodeSerialNumberCounter.counter,
+                registerChanges: registerChanges
+            )
+        )
     }
 
     func getDescendantCount(of tree: Tree) -> Int { //TODO: this is really heavy
