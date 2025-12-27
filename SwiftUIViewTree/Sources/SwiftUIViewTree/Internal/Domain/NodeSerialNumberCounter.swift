@@ -1,15 +1,14 @@
 
-@MainActor
-struct NodeSerialNumberCounter {
+actor NodeSerialNumberCounter {
     private var _nodeSerialNumberCounter = 0
     var counter: Int {
-        mutating get {
+        get {
             _nodeSerialNumberCounter += 1
             return _nodeSerialNumberCounter
         }
     }
 
-    mutating func reset() {
+    func reset() {
         _nodeSerialNumberCounter = 0
     }
 }

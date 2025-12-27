@@ -1,8 +1,9 @@
 
+import AsyncAlgorithms
 import SwiftUI
 
 @MainActor
-struct TreeBuilder {
+final class TreeBuilder {
     private let validationList: [any TreeNodeValidatorProtocol] = [
         LocationLabelTreeNodeValidator(),
         AtomicBoxTypeTreeNodeValidator(),
@@ -10,25 +11,25 @@ struct TreeBuilder {
     ]
     private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
-    mutating func getTreeFrom(
+    func getTreeFrom(
         originalView: any View,
         modifiedView: any View,
         registerChanges: Bool
-    ) -> Tree {
-        nodeSerialNumberCounter.reset()
+    ) async -> Tree {
+        await nodeSerialNumberCounter.reset()
 
         let newTree = Tree(
             node: .rootNode
         )
 
-        let originalViewRootTree = getRootTree(
+        let originalViewRootTree = await getRootTree(
             from: originalView,
             as: .originalView,
             registerChanges: registerChanges
         )
         newTree.children.append(originalViewRootTree)
 
-        let modifiedViewRootTree = getRootTree(
+        let modifiedViewRootTree = await getRootTree(
             from: modifiedView,
             as: .modifiedView,
             registerChanges: registerChanges
@@ -40,16 +41,20 @@ struct TreeBuilder {
 }
 
 private extension TreeBuilder {
-    mutating func convertToTreesRecursively(
+    func convertToTreesRecursively(
         mirror: Mirror,
         source: any View,
         registerChanges: Bool
-    ) -> [Tree] {
-        let result = mirror.children.enumerated().map { (index, child) in
+    ) async -> [Tree] {
+        let result = mirror.children.async.map { [weak self] (index, child2) in
+            let child = child2 as! Mirror.Child
             do throws(TreeNodeValidationError) {
-                try validateChild(child)
+                let list = await self?.validationList ?? []
+                for validation in list {
+                    try validation.validate(child)
+                }
             } catch {
-                return getValidatedChild(
+                return await self?.getValidatedChild(
                     from: error,
                     registerChanges: registerChanges
                 )
@@ -59,28 +64,34 @@ private extension TreeBuilder {
 
             var value = "\(child.value)"
 
-            self.transformIfNeeded(&value)
+            await self?.transformIfNeeded(&value)
 
-            let childTree = Tree(
+            let childTree = await Tree(
                 node: TreeNode(
                     type: "\(type(of: child.value))",
                     label: child.label ?? "<unknown>",
                     value: value,
-                    serialNumber: nodeSerialNumberCounter.counter,
+                    serialNumber: await self?.nodeSerialNumberCounter.counter ?? 42, //TODO: ehh
                     registerChanges: registerChanges
                 )
             )
-            childTree.children = convertToTreesRecursively(
+            childTree.children = await self?.convertToTreesRecursively(
                 mirror: childMirror,
                 source: source,
                 registerChanges: registerChanges
-            )
+            ) ?? []  //TODO: ehh
 
-            childTree.parentNode.descendantCount = getDescendantCount(of: childTree)
+            await childTree.parentNode.descendantCount = await self?.getDescendantCount(of: childTree) ?? 0  //TODO: ehh
 
             return childTree
         }
-        return result
+        var treeList: [Tree] = []
+        for await a in result {
+            if let a {
+                treeList.append(a)
+            }
+        }
+        return treeList
     }
 
     func validateChild(_ child: Mirror.Child) throws(TreeNodeValidationError) {
@@ -89,16 +100,16 @@ private extension TreeBuilder {
         }
     }
 
-    mutating func getValidatedChild(
+    func getValidatedChild(
         from treeNodeValidationError: TreeNodeValidationError,
         registerChanges: Bool
-    ) -> Tree {
+    ) async -> Tree {
         Tree(
             node: TreeNode(
                 type: treeNodeValidationError.description,
                 label: treeNodeValidationError.description,
                 value: treeNodeValidationError.description,
-                serialNumber: nodeSerialNumberCounter.counter,
+                serialNumber: await nodeSerialNumberCounter.counter,
                 registerChanges: registerChanges
             )
         )
@@ -110,18 +121,18 @@ private extension TreeBuilder {
         }
     }
 
-    mutating func getRootTree(
+    func getRootTree(
         from rootView: any View,
         as rootNodeType: RootNodeType,
         registerChanges: Bool
-    ) -> Tree {
+    ) async -> Tree {
         let rootNode = getRootTreeNode(
             of: rootView,
             as: rootNodeType,
             registerChanges: registerChanges
         )
         let rootViewTree = Tree(node: rootNode)
-        rootViewTree.children = convertToTreesRecursively(
+        rootViewTree.children = await convertToTreesRecursively(
             mirror: Mirror(reflecting: rootView),
             source: rootView,
             registerChanges: registerChanges
