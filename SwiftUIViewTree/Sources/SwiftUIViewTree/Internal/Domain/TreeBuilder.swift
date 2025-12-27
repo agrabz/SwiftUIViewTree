@@ -46,8 +46,7 @@ private extension TreeBuilder {
         source: any View,
         registerChanges: Bool
     ) async -> [Tree] {
-        let result = mirror.children.async.map { [weak self] (index, child2) in
-            let child = child2 as! Mirror.Child
+        let result = mirror.children.enumerated().async.map { [weak self] (index, child) in
             do throws(TreeNodeValidationError) {
                 let list = await self?.validationList ?? []
                 for validation in list {
