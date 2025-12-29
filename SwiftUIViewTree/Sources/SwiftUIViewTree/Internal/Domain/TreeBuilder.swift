@@ -46,51 +46,69 @@ private extension TreeBuilder {
         source: any View,
         registerChanges: Bool
     ) async -> [Tree] {
-        let result = mirror.children.enumerated().async.map { [weak self] (index, child) in
-            do throws(TreeNodeValidationError) {
-                let list = await self?.validationList ?? []
-                for validation in list {
-                    try validation.validate(child)
+        do {
+            return try await withThrowingTaskGroup { @MainActor [weak self] group in
+                for (index, child) in await mirror.children.enumerated() {
+                    try await group.addTask { @MainActor @Sendable in
+                        try await self?.asd(
+                            child: child,
+                            registerChanges: registerChanges,
+                            source: source
+                        )
+                    }
                 }
-            } catch {
-                return await self?.getValidatedChild(
-                    from: error,
-                    registerChanges: registerChanges
-                )
+                var results: [Tree] = []
+                for try await tree in group {
+                    if let tree {
+                        results.append(tree)
+                    }
+                }
+                return results
             }
+        } catch {
+            fatalError()
+        }
+    }
 
-            let childMirror = Mirror(reflecting: child.value)
-
-            var value = "\(child.value)"
-
-            await self?.transformIfNeeded(&value)
-
-            let childTree = await Tree(
-                node: TreeNode(
-                    type: "\(type(of: child.value))",
-                    label: child.label ?? "<unknown>",
-                    value: value,
-                    serialNumber: await self?.nodeSerialNumberCounter.counter ?? 42, //TODO: ehh
-                    registerChanges: registerChanges
-                )
-            )
-            childTree.children = await self?.convertToTreesRecursively(
-                mirror: childMirror,
-                source: source,
+    func asd(
+        child: Mirror.Child,
+        registerChanges: Bool,
+        source: any View
+    ) async throws -> Tree {
+        do throws(TreeNodeValidationError) { //TODO: parallel
+            try await self.validateChild(child)
+        } catch {
+            return await self.getValidatedChild(
+                from: error,
                 registerChanges: registerChanges
-            ) ?? []  //TODO: ehh
-
-            await childTree.parentNode.descendantCount = await self?.getDescendantCount(of: childTree) ?? 0  //TODO: ehh
-
-            return childTree
+            )
         }
-        var treeList: [Tree] = []
-        for await a in result {
-            if let a {
-                treeList.append(a)
-            }
-        }
-        return treeList
+
+        let childMirror = Mirror(reflecting: child.value)
+
+        var value = "\(child.value)"
+
+        await self.transformIfNeeded(&value)
+
+        let childTree = await Tree(
+            node: TreeNode(
+                type: "\(type(of: child.value))",
+                label: child.label ?? "<unknown>",
+                value: value,
+                serialNumber: await self.nodeSerialNumberCounter.counter,
+                registerChanges: registerChanges
+            )
+        )
+        childTree.children = await self.convertToTreesRecursively(
+            mirror: childMirror,
+            source: source,
+            registerChanges: registerChanges
+        )
+
+        await childTree.parentNode.descendantCount = await self.getDescendantCount(of: childTree)
+
+        return childTree
+
     }
 
     func validateChild(_ child: Mirror.Child) throws(TreeNodeValidationError) {
