@@ -3,7 +3,7 @@ import AsyncAlgorithms
 import SwiftUI
 
 @MainActor
-final class TreeBuilder {
+struct TreeBuilder {
     private let validationList: [any TreeNodeValidatorProtocol] = [
         LocationLabelTreeNodeValidator(),
         AtomicBoxTypeTreeNodeValidator(),
@@ -46,36 +46,30 @@ private extension TreeBuilder {
         source: any View,
         registerChanges: Bool
     ) async -> [Tree] {
-        do {
-            return try await withThrowingTaskGroup { @MainActor [weak self] group in
-                for child in await mirror.children {
-                    try await group.addTask { @MainActor @Sendable in
-                        try await self?.asd(
-                            child: child,
-                            registerChanges: registerChanges,
-                            source: source
-                        )
-                    }
+        await withTaskGroup { group in
+            for child in await mirror.children {
+                await group.addTask { @MainActor @Sendable in
+                    await self.asd(
+                        child: child,
+                        registerChanges: registerChanges,
+                        source: source
+                    )
                 }
-                var results: [Tree] = []
-                for try await tree in group {
-                    if let tree {
-                        results.append(tree)
-                    }
-                }
-                return results
             }
-        } catch {
-            fatalError()
+            var results: [Tree] = []
+            for await tree in group {
+                results.append(tree)
+            }
+            return results
         }
     }
 
-    func asd(
+    func asd( //TODO: naming
         child: Mirror.Child,
         registerChanges: Bool,
         source: any View
-    ) async throws -> Tree {
-        do throws(TreeNodeValidationError) { //TODO: parallel
+    ) async -> Tree {
+        do throws(TreeNodeValidationError) {
             try await self.validateChild(child)
         } catch {
             return await self.getValidatedChild(
