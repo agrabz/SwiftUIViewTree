@@ -48,7 +48,7 @@ private extension TreeBuilder {
     ) async -> [Tree] {
         do {
             return try await withThrowingTaskGroup { @MainActor [weak self] group in
-                for (index, child) in await mirror.children.enumerated() {
+                for child in await mirror.children {
                     try await group.addTask { @MainActor @Sendable in
                         try await self?.asd(
                             child: child,
