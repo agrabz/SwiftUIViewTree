@@ -41,36 +41,36 @@ struct TreeBuilder {
 }
 
 private extension TreeBuilder {
-    func convertToTreesRecursively(
+    func getChildrenTrees(
         mirror: Mirror,
-        source: any View,
+        sourceView: any View,
         registerChanges: Bool
     ) async -> [Tree] {
-        await withTaskGroup { group in
+        await withTaskGroup { childrenTreeGetterTaskGroup in
             for child in await mirror.children {
-                await group.addTask { @MainActor @Sendable in
-                    await self.asd(
-                        child: child,
+                await childrenTreeGetterTaskGroup.addTask { @MainActor @Sendable in
+                    await self.convertToTreesRecursively(
+                        mirrorChild: child,
                         registerChanges: registerChanges,
-                        source: source
+                        sourceView: sourceView
                     )
                 }
             }
-            var results: [Tree] = []
-            for await tree in group {
-                results.append(tree)
+            var childrenTrees: [Tree] = []
+            for await childTree in childrenTreeGetterTaskGroup {
+                childrenTrees.append(childTree)
             }
-            return results
+            return childrenTrees
         }
     }
 
-    func asd( //TODO: naming
-        child: Mirror.Child,
+    func convertToTreesRecursively(
+        mirrorChild: Mirror.Child,
         registerChanges: Bool,
-        source: any View
+        sourceView: any View
     ) async -> Tree {
         do throws(TreeNodeValidationError) {
-            try await self.validateChild(child)
+            try await self.validateChild(mirrorChild)
         } catch {
             return await self.getValidatedChild(
                 from: error,
@@ -78,31 +78,28 @@ private extension TreeBuilder {
             )
         }
 
-        let childMirror = Mirror(reflecting: child.value)
-
-        var value = "\(child.value)"
+        var value = "\(mirrorChild.value)"
 
         await self.transformIfNeeded(&value)
 
         let childTree = await Tree(
             node: TreeNode(
-                type: "\(type(of: child.value))",
-                label: child.label ?? "<unknown>",
+                type: "\(type(of: mirrorChild.value))",
+                label: mirrorChild.label ?? "<unknown>",
                 value: value,
                 serialNumber: await self.nodeSerialNumberCounter.counter,
                 registerChanges: registerChanges
             )
         )
-        childTree.children = await self.convertToTreesRecursively(
-            mirror: childMirror,
-            source: source,
+        childTree.children = await self.getChildrenTrees(
+            mirror: Mirror(reflecting: mirrorChild.value),
+            sourceView: sourceView,
             registerChanges: registerChanges
         )
 
         await childTree.parentNode.descendantCount = await self.getDescendantCount(of: childTree)
 
         return childTree
-
     }
 
     func validateChild(_ child: Mirror.Child) throws(TreeNodeValidationError) {
@@ -143,9 +140,9 @@ private extension TreeBuilder {
             registerChanges: registerChanges
         )
         let rootViewTree = Tree(node: rootNode)
-        rootViewTree.children = await convertToTreesRecursively(
+        rootViewTree.children = await getChildrenTrees(
             mirror: Mirror(reflecting: rootView),
-            source: rootView,
+            sourceView: rootView,
             registerChanges: registerChanges
         )
         return rootViewTree
