@@ -5,9 +5,6 @@ import Observation
 final class Tree {
     var parentNode: TreeNode
     var children: [Tree]
-    var optionalChildren: [Tree]? {
-        children.isEmpty ? nil : children
-    }
 
     init(
         node: TreeNode,
@@ -30,8 +27,6 @@ final class Tree {
         }
     }
 }
-
-extension Tree: Identifiable {}
 
 extension Tree: @MainActor Equatable {
     static func == (_ lhs: Tree, _ rhs: Tree) -> Bool {
