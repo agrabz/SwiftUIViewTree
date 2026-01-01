@@ -15,13 +15,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-async-algorithms", from: "1.1.1"),
+
     ],
     targets: [
         .target(
             name: "SwiftUIViewTree",
             dependencies: [
-                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+
             ],
             path: "SwiftUIViewTree/Sources"
         ),
