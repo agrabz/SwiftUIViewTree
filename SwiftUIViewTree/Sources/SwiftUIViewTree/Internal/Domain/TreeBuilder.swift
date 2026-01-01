@@ -122,7 +122,7 @@ private extension TreeBuilder {
         )
     }
 
-    func getDescendantCount(of tree: Tree) -> Int { //TODO: this is really heavy
+    func getDescendantCount(of tree: Tree) -> Int { //TODO: could we improve its performance somehow? memoization?
         tree.children.reduce(0) { total, child in
             total + 1 + getDescendantCount(of: child)
         }
