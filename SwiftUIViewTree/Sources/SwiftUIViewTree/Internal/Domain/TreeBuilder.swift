@@ -10,25 +10,25 @@ struct TreeBuilder {
     ]
     private var nodeSerialNumberCounter = NodeSerialNumberCounter()
 
-    mutating func getTreeFrom(
+    func getTreeFrom(
         originalView: any View,
         modifiedView: any View,
         registerChanges: Bool
-    ) -> Tree {
-        nodeSerialNumberCounter.reset()
+    ) async -> Tree {
+        await nodeSerialNumberCounter.reset()
 
         let newTree = Tree(
             node: .rootNode
         )
 
-        let originalViewRootTree = getRootTree(
+        let originalViewRootTree = await getRootTree(
             from: originalView,
             as: .originalView,
             registerChanges: registerChanges
         )
         newTree.children.append(originalViewRootTree)
 
-        let modifiedViewRootTree = getRootTree(
+        let modifiedViewRootTree = await getRootTree(
             from: modifiedView,
             as: .modifiedView,
             registerChanges: registerChanges
@@ -40,76 +40,108 @@ struct TreeBuilder {
 }
 
 private extension TreeBuilder {
-    mutating func convertToTreesRecursively(
+    func getChildrenTrees(
         mirror: Mirror,
-        source: any View,
+        sourceView: any View,
         registerChanges: Bool
-    ) -> [Tree] {
-        let result = mirror.children.enumerated().map { (index, child) in
-            for validation in validationList {
-                do throws(TreeNodeValidationError) {
-                    try validation.validate(child)
-                } catch {
-                    return Tree(
-                        node: TreeNode(
-                            type: error.description,
-                            label: error.description,
-                            value: error.description,
-                            serialNumber: nodeSerialNumberCounter.counter,
-                            registerChanges: registerChanges
-                        )
+    ) async -> [Tree] {
+        await withTaskGroup { childrenTreeGetterTaskGroup in
+            for child in await mirror.children {
+                await childrenTreeGetterTaskGroup.addTask { @MainActor @Sendable in
+                    await self.convertToTreesRecursively(
+                        mirrorChild: child,
+                        registerChanges: registerChanges,
+                        sourceView: sourceView
                     )
                 }
             }
-
-            let childMirror = Mirror(reflecting: child.value)
-
-            var value = "\(child.value)"
-
-            self.transformIfNeeded(&value)
-
-            let childTree = Tree(
-                node: TreeNode(
-                    type: "\(type(of: child.value))",
-                    label: child.label ?? "<unknown>",
-                    value: value,
-                    serialNumber: nodeSerialNumberCounter.counter,
-                    registerChanges: registerChanges
-                )
-            )
-            childTree.children = convertToTreesRecursively(
-                mirror: childMirror,
-                source: source,
-                registerChanges: registerChanges
-            )
-
-            childTree.parentNode.descendantCount = getDescendantCount(of: childTree)
-
-            return childTree
+            var childrenTrees: [Tree] = []
+            for await childTree in childrenTreeGetterTaskGroup {
+                childrenTrees.append(childTree)
+            }
+            return childrenTrees
         }
-        return result
     }
 
-    func getDescendantCount(of tree: Tree) -> Int {
+    func convertToTreesRecursively(
+        mirrorChild: Mirror.Child,
+        registerChanges: Bool,
+        sourceView: any View
+    ) async -> Tree {
+        do throws(TreeNodeValidationError) {
+            try await self.validateChild(mirrorChild)
+        } catch {
+            return await self.getValidatedChild(
+                from: error,
+                registerChanges: registerChanges
+            )
+        }
+
+        var value = "\(mirrorChild.value)"
+
+        await self.transformIfNeeded(&value)
+
+        let childTree = await Tree(
+            node: TreeNode(
+                type: "\(type(of: mirrorChild.value))",
+                label: mirrorChild.label ?? "<unknown>",
+                value: value,
+                serialNumber: await self.nodeSerialNumberCounter.counter,
+                registerChanges: registerChanges
+            )
+        )
+        childTree.children = await self.getChildrenTrees(
+            mirror: Mirror(reflecting: mirrorChild.value),
+            sourceView: sourceView,
+            registerChanges: registerChanges
+        )
+
+        await childTree.parentNode.descendantCount = await self.getDescendantCount(of: childTree)
+
+        return childTree
+    }
+
+    func validateChild(_ child: Mirror.Child) throws(TreeNodeValidationError) {
+        for validation in validationList {
+            try validation.validate(child)
+        }
+    }
+
+    func getValidatedChild(
+        from treeNodeValidationError: TreeNodeValidationError,
+        registerChanges: Bool
+    ) async -> Tree {
+        Tree(
+            node: TreeNode(
+                type: treeNodeValidationError.description,
+                label: treeNodeValidationError.description,
+                value: treeNodeValidationError.description,
+                serialNumber: await nodeSerialNumberCounter.counter,
+                registerChanges: registerChanges
+            )
+        )
+    }
+
+    func getDescendantCount(of tree: Tree) -> Int { //TODO: could we improve its performance somehow? memoization?
         tree.children.reduce(0) { total, child in
             total + 1 + getDescendantCount(of: child)
         }
     }
 
-    mutating func getRootTree(
+    func getRootTree(
         from rootView: any View,
         as rootNodeType: RootNodeType,
         registerChanges: Bool
-    ) -> Tree {
+    ) async -> Tree {
         let rootNode = getRootTreeNode(
             of: rootView,
             as: rootNodeType,
             registerChanges: registerChanges
         )
         let rootViewTree = Tree(node: rootNode)
-        rootViewTree.children = convertToTreesRecursively(
+        rootViewTree.children = await getChildrenTrees(
             mirror: Mirror(reflecting: rootView),
-            source: rootView,
+            sourceView: rootView,
             registerChanges: registerChanges
         )
         return rootViewTree

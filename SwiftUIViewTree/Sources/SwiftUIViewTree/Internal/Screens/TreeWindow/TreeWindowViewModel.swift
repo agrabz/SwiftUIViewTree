@@ -42,7 +42,7 @@ final class TreeWindowViewModel {
 
         Task {
             var treeBuilder = TreeBuilder()
-            let newTree = treeBuilder.getTreeFrom(
+            let newTree = await treeBuilder.getTreeFrom(
                 originalView: originalView,
                 modifiedView: modifiedView,
                 registerChanges: true
