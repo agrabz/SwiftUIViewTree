@@ -1,4 +1,39 @@
+
 import SwiftUI
+
+extension Array {
+    func getElementAt(index: Int) -> Element? {
+        return (index < self.endIndex) ? self[index] : nil
+    }
+}
+
+struct CustomGridLayout<Element, GridCell>: View where GridCell: View {
+
+    private var array: [Element]
+    private var numberOfColumns: Int
+    private var gridCell: (_ element: Element) -> GridCell
+
+    init(_ array: [Element], numberOfColumns: Int, @ViewBuilder gridCell: @escaping (_ element: Element) -> GridCell) {
+        self.array = array
+        self.numberOfColumns = numberOfColumns
+        self.gridCell = gridCell
+    }
+
+    var body: some View {
+        Grid {
+            ForEach(Array(stride(from: 0, to: self.array.count, by: self.numberOfColumns)), id: \.self) { index in
+                GridRow {
+                    ForEach(0..<self.numberOfColumns, id: \.self) { j in
+                        if let element = self.array.getElementAt(index: index + j) {
+                            self.gridCell(element)
+                        }
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
 
 struct TreeView: View {
     @State private var collapsedNodesStore = CollapsedNodesStore.shared
@@ -43,7 +78,10 @@ struct TreeView: View {
     }
 
     func asd(actualTree: Tree) -> some View { //TODO: better names
-        ForEach(actualTree.children, id: \.parentNode.id) { actualTree in
+        CustomGridLayout(actualTree.children, numberOfColumns: 4) { actualTree in
+
+//        }
+//        ForEach(actualTree.children, id: \.parentNode.id) { actualTree in
             ParentNodeView(
                 parentNode: .init(
                     get: {
