@@ -11,11 +11,11 @@ struct TreeView: View {
                 parentNode: $tree.parentNode
             )
 
-            ForEach(self.treeLevels(), id: \.self) { a in
+            ForEach(self.treeLevels(), id: \.self) { treeLevels in  //TODO: better names?
                 HStack(alignment: .top) {
-                    ForEach(a, id: \.parentNode.id) { b in
-                        if collapsedNodesStore.isCollapsed(nodeID: b.parentNode.id) == false {
-                            asd(actualTree: b)
+                    ForEach(treeLevels, id: \.parentNode.id) { tree in
+                        if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
+                            asd(actualTree: tree)
                         }
                     }
                 }
@@ -42,7 +42,7 @@ struct TreeView: View {
         return levels
     }
 
-    func asd(actualTree: Tree) -> some View {
+    func asd(actualTree: Tree) -> some View { //TODO: better names
         ForEach(actualTree.children, id: \.parentNode.id) { actualTree in
             ParentNodeView(
                 parentNode: .init(
