@@ -17,6 +17,54 @@ struct TreeView: View {
                 )
                 .fixedSize()
             }
+
+            HStack(alignment: .top) {
+                ForEach(tree.children, id: \.parentNode.id) { child in
+                    ForEach(child.children, id: \.parentNode.id) { grandchild in
+                        ParentNodeView(
+                            parentNode: .init(
+                                get: {
+                                    grandchild.parentNode
+                                },
+                                set: { newValue in
+                                    if let index = tree.children.firstIndex(
+                                        where: { child in
+                                            child.parentNode.id == newValue.id
+                                        }
+                                    ) {
+                                        tree.children[index].parentNode = newValue
+                                    }
+                                }
+                            )
+                        )
+                    }
+                }
+            }
+
+            HStack(alignment: .top) {
+                ForEach(tree.children, id: \.parentNode.id) { child in
+                    ForEach(child.children, id: \.parentNode.id) { grandchild in
+                        ForEach(grandchild.children, id: \.parentNode.id) { greatGrandchild in
+                            ParentNodeView(
+                                parentNode: .init(
+                                    get: {
+                                        greatGrandchild.parentNode
+                                    },
+                                    set: { newValue in
+                                        if let index = tree.children.firstIndex(
+                                            where: { child in
+                                                child.parentNode.id == newValue.id
+                                            }
+                                        ) {
+                                            tree.children[index].parentNode = newValue
+                                        }
+                                    }
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

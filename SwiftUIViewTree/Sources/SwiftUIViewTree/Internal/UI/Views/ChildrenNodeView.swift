@@ -6,18 +6,18 @@ struct ChildrenNodeView: View {
     var body: some View {
         HStack(alignment: .top) {
             ForEach(children, id: \.parentNode.id) { child in
-                TreeView(
-                    tree: .init(
+                ParentNodeView(
+                    parentNode: .init(
                         get: {
-                            child
+                            child.parentNode
                         },
                         set: { newValue in
                             if let index = children.firstIndex(
                                 where: { child in
-                                    child.parentNode.id == newValue.parentNode.id
+                                    child.parentNode.id == newValue.id
                                 }
                             ) {
-                                children[index] = newValue
+                                children[index].parentNode = newValue
                             }
                         }
                     )
