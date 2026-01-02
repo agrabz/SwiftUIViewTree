@@ -12,9 +12,26 @@ struct TreeView: View {
             )
 
             if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
-                ChildrenNodeView(
-                    children: $tree.children
-                )
+                HStack(alignment: .top) {
+                    ForEach(tree.children, id: \.parentNode.id) { child in
+                        ParentNodeView(
+                            parentNode: .init(
+                                get: {
+                                    child.parentNode
+                                },
+                                set: { newValue in
+                                    if let index = tree.children.firstIndex(
+                                        where: { child in
+                                            child.parentNode.id == newValue.id
+                                        }
+                                    ) {
+                                        tree.children[index].parentNode = newValue
+                                    }
+                                }
+                            )
+                        )
+                    }
+                }
                 .fixedSize()
             }
 
@@ -27,12 +44,12 @@ struct TreeView: View {
                                     grandchild.parentNode
                                 },
                                 set: { newValue in
-                                    if let index = tree.children.firstIndex(
-                                        where: { child in
-                                            child.parentNode.id == newValue.id
+                                    if let index = grandchild.children.firstIndex(
+                                        where: { grandchild in
+                                            grandchild.parentNode.id == newValue.id
                                         }
                                     ) {
-                                        tree.children[index].parentNode = newValue
+                                        child.children[index].parentNode = newValue
                                     }
                                 }
                             )
@@ -52,12 +69,12 @@ struct TreeView: View {
                                         greatGrandchild.parentNode
                                     },
                                     set: { newValue in
-                                        if let index = tree.children.firstIndex(
-                                            where: { child in
-                                                child.parentNode.id == newValue.id
+                                        if let index = greatGrandchild.children.firstIndex(
+                                            where: { greatGrandchild in
+                                                greatGrandchild.parentNode.id == newValue.id
                                             }
                                         ) {
-                                            tree.children[index].parentNode = newValue
+                                            grandchild.children[index].parentNode = newValue
                                         }
                                     }
                                 )
