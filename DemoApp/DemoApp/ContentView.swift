@@ -13,8 +13,25 @@ struct SubviewToTestWith: View {
         }
 }
 
+struct MyType {
+    let var10: String = "var10"
+    let var11: String = "var11"
+    let var12: String = "var12"
+    let var13: String = "var13"
+    let var14: String = "var14"
+    let var15: String = "var15"
+    let var16: String = "var16"
+    let var17: String = "var17"
+    let var18: String = "var18"
+    let var19: String = "var19"
+    let var20: String = "var20"
+    let var21: String = "var21"
+    let var22: String = "var22"
+}
+
 struct ContentView: View {
     @State private var isTapped = false
+    private let asd = MyType()
 
     var body: some View {
         Button {

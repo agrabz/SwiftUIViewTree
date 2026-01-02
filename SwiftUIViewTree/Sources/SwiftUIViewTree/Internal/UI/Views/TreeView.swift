@@ -33,6 +33,17 @@ struct TreeView: View {
                 }
             }
             .fixedSize()
+
+            HStack(alignment: .top) {
+                ForEach(tree.children, id: \.parentNode.id) { child in
+                    ForEach(child.children, id: \.parentNode.id) { grandchild in
+                        ForEach(grandchild.children, id: \.parentNode.id) { greatGrandChild in
+                            asd(actualTree: greatGrandChild)
+                        }
+                    }
+                }
+            }
+            .fixedSize()
         }
     }
 
