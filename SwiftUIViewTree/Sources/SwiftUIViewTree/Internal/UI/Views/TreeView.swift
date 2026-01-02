@@ -13,48 +13,14 @@ struct TreeView: View {
 
             if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
                 HStack(alignment: .top) {
-                    ForEach(tree.children, id: \.parentNode.id) { child in
-                        ParentNodeView(
-                            parentNode: .init(
-                                get: {
-                                    child.parentNode
-                                },
-                                set: { newValue in
-                                    if let index = tree.children.firstIndex(
-                                        where: { child in
-                                            child.parentNode.id == newValue.id
-                                        }
-                                    ) {
-                                        tree.children[index].parentNode = newValue
-                                    }
-                                }
-                            )
-                        )
-                    }
+                    asd(actualTree: tree)
                 }
                 .fixedSize()
             }
 
             HStack(alignment: .top) {
                 ForEach(tree.children, id: \.parentNode.id) { child in
-                    ForEach(child.children, id: \.parentNode.id) { grandchild in
-                        ParentNodeView(
-                            parentNode: .init(
-                                get: {
-                                    grandchild.parentNode
-                                },
-                                set: { newValue in
-                                    if let index = grandchild.children.firstIndex(
-                                        where: { grandchild in
-                                            grandchild.parentNode.id == newValue.id
-                                        }
-                                    ) {
-                                        child.children[index].parentNode = newValue
-                                    }
-                                }
-                            )
-                        )
-                    }
+                    asd(actualTree: child)
                 }
             }
             .fixedSize()
@@ -62,28 +28,32 @@ struct TreeView: View {
             HStack(alignment: .top) {
                 ForEach(tree.children, id: \.parentNode.id) { child in
                     ForEach(child.children, id: \.parentNode.id) { grandchild in
-                        ForEach(grandchild.children, id: \.parentNode.id) { greatGrandchild in
-                            ParentNodeView(
-                                parentNode: .init(
-                                    get: {
-                                        greatGrandchild.parentNode
-                                    },
-                                    set: { newValue in
-                                        if let index = greatGrandchild.children.firstIndex(
-                                            where: { greatGrandchild in
-                                                greatGrandchild.parentNode.id == newValue.id
-                                            }
-                                        ) {
-                                            grandchild.children[index].parentNode = newValue
-                                        }
-                                    }
-                                )
-                            )
-                        }
+                        asd(actualTree: grandchild)
                     }
                 }
             }
             .fixedSize()
+        }
+    }
+
+    func asd(actualTree: Tree) -> some View {
+        ForEach(actualTree.children, id: \.parentNode.id) { actualTree in
+            ParentNodeView(
+                parentNode: .init(
+                    get: {
+                        actualTree.parentNode
+                    },
+                    set: { newValue in
+                        if let index = actualTree.children.firstIndex(
+                            where: { actualTreeCandidate in
+                                actualTreeCandidate.parentNode.id == newValue.id
+                            }
+                        ) {
+                            actualTree.children[index].parentNode = newValue
+                        }
+                    }
+                )
+            )
         }
     }
 }
