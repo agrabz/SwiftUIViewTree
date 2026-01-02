@@ -14,7 +14,9 @@ struct TreeView: View {
             ForEach(self.treeLevels(), id: \.self) { a in
                 HStack(alignment: .top) {
                     ForEach(a, id: \.parentNode.id) { b in
-                        asd(actualTree: b)
+                        if collapsedNodesStore.isCollapsed(nodeID: b.parentNode.id) == false {
+                            asd(actualTree: b)
+                        }
                     }
                 }
                 .fixedSize()
