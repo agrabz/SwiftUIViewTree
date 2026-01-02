@@ -127,6 +127,15 @@ extension TreeNode: @MainActor CustomStringConvertible {
     }
 }
 
+extension TreeNode: @MainActor Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.label)
+        hasher.combine(self.value)
+        hasher.combine(self.type)
+        hasher.combine(self.serialNumber)
+    }
+}
+
 extension TreeNode: @MainActor Equatable {
     static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
         lhs.type == rhs.type &&

@@ -11,40 +11,33 @@ struct TreeView: View {
                 parentNode: $tree.parentNode
             )
 
-            if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
+            ForEach(self.treeLevels(), id: \.self) { a in
                 HStack(alignment: .top) {
-                    asd(actualTree: tree)
+                    ForEach(a, id: \.parentNode.id) { b in
+                        asd(actualTree: b)
+                    }
                 }
                 .fixedSize()
             }
-
-            HStack(alignment: .top) {
-                ForEach(tree.children, id: \.parentNode.id) { child in
-                    asd(actualTree: child)
-                }
-            }
-            .fixedSize()
-
-            HStack(alignment: .top) {
-                ForEach(tree.children, id: \.parentNode.id) { child in
-                    ForEach(child.children, id: \.parentNode.id) { grandchild in
-                        asd(actualTree: grandchild)
-                    }
-                }
-            }
-            .fixedSize()
-
-            HStack(alignment: .top) {
-                ForEach(tree.children, id: \.parentNode.id) { child in
-                    ForEach(child.children, id: \.parentNode.id) { grandchild in
-                        ForEach(grandchild.children, id: \.parentNode.id) { greatGrandChild in
-                            asd(actualTree: greatGrandChild)
-                        }
-                    }
-                }
-            }
-            .fixedSize()
         }
+    }
+
+    func treeLevels() -> [[Tree]] {
+        var levels: [[Tree]] = []
+        var currentLevel: [Tree] = [tree]
+
+        while !currentLevel.isEmpty {
+            levels.append(currentLevel)
+
+            // Build next level by collecting all children
+            var nextLevel: [Tree] = []
+            for node in currentLevel {
+                nextLevel.append(contentsOf: node.children)
+            }
+            currentLevel = nextLevel
+        }
+
+        return levels
     }
 
     func asd(actualTree: Tree) -> some View {
