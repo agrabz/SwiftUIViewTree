@@ -40,6 +40,7 @@ struct TreeView: View {
                     }
                 }
             }
+            .fixedSize()
 
             HStack(alignment: .top) {
                 ForEach(tree.children, id: \.parentNode.id) { child in
@@ -65,6 +66,7 @@ struct TreeView: View {
                     }
                 }
             }
+            .fixedSize()
         }
     }
 }
