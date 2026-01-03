@@ -50,7 +50,7 @@ struct TreeView: View {
                 HStack(alignment: .top) {
                     ForEach(treeLevels, id: \.parentNode.id) { tree in
                         if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
-                            asd(actualTree: tree)
+                            getViewForTreeChildren(actualTree: tree)
                         }
                     }
                 }
@@ -59,29 +59,31 @@ struct TreeView: View {
         }
     }
 
-    func treeLevels() -> [[Tree]] {
-        var levels: [[Tree]] = []
+    func treeLevels() -> [[Tree]] { //TODO: review vibe
+        var result: [[Tree]] = []
         var currentLevel: [Tree] = [tree]
 
         while !currentLevel.isEmpty {
-            levels.append(currentLevel)
+            result.append(currentLevel)
 
-            // Build next level by collecting all children
             var nextLevel: [Tree] = []
+
             for node in currentLevel {
+                if collapsedNodesStore.isCollapsed(nodeID: node.parentNode.id) {
+                    continue   // ← PRUNE ENTIRE SUBTREE
+                }
+
                 nextLevel.append(contentsOf: node.children)
             }
+
             currentLevel = nextLevel
         }
 
-        return levels
+        return result
     }
 
-    func asd(actualTree: Tree) -> some View { //TODO: better names
+    func getViewForTreeChildren(actualTree: Tree) -> some View { //TODO: better names
         CustomGridLayout(actualTree.children, numberOfColumns: 4) { actualTree in
-
-//        }
-//        ForEach(actualTree.children, id: \.parentNode.id) { actualTree in
             ParentNodeView(
                 parentNode: .init(
                     get: {
