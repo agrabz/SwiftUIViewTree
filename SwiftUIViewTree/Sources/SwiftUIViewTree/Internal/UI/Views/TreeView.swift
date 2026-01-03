@@ -46,7 +46,7 @@ struct TreeView: View {
                 parentNode: $tree.parentNode
             )
 
-            ForEach(self.treeLevels(), id: \.self) { treeLevels in  //TODO: better names?
+            ForEach(self.getAllTreeLevels(), id: \.self) { treeLevels in
                 HStack(alignment: .top) {
                     ForEach(treeLevels, id: \.parentNode.id) { tree in
                         if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
@@ -59,27 +59,27 @@ struct TreeView: View {
         }
     }
 
-    func treeLevels() -> [[Tree]] { //TODO: review vibe
-        var result: [[Tree]] = []
-        var currentLevel: [Tree] = [tree]
+    func getAllTreeLevels() -> [[Tree]] { //TODO: placement?
+        var allTreeLevels = [[Tree]]()
+        var currentLevelOfTrees = [self.tree]
 
-        while !currentLevel.isEmpty {
-            result.append(currentLevel)
+        while currentLevelOfTrees.isNotEmpty {
+            allTreeLevels.append(currentLevelOfTrees)
 
-            var nextLevel: [Tree] = []
+            var nextLevelOfTrees = [Tree]()
 
-            for node in currentLevel {
-                if collapsedNodesStore.isCollapsed(nodeID: node.parentNode.id) {
-                    continue   // ← PRUNE ENTIRE SUBTREE
+            for currentLevelTree in currentLevelOfTrees {
+                if collapsedNodesStore.isCollapsed(nodeID: currentLevelTree.parentNode.id) {
+                    continue
                 }
 
-                nextLevel.append(contentsOf: node.children)
+                nextLevelOfTrees.append(contentsOf: currentLevelTree.children)
             }
 
-            currentLevel = nextLevel
+            currentLevelOfTrees = nextLevelOfTrees
         }
 
-        return result
+        return allTreeLevels
     }
 
     func getViewForTreeChildren(actualTree: Tree) -> some View { //TODO: better names
