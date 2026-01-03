@@ -16,6 +16,7 @@ struct PrintNodeFullDetailsGesture: Gesture {
                         Value: \(node.value)
 
                     """
+                    //TODO: Children count: \(node.children.count)
                 )
             }
     }
