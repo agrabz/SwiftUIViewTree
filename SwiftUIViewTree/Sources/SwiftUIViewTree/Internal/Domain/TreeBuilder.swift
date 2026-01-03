@@ -96,6 +96,10 @@ private extension TreeBuilder {
             registerChanges: registerChanges
         )
 
+        if childTree.children.count > 10 { //TODO: maybe a setting?
+            CollapsedNodesStore.shared.collapse(nodeID: childTree.parentNode.id)
+        }
+
         await childTree.parentNode.descendantCount = await self.getDescendantCount(of: childTree)
 
         return childTree
