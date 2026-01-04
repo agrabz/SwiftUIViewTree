@@ -11,4 +11,13 @@ enum RootNodeType: String {
                 -3
         }
     }
+
+    var index: Int {
+        switch self {
+            case .originalView:
+                0
+            case .modifiedView:
+                1
+        }
+    }
 }

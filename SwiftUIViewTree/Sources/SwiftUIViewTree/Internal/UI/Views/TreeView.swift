@@ -39,11 +39,11 @@ struct TreeView: View {
     @State private var collapsedNodesStore = CollapsedNodesStore.shared
 
     @Binding var tree: Tree
-    var firstTree: Tree {
-        tree.children.first!
+    var originalViewTreeBranch: Tree {
+        tree.children[RootNodeType.originalView.index] //TODO: introduce a MainTree type which guarantees to have an original and a modified branch instead of this crashable approach
     }
-    var secondTree: Tree {
-        tree.children[1]
+    var modifiedViewTreeBranch: Tree {
+        tree.children[RootNodeType.modifiedView.index] //TODO: introduce a MainTree type which guarantees to have an original and a modified branch instead of this crashable approach
     }
 
     var body: some View {
@@ -56,10 +56,10 @@ struct TreeView: View {
                 VStack {
 
                     ParentNodeView(
-                        parentNode: $tree.children[0].parentNode
+                        parentNode: $tree.children[RootNodeType.originalView.index].parentNode
                     )
 
-                    ForEach(getAllTreeLevels(of: firstTree), id: \.self) { treeLevels in
+                    ForEach(getAllTreeLevels(of: originalViewTreeBranch), id: \.self) { treeLevels in
                         HStack(alignment: .top) {
                             ForEach(treeLevels, id: \.parentNode.id) { tree in
                                 if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
@@ -74,10 +74,11 @@ struct TreeView: View {
                 VStack {
 
                     ParentNodeView(
-                        parentNode: $tree.children[1].parentNode
+                        parentNode: $tree.children[RootNodeType.modifiedView.index].parentNode
                     )
 
-                    ForEach(getAllTreeLevels(of: secondTree), id: \.self) { treeLevels in
+                    //TODO: with this approach children may not be under their parent, which looks weird
+                    ForEach(getAllTreeLevels(of: modifiedViewTreeBranch), id: \.self) { treeLevels in
                         HStack(alignment: .top) {
                             ForEach(treeLevels, id: \.parentNode.id) { tree in
                                 if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
