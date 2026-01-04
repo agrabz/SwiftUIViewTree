@@ -39,6 +39,12 @@ struct TreeView: View {
     @State private var collapsedNodesStore = CollapsedNodesStore.shared
 
     @Binding var tree: Tree
+    var firstTree: Tree {
+        tree.children.first!
+    }
+    var secondTree: Tree {
+        tree.children[1]
+    }
 
     var body: some View {
         VStack {
@@ -46,22 +52,49 @@ struct TreeView: View {
                 parentNode: $tree.parentNode
             )
 
-            ForEach(self.getAllTreeLevels(), id: \.self) { treeLevels in
-                HStack(alignment: .top) {
-                    ForEach(treeLevels, id: \.parentNode.id) { tree in
-                        if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
-                            getViewForTreeChildren(actualTree: tree)
+            HStack(alignment: .top) {
+                VStack {
+
+                    ParentNodeView(
+                        parentNode: $tree.children[0].parentNode
+                    )
+
+                    ForEach(getAllTreeLevels(of: firstTree), id: \.self) { treeLevels in
+                        HStack(alignment: .top) {
+                            ForEach(treeLevels, id: \.parentNode.id) { tree in
+                                if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
+                                    getViewForTreeChildren(actualTree: tree)
+                                }
+                            }
                         }
+                        .fixedSize()
                     }
                 }
-                .fixedSize()
+
+                VStack {
+
+                    ParentNodeView(
+                        parentNode: $tree.children[1].parentNode
+                    )
+
+                    ForEach(getAllTreeLevels(of: secondTree), id: \.self) { treeLevels in
+                        HStack(alignment: .top) {
+                            ForEach(treeLevels, id: \.parentNode.id) { tree in
+                                if collapsedNodesStore.isCollapsed(nodeID: tree.parentNode.id) == false {
+                                    getViewForTreeChildren(actualTree: tree)
+                                }
+                            }
+                        }
+                        .fixedSize()
+                    }
+                }
             }
         }
     }
 
-    func getAllTreeLevels() -> [[Tree]] { //TODO: placement?
+    func getAllTreeLevels(of treer: Tree) -> [[Tree]] { //TODO: placement?
         var allTreeLevels = [[Tree]]()
-        var currentLevelOfTrees = [self.tree]
+        var currentLevelOfTrees = [treer]
 
         while currentLevelOfTrees.isNotEmpty {
             allTreeLevels.append(currentLevelOfTrees)
