@@ -2,8 +2,6 @@
 import SwiftUI
 
 struct TreeView: View {
-    @State private var collapsedNodesStore = CollapsedNodesStore.shared
-
     @Binding var tree: Tree
 
     var body: some View {
@@ -40,10 +38,10 @@ struct TreeView: View {
 
     func graph(of rootNode: RootNodeType) -> some View {
         //TODO: with this approach children may not be under their parent, which can look weird
-        ForEach(getAllTreeLevels(of: tree.children[rootNode.index]), id: \.self) { treeLevels in
+        ForEach(TreeLeveler.getAllTreeLevels(of: tree.children[rootNode.index]), id: \.self) { treeLevels in
             HStack(alignment: .top) {
                 ForEach(treeLevels, id: \.parentNode.id) { treeInActualLevel in
-                    if collapsedNodesStore.isCollapsed(nodeID: treeInActualLevel.parentNode.id) == false {
+                    if CollapsedNodesStore.shared.isCollapsed(nodeID: treeInActualLevel.parentNode.id) == false {
                         childrenNodes(of: treeInActualLevel)
                     }
                 }
@@ -71,28 +69,5 @@ struct TreeView: View {
                 )
             )
         }
-    }
-
-    func getAllTreeLevels(of tree: Tree) -> [[Tree]] { //TODO: placement?
-        var allTreeLevels = [[Tree]]()
-        var currentLevelOfTrees = [tree]
-
-        while currentLevelOfTrees.isNotEmpty {
-            allTreeLevels.append(currentLevelOfTrees)
-
-            var nextLevelOfTrees = [Tree]()
-
-            for currentLevelTree in currentLevelOfTrees {
-                if collapsedNodesStore.isCollapsed(nodeID: currentLevelTree.parentNode.id) {
-                    continue
-                }
-
-                nextLevelOfTrees.append(contentsOf: currentLevelTree.children)
-            }
-
-            currentLevelOfTrees = nextLevelOfTrees
-        }
-
-        return allTreeLevels
     }
 }
