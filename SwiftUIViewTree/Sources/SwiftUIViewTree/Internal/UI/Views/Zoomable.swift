@@ -29,7 +29,7 @@ final class ZoomableViewController : UIViewController, UIScrollViewDelegate {
     private let contentView: UIView
     private let originalContentSize: CGSize
     private let zoomFloatingPointCalculationTolerance: CGFloat = 0.001
-    private let zoomScaleFactorOnDoubleTap: CGFloat = 4.0
+    private let zoomScaleFactorOnDoubleTap: CGFloat = 8.0
 
     init(view: UIView) {
         self.scrollView.maximumZoomScale = 0.8
