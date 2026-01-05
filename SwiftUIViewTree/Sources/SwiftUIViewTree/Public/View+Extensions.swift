@@ -22,7 +22,7 @@ public extension View {
     func renderViewTree(
         of originalView: any View,
         renderMode: RenderMode = .treeGraph(showTreeInitially: true),
-        settings: [SwiftUIViewTreeSetting] = []
+        settings: [SwiftUIViewTreeSetting] = .default
     ) -> some View {
         SwiftUIViewTreeConfiguration.shared.applySettings(settings)
 
@@ -65,11 +65,21 @@ public enum RenderMode {
     case treeGraph(showTreeInitially: Bool)
 }
 
-public enum SwiftUIViewTreeSetting {
+public enum SwiftUIViewTreeSetting: Sendable {
     /// SwiftUI uses reference types under the hood sometimes for things like `LocalizedTextStorage`.
     /// The `Mirror` provided APIs include the memory addresses of these types.
     /// These may change for less obvious reasons and keeping track of them is most probably not super useful, nor helpful, therefore by default this is turned off.
     case enableMemoryAddressDiffing
+    /// SwiftUIViewTree collapses parent nodes with `10` or more children by default to make the initial UI less messy.
+    /// To turn this off, set this setting with value `0`.
+    /// To change the default `10` to some other value pass in the desired max children count.
+    case maxChildCountForAutoCollapsingParentNodes(Int)
+}
+
+public extension Array where Element == SwiftUIViewTreeSetting {
+    static let `default`: [Element] = [
+        .maxChildCountForAutoCollapsingParentNodes(10)
+    ]
 }
 
 private extension View {

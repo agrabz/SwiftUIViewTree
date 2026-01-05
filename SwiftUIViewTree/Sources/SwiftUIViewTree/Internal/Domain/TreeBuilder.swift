@@ -96,7 +96,9 @@ private extension TreeBuilder {
             registerChanges: registerChanges
         )
 
-        if childTree.children.count > 10 { //TODO: maybe a setting?
+        let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
+
+        if maxChildCountForAutoCollapsingParentNodes != 0 && childTree.children.count >= maxChildCountForAutoCollapsingParentNodes  {
             CollapsedNodesStore.shared.collapse(nodeID: childTree.parentNode.id)
         }
 

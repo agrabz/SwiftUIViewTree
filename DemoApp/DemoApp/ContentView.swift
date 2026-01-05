@@ -65,11 +65,19 @@ struct ContentView: View {
             }
             .padding()
         }
-        .renderViewTree(of: self)
+//        .renderViewTree(of: self)
+//        .renderViewTree(of: self, settings: .default)
+//        .renderViewTree(of: self, settings: [.autoCollapseParentNodes(withChildrenCount: 1)])
 //        .renderViewTree(of: self, settings: [.enableMemoryAddressDiffing])
+//        .renderViewTree(of: self, settings: [.enableMemoryAddressDiffing, .autoCollapseParentNodes(withChildrenCount: 3)])
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: true))
 //        .renderViewTree(of: self, renderMode: .treeGraph(showTreeInitially: false))
 //        .renderViewTree(of: self, renderMode: .never)
+//        .renderViewTree(
+//            of: self,
+//            renderMode: .treeGraph(showTreeInitially: false),
+//            settings: [.enableMemoryAddressDiffing, .autoCollapseParentNodes(withChildrenCount: 3)]
+//        )
     }
 }
 
