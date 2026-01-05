@@ -40,7 +40,7 @@ public extension View {
     /// Note that right now a subview only shows its "original" branch, not its "modified" branch.
     /// Showing the "modified" branch on the tree is up on the roadmap.
     ///
-    /// - See Also: `renderViewTree(of:renderMode:)`
+    /// - See Also: `renderViewTree(of:renderMode:settings:)`
     func notifyViewTreeOnChanges(of originalSubView: any View) -> some View {
         TreeWindowViewModel.shared.computeSubViewChanges(
             originalSubView: originalSubView,
@@ -53,7 +53,7 @@ public extension View {
 
 /// The mode to render the view tree.
 ///
-/// - See Also: `renderViewTree(of:renderMode:)`
+/// - See Also: `renderViewTree(of:renderMode:settings:)`
 public enum RenderMode {
     /// Indicates that you don't want to see the view tree at all.
     /// Might be useful if you only want to use the diff printing feature.
@@ -77,6 +77,10 @@ public enum SwiftUIViewTreeSetting: Sendable {
 }
 
 public extension Array where Element == SwiftUIViewTreeSetting {
+    /// The default settings used by the `renderViewTree` function.
+    ///
+    /// - See also: `renderViewTree(of:renderMode:settings:)`
+    /// - See also: `SwiftUIViewTreeSetting`
     static let `default`: [Element] = [
         .maxChildCountForAutoCollapsingParentNodes(10)
     ]
