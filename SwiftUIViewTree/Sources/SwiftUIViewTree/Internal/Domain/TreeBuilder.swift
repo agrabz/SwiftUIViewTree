@@ -2,7 +2,7 @@
 import SwiftUI
 
 @MainActor
-struct TreeBuilder {
+struct TreeBuilder { //TODO: test
     private let validationList: [any TreeNodeValidatorProtocol] = [
         LocationLabelTreeNodeValidator(),
         AtomicBoxTypeTreeNodeValidator(),
