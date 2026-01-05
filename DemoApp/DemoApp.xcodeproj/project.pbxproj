@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B6182A42F0BCB3800DDC90C /* SwiftUIViewTree in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6182A32F0BCB3800DDC90C /* SwiftUIViewTree */; };
+		0B3BCD262E77605500233FA3 /* SwiftUIViewTree in Frameworks */ = {isa = PBXBuildFile; productRef = 0B3BCD252E77605500233FA3 /* SwiftUIViewTree */; };
+		0BFEAAA32EF2F3DE00C6A6C4 /* SwiftUIViewTree in Frameworks */ = {isa = PBXBuildFile; productRef = 0BFEAAA22EF2F3DE00C6A6C4 /* SwiftUIViewTree */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B6182A42F0BCB3800DDC90C /* SwiftUIViewTree in Frameworks */,
+				0B3BCD262E77605500233FA3 /* SwiftUIViewTree in Frameworks */,
+				0BFEAAA32EF2F3DE00C6A6C4 /* SwiftUIViewTree in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +72,8 @@
 			);
 			name = DemoApp;
 			packageProductDependencies = (
-				0B6182A32F0BCB3800DDC90C /* SwiftUIViewTree */,
+				0B3BCD252E77605500233FA3 /* SwiftUIViewTree */,
+				0BFEAAA22EF2F3DE00C6A6C4 /* SwiftUIViewTree */,
 			);
 			productName = DemoApp;
 			productReference = 0B3BCCEF2E775BD500233FA3 /* DemoApp.app */;
@@ -101,7 +104,7 @@
 			mainGroup = 0B3BCCE62E775BD500233FA3;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				0B6182A22F0BCB3800DDC90C /* XCRemoteSwiftPackageReference "SwiftUIViewTree" */,
+				0BFEAAA12EF2F3DE00C6A6C4 /* XCLocalSwiftPackageReference "../../SwiftUIViewTree" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B3BCCF02E775BD500233FA3 /* Products */;
@@ -330,21 +333,20 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		0B6182A22F0BCB3800DDC90C /* XCRemoteSwiftPackageReference "SwiftUIViewTree" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/agrabz/SwiftUIViewTree";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.0;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		0BFEAAA12EF2F3DE00C6A6C4 /* XCLocalSwiftPackageReference "../../SwiftUIViewTree" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../SwiftUIViewTree;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0B6182A32F0BCB3800DDC90C /* SwiftUIViewTree */ = {
+		0B3BCD252E77605500233FA3 /* SwiftUIViewTree */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0B6182A22F0BCB3800DDC90C /* XCRemoteSwiftPackageReference "SwiftUIViewTree" */;
+			productName = SwiftUIViewTree;
+		};
+		0BFEAAA22EF2F3DE00C6A6C4 /* SwiftUIViewTree */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIViewTree;
 		};
 /* End XCSwiftPackageProductDependency section */
