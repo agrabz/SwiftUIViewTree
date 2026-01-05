@@ -22,7 +22,7 @@ struct TreeWindowViewModelTests {
         #expect(treeWindowViewModel.isRecomputing == false)
     }
 
-    @Test
+    @Test(.viewTree())
     func computeViewTree_FirstTime() async {
         //GIVEN
         let treeWindowViewModel = TreeWindowViewModel()
@@ -66,7 +66,7 @@ struct TreeWindowViewModelTests {
         )
     }
 
-    @Test
+    @Test(.viewTree())
     func computeViewTree_NonFirstTime() async {
         //GIVEN
         let treeWindowViewModel = TreeWindowViewModel()

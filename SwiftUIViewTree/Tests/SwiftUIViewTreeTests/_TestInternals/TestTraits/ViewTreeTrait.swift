@@ -9,6 +9,8 @@ struct ViewTreeTrait: TestTrait, SuiteTrait, TestScoping {
     private let viewTreeLogger: ViewTreeLoggerProtocol
     private let configuration: Configuration
 
+    var isRecursive = true
+
     init(
         collapsedNodeStore: @autoclosure () -> CollapsedNodesStore,
         treeNodeRegistry: @autoclosure () -> TreeNodeRegistry,
