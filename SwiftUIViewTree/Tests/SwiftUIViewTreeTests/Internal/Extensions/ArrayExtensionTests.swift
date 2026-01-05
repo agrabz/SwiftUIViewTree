@@ -126,5 +126,29 @@ struct ArrayExtensionTests {
         //THEN
         #expect(Array(result).isEmpty)
     }
+
+    @Test
+    func `isNotEmpty true`() async throws {
+        //GIVEN
+        let array = [1,2,3]
+
+        //WHEN
+        let result = array.isNotEmpty
+
+        //THEN
+        #expect(result == true)
+    }
+
+    @Test
+    func `isNotEmpty false`() async throws {
+        //GIVEN
+        let array = [Int]()
+
+        //WHEN
+        let result = array.isNotEmpty
+
+        //THEN
+        #expect(result == false)
+    }
 }
 
