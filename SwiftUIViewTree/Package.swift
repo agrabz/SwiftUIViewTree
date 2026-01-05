@@ -22,8 +22,9 @@ let package = Package(
             name: "SwiftUIViewTree",
             dependencies: [
 
-            ],
-            path: "SwiftUIViewTree/Sources"
+            ]
+//            ,
+//            path: "SwiftUIViewTree/Sources"
         ),
         .testTarget(
             name: "SwiftUIViewTreeTests",
