@@ -65,7 +65,7 @@ struct ContentView: View {
             }
             .padding()
         }
-//        .renderViewTree(of: self)
+        .renderViewTree(of: self)
 //        .renderViewTree(of: self, settings: .default)
 //        .renderViewTree(of: self, settings: [.autoCollapseParentNodes(withChildrenCount: 1)])
 //        .renderViewTree(of: self, settings: [.enableMemoryAddressDiffing])
