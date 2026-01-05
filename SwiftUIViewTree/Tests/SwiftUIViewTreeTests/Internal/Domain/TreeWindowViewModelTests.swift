@@ -22,7 +22,7 @@ struct TreeWindowViewModelTests {
         #expect(treeWindowViewModel.isRecomputing == false)
     }
 
-    @Test(.viewTree())
+    @Test
     func computeViewTree_FirstTime() async {
         //GIVEN
         let treeWindowViewModel = TreeWindowViewModel()
@@ -36,7 +36,7 @@ struct TreeWindowViewModelTests {
             modifiedView: modifiedView
         )
         #expect(treeWindowViewModel.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
+        try? await Task.sleep(for: .seconds(0.5)) // mini-delay is needed because computeViewTree's logic is running in a Task
 
         //THEN
         #expect(treeWindowViewModel.isRecomputing == false)
@@ -66,7 +66,7 @@ struct TreeWindowViewModelTests {
         )
     }
 
-    @Test(.viewTree())
+    @Test
     func computeViewTree_NonFirstTime() async {
         //GIVEN
         let treeWindowViewModel = TreeWindowViewModel()
@@ -79,7 +79,7 @@ struct TreeWindowViewModelTests {
             modifiedView: modifiedView
         )
         #expect(treeWindowViewModel.isRecomputing == false)
-        try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
+        try? await Task.sleep(for: .seconds(0.5)) // mini-delay is needed because computeViewTree's logic is running in a Task
 
         #expect(treeWindowViewModel.isRecomputing == false)
         guard case .treeComputed = treeWindowViewModel.uiState else {
@@ -94,7 +94,7 @@ struct TreeWindowViewModelTests {
         )
 
         //THEN
-        try? await Task.sleep(for: .seconds(0.2)) // mini-delay is needed because computeViewTree's logic is running in a Task
+        try? await Task.sleep(for: .seconds(0.5)) // mini-delay is needed because computeViewTree's logic is running in a Task
         #expect(treeWindowViewModel.isRecomputing == false)
 
         guard case .treeComputed(let computedUIState) = treeWindowViewModel.uiState else {

@@ -46,8 +46,8 @@ private extension TreeBuilder {
         registerChanges: Bool
     ) async -> [Tree] {
         await withTaskGroup { childrenTreeGetterTaskGroup in
-            for child in await mirror.children {
-                await childrenTreeGetterTaskGroup.addTask { @MainActor @Sendable in
+            for child in mirror.children {
+                childrenTreeGetterTaskGroup.addTask { @MainActor @Sendable in
                     await self.convertToTreesRecursively(
                         mirrorChild: child,
                         registerChanges: registerChanges,
@@ -69,7 +69,7 @@ private extension TreeBuilder {
         sourceView: any View
     ) async -> Tree {
         do throws(TreeNodeValidationError) {
-            try await self.validateChild(mirrorChild)
+            try self.validateChild(mirrorChild)
         } catch {
             return await self.getValidatedChild(
                 from: error,
@@ -79,9 +79,9 @@ private extension TreeBuilder {
 
         var value = "\(mirrorChild.value)"
 
-        await self.transformIfNeeded(&value)
+        self.transformIfNeeded(&value)
 
-        let childTree = await Tree(
+        let childTree = Tree(
             node: TreeNode(
                 type: "\(type(of: mirrorChild.value))",
                 label: mirrorChild.label ?? "<unknown>",
@@ -102,7 +102,7 @@ private extension TreeBuilder {
             CollapsedNodesStore.shared.collapse(nodeID: childTree.parentNode.id)
         }
 
-        await childTree.parentNode.descendantCount = await self.getDescendantCount(of: childTree)
+        childTree.parentNode.descendantCount = self.getDescendantCount(of: childTree)
 
         return childTree
     }
