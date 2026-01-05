@@ -40,8 +40,7 @@ private extension SubViewChangeHandler {
         originalSubView: any View,
         modifiedSubView: any View,
     ) async -> Tree {
-        var treeBuilder = await TreeBuilder()
-        let subviewTree = await treeBuilder.getTreeFrom(
+        let subviewTree = await TreeBuilder().getTreeFrom(
             originalView: originalSubView,
             modifiedView: modifiedSubView,
             registerChanges: false

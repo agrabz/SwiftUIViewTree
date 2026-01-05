@@ -48,6 +48,12 @@ extension Tree: @MainActor Equatable {
     }
 }
 
+extension Tree: @MainActor Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.parentNode.id)
+    }
+}
+
 extension Tree: @MainActor CustomStringConvertible {
     var description: String {
         var description = parentNode.description

@@ -37,4 +37,8 @@ final class CollapsedNodesStore: Sendable {
             collapsedNodeIDs.insert(nodeID)
         }
     }
+
+    func collapse(nodeID: TreeNode.ID) {
+        collapsedNodeIDs.insert(nodeID)
+    }
 }

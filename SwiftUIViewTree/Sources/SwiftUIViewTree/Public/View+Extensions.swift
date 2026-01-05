@@ -22,7 +22,7 @@ public extension View {
     func renderViewTree(
         of originalView: any View,
         renderMode: RenderMode = .treeGraph(showTreeInitially: true),
-        settings: [SwiftUIViewTreeSetting] = []
+        settings: [SwiftUIViewTreeSetting] = .default
     ) -> some View {
         SwiftUIViewTreeConfiguration.shared.applySettings(settings)
 
@@ -40,7 +40,7 @@ public extension View {
     /// Note that right now a subview only shows its "original" branch, not its "modified" branch.
     /// Showing the "modified" branch on the tree is up on the roadmap.
     ///
-    /// - See Also: `renderViewTree(of:renderMode:)`
+    /// - See Also: `renderViewTree(of:renderMode:settings:)`
     func notifyViewTreeOnChanges(of originalSubView: any View) -> some View {
         TreeWindowViewModel.shared.computeSubViewChanges(
             originalSubView: originalSubView,
@@ -53,7 +53,7 @@ public extension View {
 
 /// The mode to render the view tree.
 ///
-/// - See Also: `renderViewTree(of:renderMode:)`
+/// - See Also: `renderViewTree(of:renderMode:settings:)`
 public enum RenderMode {
     /// Indicates that you don't want to see the view tree at all.
     /// Might be useful if you only want to use the diff printing feature.
@@ -65,11 +65,25 @@ public enum RenderMode {
     case treeGraph(showTreeInitially: Bool)
 }
 
-public enum SwiftUIViewTreeSetting {
+public enum SwiftUIViewTreeSetting: Sendable {
     /// SwiftUI uses reference types under the hood sometimes for things like `LocalizedTextStorage`.
     /// The `Mirror` provided APIs include the memory addresses of these types.
     /// These may change for less obvious reasons and keeping track of them is most probably not super useful, nor helpful, therefore by default this is turned off.
     case enableMemoryAddressDiffing
+    /// SwiftUIViewTree collapses parent nodes with `10` or more children by default to make the initial UI less messy.
+    /// To turn this off, set this setting with value `0`.
+    /// To change the default `10` to some other value pass in the desired max children count.
+    case maxChildCountForAutoCollapsingParentNodes(Int)
+}
+
+public extension Array where Element == SwiftUIViewTreeSetting {
+    /// The default settings used by the `renderViewTree` function.
+    ///
+    /// - See also: `renderViewTree(of:renderMode:settings:)`
+    /// - See also: `SwiftUIViewTreeSetting`
+    static let `default`: [Element] = [
+        .maxChildCountForAutoCollapsingParentNodes(10)
+    ]
 }
 
 private extension View {

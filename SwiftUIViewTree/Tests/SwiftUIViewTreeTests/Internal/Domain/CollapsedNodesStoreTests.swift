@@ -67,4 +67,43 @@ struct CollapsedNodesStoreTests {
         let isCollapsedAfterToggle = CollapsedNodesStore.shared.isCollapsed(nodeID: mockNode.id)
         #expect(isCollapsedAfterToggle == false)
     }
+
+    @Test
+    func `collapse from expanded to collapsed`() {
+        //GIVEN
+        let mockNode = TreeNode.createMock()
+
+        let isCollapsed = CollapsedNodesStore.shared.isCollapsed(nodeID: mockNode.id)
+        #expect(isCollapsed == false)
+
+        //WHEN
+        CollapsedNodesStore.shared.collapse(nodeID: mockNode.id)
+
+        //THEN
+        let isCollapsedAfterCollapse = CollapsedNodesStore.shared.isCollapsed(nodeID: mockNode.id)
+        #expect(isCollapsedAfterCollapse == true)
+    }
+
+    @Test
+    func `collapse from collapsed to collapsed`() {
+        //GIVEN
+        let mockNode = TreeNode.createMock()
+
+        let isCollapsed = CollapsedNodesStore.shared.isCollapsed(nodeID: mockNode.id)
+        #expect(isCollapsed == false)
+
+        CollapsedNodesStore.shared.collapse(nodeID: mockNode.id)
+
+        let isCollapsedAfterToggle = CollapsedNodesStore.shared.isCollapsed(nodeID: mockNode.id)
+        #expect(isCollapsedAfterToggle == true)
+
+
+        //WHEN
+        CollapsedNodesStore.shared.collapse(nodeID: mockNode.id)
+
+        //THEN
+        let isCollapsedAfterSecondCollapse = CollapsedNodesStore.shared.isCollapsed(nodeID: mockNode.id)
+        #expect(isCollapsedAfterSecondCollapse == true)
+
+    }
 }

@@ -1,3 +1,4 @@
+
 extension Array {
     func safeGetElement(at index: Int) -> Element? {
         guard indices.contains(index) else {
@@ -20,5 +21,11 @@ extension Array {
             return []
         }
         return subSequence
+    }
+}
+
+extension Array {
+    var isNotEmpty: Bool {
+        !isEmpty
     }
 }

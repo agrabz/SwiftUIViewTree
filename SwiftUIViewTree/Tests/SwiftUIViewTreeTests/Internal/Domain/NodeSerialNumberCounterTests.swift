@@ -8,9 +8,9 @@ struct NodeSerialNumberCounterTests {
     @Test
     func getCounter_Once() async throws {
         //GIVEN
-        var counter = NodeSerialNumberCounter()
+        let counter = NodeSerialNumberCounter()
         //WHEN
-        let result = counter.counter
+        let result = await counter.counter
         //THEN
         #expect(result == 1)
     }
@@ -18,12 +18,12 @@ struct NodeSerialNumberCounterTests {
     @Test
     func getCounter_MultipleTimes() async throws {
         //GIVEN
-        var counter = NodeSerialNumberCounter()
+        let counter = NodeSerialNumberCounter()
         //WHEN
         var testCounter = 0
         //THEN
         for _ in 0..<10 {
-            let result = counter.counter
+            let result = await counter.counter
             #expect(result == testCounter + 1)
             testCounter += 1
         }
@@ -32,17 +32,17 @@ struct NodeSerialNumberCounterTests {
     @Test
     func reset() async throws {
         //GIVEN
-        var counter = NodeSerialNumberCounter()
+        let counter = NodeSerialNumberCounter()
         var testCounter = 0
         for _ in 0..<10 {
-            let result = counter.counter
+            let result = await counter.counter
             #expect(result == testCounter + 1)
             testCounter += 1
         }
         //WHEN
-        counter.reset()
+        await counter.reset()
         //THEN
-        let resultAfterReset = counter.counter
+        let resultAfterReset = await counter.counter
         #expect(resultAfterReset == 1)
     }
 }
