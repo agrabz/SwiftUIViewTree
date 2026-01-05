@@ -4,11 +4,15 @@
 
 Use `.renderViewTree(of: self)` to see the view tree visually next to your original view.
 
-<img width="2730" height="1368" alt="RocketSim_Screenshot_iPhone_16_Pro_6 3_2025-12-05_00 07 15" src="https://github.com/user-attachments/assets/dce23278-cb45-450e-ba30-b017092f2d82" />
+<img width="400" height="798" alt="RocketSim_Screenshot_iPhone_17_Pro_6 3_2026-01-05_14 57 07" src="https://github.com/user-attachments/assets/9aff19a0-0192-443a-aaa4-41b846290a95" />
 
-The screenshot above is produced by the code below:
+<img width="350" height="698" alt="RocketSim_Screenshot_iPhone_17_Pro_6 3_2026-01-05_14 57 21" src="https://github.com/user-attachments/assets/726dc51d-bff5-4eee-b967-cefe68efaaf3" />
+
+The screenshots above is produced by the code below:
 
 ```swift
+import SwiftUIViewTree
+
 struct ContentView: View {
     @State var isTapped = false
 
@@ -38,23 +42,26 @@ Without the `.renderViewTree(of: self)` line the view would be just like:
 
 ## Pinch to zoom and scroll
 
-You can also pinch to zoom and scroll to any direction:
+You can also pinch to zoom and scroll to any direction.
 
-![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_09 58 15](https://github.com/user-attachments/assets/26fa2e99-4288-4ea8-8d7e-7733270d0c41)
+Tip: Use `Option` + `Shift` to move both fingers on a simulator.
+
+![fixed-gif](https://github.com/user-attachments/assets/0fb0b4b3-0a1f-4ce9-9a81-4ea78c1828d1)
+
 
 ## Double tap to zoom
 
-You can apply stepped zoom by doulbe tapping on the view tree's canvas.
+You can apply stepped zoom by double tapping on the view tree's canvas.
 
-![RocketSim_Recording_iPhone_16_Pro_6 3_2025-12-05_10 13 34](https://github.com/user-attachments/assets/68be4b60-af0f-485a-aea6-dcd44e7c5674)
+![fixed-gif2](https://github.com/user-attachments/assets/1471323f-7ff1-4a15-99fb-b52423c64124)
+
 
 ## Node color change on updates
 
 If something got updated due to a state change it gets a new color:
 
-https://github.com/user-attachments/assets/132e4292-ad7e-4931-8324-2442e309e95a
+![fixed-gif2](https://github.com/user-attachments/assets/1067937a-01b0-4ba1-9eae-d0a2723bf7e2)
 
-https://github.com/user-attachments/assets/78de71ea-5ea5-4dc0-bac1-98c3627c86df
 
 
 ## Change Detection | Printing to the console
@@ -62,21 +69,22 @@ https://github.com/user-attachments/assets/78de71ea-5ea5-4dc0-bac1-98c3627c86df
 When a node gets a new color you can also see it in the console:
 
 ```
-🚨Changes detected
-"_value": "Bool"
-🟥Old value: "false"
-🟩New value: "true"
+🚨Changes detected in "_value": "Bool"
+🟥Old value: "true"
+🟩New value: "false"
+🔺Diff at [0]: '...true...' --> '...false...'
 ```
 
 ## Double tap a node to Collapse/ Expand
 
 If certain parts of the tree are redundant for you, then you can double tap to collapse and later reopen them:
 
-https://github.com/user-attachments/assets/d20066a0-d73a-45cc-91c9-4cda23e5b082
+![fixed-gif3](https://github.com/user-attachments/assets/437f22c1-a183-4b3d-8a78-fc9cbeb8081b)
 
 A collapsed node is always gray and a badge indicates how many descendants it has:
 
-<img width="919" height="514" alt="image" src="https://github.com/user-attachments/assets/0b1c51b2-bbb2-4823-b062-25c8fd3d2169" />
+<img width="400" height="798" alt="RocketSim_Screenshot_iPhone_17_Pro_6 3_2026-01-05_15 47 08" src="https://github.com/user-attachments/assets/9c3a9437-d9bd-4c39-875d-680f6c930639" />
+
 
 ## Tap a node to see full details
 
@@ -93,6 +101,14 @@ Node Details:
 ## Swift 6 Support
 
 The solution is fully compatible with Swift 6.
+
+## iPad Support
+
+You can browse the view tree on an iPad as well.
+
+<img width="400" height="517" alt="RocketSim_Screenshot_iPad_Air_13-inch_(M3)_12 9_2026-01-05_14 57 56" src="https://github.com/user-attachments/assets/9b9c6691-74c7-4f5a-8b60-1828540b8b25" />
+
+<img width="517" height="400" alt="RocketSim_Screenshot_iPad_Air_13-inch_(M3)_12 9_2026-01-05_14 56 18" src="https://github.com/user-attachments/assets/26304d2b-2c96-41d0-95bd-03e6a6cf8659" />
 
 # Why is this useful?
 
