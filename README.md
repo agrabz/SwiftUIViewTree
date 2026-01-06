@@ -112,7 +112,7 @@ You can browse the view tree on an iPad as well.
 
 # Why is this useful?
 
-SwiftUI can produce unexpected updates that are hard to troubleshoot with the tools provided by Apple.
+SwiftUI can produce unexpected updates that are not easy to troubleshoot with the built-in tools.
 
 To troubleshoot and better understand the surprises of SwiftUI you might find this library useful.
 
@@ -122,25 +122,23 @@ There are numerous articles on the web that are about this topic. I'll collect s
 
 # Roadmap
 
-- Add licence
+- Add history of graph state to be able to track quick changes e.g. image blinking.
 
-- Closable, reopenable viewtree window
+- Detach view tree from source to stop receiving new updates
 
 - Setable frame for the view tree
 
-- Supporting `Any` type and not just `SwiftUI.View`
+- Tapping on a connection line to scroll to the parent node
+
+- Better accessibility support, maybe with the usage of `OutlineGroup` as `renderMode`
 
 - Supporting logs for production usage
 
 - Dedicated documentation page
 
-- Explicit support for iPad and Mac.
+- Support for Mac
 
 - CI on PRs
-
-- Add history of graph state to be able to track quick changes e.g. image blinking
-
-- Do more tests with animations, navigations
 
 - Build a table in the documentation of tested view types - maybe
 
