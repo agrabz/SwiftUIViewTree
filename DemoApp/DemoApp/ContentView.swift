@@ -13,7 +13,7 @@ struct SubviewToTestWith: View {
         }
 }
 
-struct MyBigType {
+struct MyBigType: Hashable {
     var var10: String = "var10"
     var var11: String = "var11"
     var var12: String = "var12"
@@ -30,7 +30,7 @@ struct MyBigType {
     let myBigChildType = MyBigChildType()
 }
 
-struct MyBigChildType {
+struct MyBigChildType: Hashable {
     let let10: String = "let10"
     let let11: String = "let11"
     let let12: String = "let12"
@@ -46,24 +46,37 @@ struct MyBigChildType {
     let let22: String = "let22"
 }
 
+@Observable
+final class ViewModel {
+    var uiModel: UIModel = .loaded([MyBigType()])
+
+    enum UIModel {
+        case loading
+        case loaded([MyBigType])
+    }
+}
+
 struct ContentView: View {
-    @State private var isTapped = false
-    private let myBigObject = MyBigType()
+    @State private var viewModel = ViewModel()
 
     var body: some View {
+        switch viewModel.uiModel {
+            case .loading:
+                Text("Loading")
+            case .loaded(let myBigType):
+                ForEach(myBigType, id: \.self) { mbt in
+                    Text(mbt.var10)
+                }
+        }
         Button {
-            isTapped.toggle()
-        } label: {
-            VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-
-                SubviewToTestWith(isTapped: $isTapped)
-//                Text(isTapped ? "Yo what?" : "Hello, World!")
-//                    .bold(isTapped)
+            switch viewModel.uiModel {
+                case .loading:
+                    viewModel.uiModel = .loaded([MyBigType()])
+                case .loaded(let array):
+                    viewModel.uiModel = .loading
             }
-            .padding()
+        } label: {
+            Text("Change")
         }
         .renderViewTree(of: self)
 //        .renderViewTree(of: self, settings: .default)
