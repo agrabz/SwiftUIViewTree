@@ -1,6 +1,22 @@
 import Foundation
 import SwiftUI
 
+struct DraftTreeNode {
+    let type: String
+    let label: String
+    let value: String
+
+    init(
+        type: String,
+        label: String,
+        value: String,
+    ) {
+        self.type = type
+        self.label = label
+        self.value = value
+    }
+}
+
 @MainActor
 @Observable
 final class TreeNode: Sendable {

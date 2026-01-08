@@ -45,6 +45,22 @@ private extension TreeBuilder {
         sourceView: any View,
         registerChanges: Bool
     ) async -> [Tree] {
+        let draftChildren = await getDraftChildrenTrees(mirror: mirror, sourceView: sourceView, registerChanges: registerChanges)
+
+        let finalizedChildren = createTreeFromDraft(draftChildren)
+
+        return finalizedChildren
+    }
+
+    func createTreeFromDraft(_ draft: [DraftTree]) -> [Tree] {
+        []
+    }
+
+    func getDraftChildrenTrees(
+        mirror: Mirror,
+        sourceView: any View,
+        registerChanges: Bool
+    ) async -> [DraftTree] {
         await withTaskGroup { childrenTreeGetterTaskGroup in
             for child in mirror.children {
                 childrenTreeGetterTaskGroup.addTask { @MainActor @Sendable in
@@ -55,10 +71,12 @@ private extension TreeBuilder {
                     )
                 }
             }
-            var childrenTrees: [Tree] = []
+            var childrenTrees: [DraftTree] = []
             for await childTree in childrenTreeGetterTaskGroup {
                 childrenTrees.append(childTree)
             }
+            //TODO: serial number assignment
+
             return childrenTrees
         }
     }
@@ -67,7 +85,7 @@ private extension TreeBuilder {
         mirrorChild: Mirror.Child,
         registerChanges: Bool,
         sourceView: any View
-    ) async -> Tree {
+    ) async -> DraftTree {
         do throws(TreeNodeValidationError) {
             try self.validateChild(mirrorChild)
         } catch {
@@ -81,16 +99,14 @@ private extension TreeBuilder {
 
         self.transformIfNeeded(&value)
 
-        let childTree = Tree(
-            node: TreeNode(
+        var childTree = DraftTree(
+            node: DraftTreeNode(
                 type: "\(type(of: mirrorChild.value))",
                 label: mirrorChild.label ?? "<unknown>",
                 value: value,
-                serialNumber: await self.nodeSerialNumberCounter.counter,
-                registerChanges: registerChanges
             )
         )
-        childTree.children = await self.getChildrenTrees(
+        childTree.children = await self.getDraftChildrenTrees(
             mirror: Mirror(reflecting: mirrorChild.value),
             sourceView: sourceView,
             registerChanges: registerChanges
@@ -98,11 +114,12 @@ private extension TreeBuilder {
 
         let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
 
-        if maxChildCountForAutoCollapsingParentNodes != 0 && childTree.children.count >= maxChildCountForAutoCollapsingParentNodes  {
-            CollapsedNodesStore.shared.collapse(nodeID: childTree.parentNode.id)
-        }
+        //TODO: do auto collapsing, descendant count assignment in traversal phase
+//        if maxChildCountForAutoCollapsingParentNodes != 0 && childTree.children.count >= maxChildCountForAutoCollapsingParentNodes  {
+//            CollapsedNodesStore.shared.collapse(nodeID: childTree.parentNode.id)
+//        }
 
-        childTree.parentNode.descendantCount = self.getDescendantCount(of: childTree)
+//        childTree.parentNode.descendantCount = self.getDescendantCount(of: childTree)
 
         return childTree
     }
@@ -116,14 +133,12 @@ private extension TreeBuilder {
     func getValidatedChild(
         from treeNodeValidationError: TreeNodeValidationError,
         registerChanges: Bool
-    ) async -> Tree {
-        Tree(
-            node: TreeNode(
+    ) async -> DraftTree {
+        DraftTree(
+            node: DraftTreeNode(
                 type: treeNodeValidationError.description,
                 label: treeNodeValidationError.description,
                 value: treeNodeValidationError.description,
-                serialNumber: await nodeSerialNumberCounter.counter,
-                registerChanges: registerChanges
             )
         )
     }

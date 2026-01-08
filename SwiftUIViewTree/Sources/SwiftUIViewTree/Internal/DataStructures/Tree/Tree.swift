@@ -1,5 +1,18 @@
 import Observation
 
+struct DraftTree {
+    var parentNode: DraftTreeNode
+    var children: [DraftTree]
+
+    init(
+        node: DraftTreeNode,
+        children: [DraftTree] = []
+    ) {
+        self.parentNode = node
+        self.children = children
+    }
+}
+
 @MainActor
 @Observable
 final class Tree {
