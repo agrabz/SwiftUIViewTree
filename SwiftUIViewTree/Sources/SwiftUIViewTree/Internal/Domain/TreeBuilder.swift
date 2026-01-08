@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 @MainActor
@@ -47,13 +46,40 @@ private extension TreeBuilder {
     ) async -> [Tree] {
         let draftChildren = await getDraftChildrenTrees(mirror: mirror, sourceView: sourceView, registerChanges: registerChanges)
 
-        let finalizedChildren = createTreeFromDraft(draftChildren)
+        let finalizedChildren = await createTreeFromDraft(draftChildren)
 
         return finalizedChildren
     }
 
-    func createTreeFromDraft(_ draft: [DraftTree]) -> [Tree] {
-        []
+    func createTreeFromDraft(_ draft: [DraftTree]) async -> [Tree] {
+        draft.map { finalizeDraftTree($0) }
+    }
+
+    private func finalizeDraftTree(_ draft: DraftTree) async -> Tree {
+        // Build the concrete node with a DFS-ordered serial number
+        let serialNumber = await self.nodeSerialNumberCounter.counter
+        let node = TreeNode(
+            type: draft.parentNode.type,
+            label: draft.parentNode.label,
+            value: draft.parentNode.value,
+            serialNumber: serialNumber,
+            registerChanges: true
+        )
+
+        let tree = Tree(node: node)
+        // Recursively finalize children in order (DFS pre-order)
+        tree.children = draft.children.map { finalizeDraftTree($0) }
+
+        // Auto-collapse logic
+        let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
+        if maxChildCountForAutoCollapsingParentNodes != 0 && tree.children.count >= maxChildCountForAutoCollapsingParentNodes  {
+            CollapsedNodesStore.shared.collapse(nodeID: tree.parentNode.id)
+        }
+
+        // Descendant count assignment
+        tree.parentNode.descendantCount = self.getDescendantCount(of: tree)
+
+        return tree
     }
 
     func getDraftChildrenTrees(

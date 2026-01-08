@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-struct DraftTreeNode {
+struct DraftTreeNode: Sendable {
     let type: String
     let label: String
     let value: String

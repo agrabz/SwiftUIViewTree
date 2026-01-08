@@ -1,6 +1,6 @@
 import Observation
 
-struct DraftTree {
+struct DraftTree: Sendable {
     var parentNode: DraftTreeNode
     var children: [DraftTree]
 
