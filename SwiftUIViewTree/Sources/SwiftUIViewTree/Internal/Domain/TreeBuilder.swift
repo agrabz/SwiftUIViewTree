@@ -52,7 +52,13 @@ private extension TreeBuilder {
     }
 
     func createTreeFromDraft(_ draft: [DraftTree]) async -> [Tree] {
-        draft.map { finalizeDraftTree($0) }
+        var result: [Tree] = []
+        result.reserveCapacity(draft.count)
+        for d in draft {
+            let t = await finalizeDraftTree(d)
+            result.append(t)
+        }
+        return result
     }
 
     private func finalizeDraftTree(_ draft: DraftTree) async -> Tree {
@@ -63,16 +69,23 @@ private extension TreeBuilder {
             label: draft.parentNode.label,
             value: draft.parentNode.value,
             serialNumber: serialNumber,
-            registerChanges: true
+            registerChanges: true // consider threading through registerChanges if needed
         )
 
         let tree = Tree(node: node)
+
         // Recursively finalize children in order (DFS pre-order)
-        tree.children = draft.children.map { finalizeDraftTree($0) }
+        var finalizedChildren: [Tree] = []
+        finalizedChildren.reserveCapacity(draft.children.count)
+        for childDraft in draft.children {
+            let childTree = await finalizeDraftTree(childDraft)
+            finalizedChildren.append(childTree)
+        }
+        tree.children = finalizedChildren
 
         // Auto-collapse logic
         let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
-        if maxChildCountForAutoCollapsingParentNodes != 0 && tree.children.count >= maxChildCountForAutoCollapsingParentNodes  {
+        if maxChildCountForAutoCollapsingParentNodes != 0 && tree.children.count >= maxChildCountForAutoCollapsingParentNodes {
             CollapsedNodesStore.shared.collapse(nodeID: tree.parentNode.id)
         }
 
