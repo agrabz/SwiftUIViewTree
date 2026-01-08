@@ -6,7 +6,7 @@ struct NodeView: View {
     var body: some View {
         VStack {
             HStack {
-                Text(self.node.shortenedLabel)
+                Text("\(self.node.serialNumber)")
                     .font(.headline)
                     .fontWeight(.black)
 
