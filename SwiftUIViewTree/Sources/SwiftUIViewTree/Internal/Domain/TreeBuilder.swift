@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 @MainActor
@@ -44,16 +45,22 @@ private extension TreeBuilder {
         sourceView: any View,
         registerChanges: Bool
     ) async -> [Tree] {
-        var childrenTrees: [Tree] = []
-        for child in mirror.children {
-            let childTree = await self.convertToTreesRecursively(
-                mirrorChild: child,
-                registerChanges: registerChanges,
-                sourceView: sourceView
-            )
-            childrenTrees.append(childTree)
+        await withTaskGroup { childrenTreeGetterTaskGroup in
+            for child in mirror.children {
+                childrenTreeGetterTaskGroup.addTask { @MainActor @Sendable in
+                    await self.convertToTreesRecursively(
+                        mirrorChild: child,
+                        registerChanges: registerChanges,
+                        sourceView: sourceView
+                    )
+                }
+            }
+            var childrenTrees: [Tree] = []
+            for await childTree in childrenTreeGetterTaskGroup {
+                childrenTrees.append(childTree)
+            }
+            return childrenTrees
         }
-        return childrenTrees
     }
 
     func convertToTreesRecursively(
@@ -178,4 +185,3 @@ private extension TreeBuilder {
         }
     }
 }
-
