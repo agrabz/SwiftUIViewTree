@@ -55,46 +55,42 @@ private extension TreeBuilder {
         var result: [Tree] = []
         result.reserveCapacity(draft.count)
         for d in draft {
-            let t = await finalizeDraftTree(d)
+            let t = await transformDraftTreeToTree(draftTree: d)
             result.append(t)
         }
         return result
     }
 
-    private func finalizeDraftTree(_ draft: DraftTree) async -> Tree {
-        // Build the concrete node with a DFS-ordered serial number
+    private func transformDraftTreeToTree(draftTree: DraftTree) async -> Tree { //TODO: func too big
         let serialNumber = await self.nodeSerialNumberCounter.counter
-        let node = TreeNode(
-            type: draft.parentNode.type,
-            label: draft.parentNode.label,
-            value: draft.parentNode.value,
+        let parentNode = TreeNode(
+            type: draftTree.parentNode.type,
+            label: draftTree.parentNode.label,
+            value: draftTree.parentNode.value,
             serialNumber: serialNumber,
-            registerChanges: true // consider threading through registerChanges if needed
+            registerChanges: true //TODO: good? was it like this on main?
         )
 
-        let tree = Tree(node: node)
+        let tree = Tree(node: parentNode)
 
-        let unorderedMirrorChildren = draft.children
-        let orderedMirrorChildren = unorderedMirrorChildren.sorted { lhs, rhs in
+        let orderedDraftTreeChildren = draftTree.children.sorted { lhs, rhs in
             lhs.parentNode.label > rhs.parentNode.label
         }
-        // Recursively finalize children in order (DFS pre-order)
+
         var finalizedChildren: [Tree] = []
-        finalizedChildren.reserveCapacity(draft.children.count)
-        for childDraft in orderedMirrorChildren {
-            let childTree = await finalizeDraftTree(childDraft)
+        finalizedChildren.reserveCapacity(draftTree.children.count)
+        for draftTreeChild in orderedDraftTreeChildren {
+            let childTree = await transformDraftTreeToTree(draftTree: draftTreeChild)
             finalizedChildren.append(childTree)
         }
 
         tree.children = finalizedChildren
 
-        // Auto-collapse logic
         let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
         if maxChildCountForAutoCollapsingParentNodes != 0 && tree.children.count >= maxChildCountForAutoCollapsingParentNodes {
             CollapsedNodesStore.shared.collapse(nodeID: tree.parentNode.id)
         }
 
-        // Descendant count assignment
         tree.parentNode.descendantCount = self.getDescendantCount(of: tree)
 
         return tree
@@ -119,7 +115,6 @@ private extension TreeBuilder {
             for await childTree in childrenTreeGetterTaskGroup {
                 childrenTrees.append(childTree)
             }
-            //TODO: serial number assignment
 
             return childrenTrees
         }
@@ -155,15 +150,6 @@ private extension TreeBuilder {
             sourceView: sourceView,
             registerChanges: registerChanges
         )
-
-        let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
-
-        //TODO: do auto collapsing, descendant count assignment in traversal phase
-//        if maxChildCountForAutoCollapsingParentNodes != 0 && childTree.children.count >= maxChildCountForAutoCollapsingParentNodes  {
-//            CollapsedNodesStore.shared.collapse(nodeID: childTree.parentNode.id)
-//        }
-
-//        childTree.parentNode.descendantCount = self.getDescendantCount(of: childTree)
 
         return childTree
     }
