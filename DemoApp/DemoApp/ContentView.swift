@@ -49,8 +49,8 @@ struct MyBigChildType: Hashable {
 @Observable
 final class ViewModel {
 //    var uiModel: UIModel = .loading
-    var uiModel: UIModel = .what(2)
-//    var uiModel: UIModel = .loaded([MyBigType()])
+//    var uiModel: UIModel = .what(2)
+    var uiModel: UIModel = .loaded([MyBigType()])
 
     enum UIModel {
         case loading

@@ -12,10 +12,10 @@ struct TreeWindowScreen<Content: View>: View {
             ZStack {
                 self.window(proxy: proxy)
 
-                ShouldShowTreeButton(
-                    shouldShowTree: self.$showTree,
-                    proxy: proxy
-                )
+//                ShouldShowTreeButton(
+//                    shouldShowTree: self.$showTree,
+//                    proxy: proxy
+//                )
             }
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
         }

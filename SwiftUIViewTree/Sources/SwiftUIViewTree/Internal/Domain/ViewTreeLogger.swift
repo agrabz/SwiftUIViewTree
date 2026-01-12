@@ -5,12 +5,12 @@ struct ViewTreeLogger: ViewTreeLoggerProtocol {
     @TaskLocal static var shared: ViewTreeLoggerProtocol = ViewTreeLogger()
 
     func logChangesOf(node: TreeNode, previousNodeValue: String) {
-        print()
-        print("🚨Changes detected in \"\(node.label)\":", "\"\(node.type)\"")
-        print("🟥Old value:", "\"\(previousNodeValue)\"")
-        print("🟩New value:", "\"\(node.value)\"")
-        printDiffOf(lhs: previousNodeValue, rhs: node.value)
-        print()
+//        print()
+//        print("🚨Changes detected in \"\(node.label)\":", "\"\(node.type)\"")
+//        print("🟥Old value:", "\"\(previousNodeValue)\"")
+//        print("🟩New value:", "\"\(node.value)\"")
+//        printDiffOf(lhs: previousNodeValue, rhs: node.value)
+//        print()
     }
 }
 
