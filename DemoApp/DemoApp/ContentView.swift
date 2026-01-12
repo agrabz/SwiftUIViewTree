@@ -48,12 +48,14 @@ struct MyBigChildType: Hashable {
 
 @Observable
 final class ViewModel {
-    var uiModel: UIModel = .loading
+//    var uiModel: UIModel = .loading
+    var uiModel: UIModel = .what(2)
 //    var uiModel: UIModel = .loaded([MyBigType()])
 
     enum UIModel {
         case loading
         case loaded([MyBigType])
+        case what(Int)
     }
 }
 
@@ -67,23 +69,8 @@ struct ContentView: View {
                     viewModel.uiModel = .loaded([MyBigType()])
                 case .loaded(let array):
                     viewModel.uiModel = .loading
-            }
-        } label: {
-            switch viewModel.uiModel {
-                case .loading:
-                    Text("Loading")
-                case .loaded(let myBigType):
-                    ForEach(myBigType, id: \.self) { mbt in
-                        Text(mbt.var10)
-                    }
-            }
-        }
-        Button {
-            switch viewModel.uiModel {
-                case .loading:
-                    viewModel.uiModel = .loaded([MyBigType()])
-                case .loaded(let array):
-                    viewModel.uiModel = .loading
+                case .what(let int):
+                    viewModel.uiModel = .what(int)
             }
         } label: {
             Text("Change")

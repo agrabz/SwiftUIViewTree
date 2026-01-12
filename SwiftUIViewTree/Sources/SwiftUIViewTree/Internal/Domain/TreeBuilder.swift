@@ -81,7 +81,13 @@ private extension TreeBuilder {
             let childTree = await finalizeDraftTree(childDraft)
             finalizedChildren.append(childTree)
         }
-        tree.children = finalizedChildren
+        //TODO: maybe during the above for loop?
+        let unorderedMirrorChildren = finalizedChildren
+        let orderedMirrorChildren = unorderedMirrorChildren.sorted { lhs, rhs in
+            lhs.parentNode.label > rhs.parentNode.label
+        }
+
+        tree.children = orderedMirrorChildren
 
         // Auto-collapse logic
         let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
