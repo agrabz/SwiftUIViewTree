@@ -74,7 +74,6 @@ private extension TreeBuilder {
 
         let tree = Tree(node: node)
 
-        //TODO: maybe during the above for loop? wee need to do it before this because serial numbers also have to be like this
         let unorderedMirrorChildren = draft.children
         let orderedMirrorChildren = unorderedMirrorChildren.sorted { lhs, rhs in
             lhs.parentNode.label > rhs.parentNode.label
