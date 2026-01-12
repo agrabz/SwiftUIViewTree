@@ -74,20 +74,20 @@ private extension TreeBuilder {
 
         let tree = Tree(node: node)
 
-        // Recursively finalize children in order (DFS pre-order)
-        var finalizedChildren: [Tree] = []
-        finalizedChildren.reserveCapacity(draft.children.count)
-        for childDraft in draft.children {
-            let childTree = await finalizeDraftTree(childDraft)
-            finalizedChildren.append(childTree)
-        }
-        //TODO: maybe during the above for loop?
-        let unorderedMirrorChildren = finalizedChildren
+        //TODO: maybe during the above for loop? wee need to do it before this because serial numbers also have to be like this
+        let unorderedMirrorChildren = draft.children
         let orderedMirrorChildren = unorderedMirrorChildren.sorted { lhs, rhs in
             lhs.parentNode.label > rhs.parentNode.label
         }
+        // Recursively finalize children in order (DFS pre-order)
+        var finalizedChildren: [Tree] = []
+        finalizedChildren.reserveCapacity(draft.children.count)
+        for childDraft in orderedMirrorChildren {
+            let childTree = await finalizeDraftTree(childDraft)
+            finalizedChildren.append(childTree)
+        }
 
-        tree.children = orderedMirrorChildren
+        tree.children = finalizedChildren
 
         // Auto-collapse logic
         let maxChildCountForAutoCollapsingParentNodes = SwiftUIViewTreeConfiguration.shared.maxChildCountForAutoCollapsingParentNodes
