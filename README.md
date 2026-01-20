@@ -62,7 +62,7 @@ If something got updated due to a state change it gets a new color:
 
 ![fixed-gif2](https://github.com/user-attachments/assets/1067937a-01b0-4ba1-9eae-d0a2723bf7e2)
 
-
+**Note**: structural changes like `myEnum.case1 --> myEnum.case2(let someInteger)` in the view tree are not yet handled properly (but it's on the top of the roadmap), only simple value changes: `true --> false`
 
 ## Change Detection | Printing to the console
 
@@ -121,6 +121,8 @@ There are numerous articles on the web that are about this topic. I'll collect s
 - [SWIFTUI THAT PAIN: REFRESH , REDRAWS, RESET— X — FILE](https://thexcodewhisperer.medium.com/swiftui-refresh-x-file-4502c98e00cd)
 
 # Roadmap
+
+- Track structural graph changes properly. E.g. `myEnum.case1 --> myEnum.case2(let someInteger)`
 
 - Add history of graph state to be able to track quick changes e.g. image blinking.
 
