@@ -68,9 +68,9 @@ struct ContentView: View {
                 case .loading:
                     viewModel.uiModel = .loaded([MyBigType()])
                 case .loaded(let array):
-                    viewModel.uiModel = .loading
+                    viewModel.uiModel = .what(array.count)
                 case .what(let int):
-                    viewModel.uiModel = .what(int)
+                    viewModel.uiModel = .loading
             }
         } label: {
             switch viewModel.uiModel {

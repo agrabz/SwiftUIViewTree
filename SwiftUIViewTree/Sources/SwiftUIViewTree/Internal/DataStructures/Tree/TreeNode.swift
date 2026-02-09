@@ -109,11 +109,13 @@ final class TreeNode: Sendable {
                 /// Breaking change!
                 if type != oldNode?.type {
                     print("oldType: \(String(describing: oldNode?.type)), newType: \(type)")
+                    BreakingChangeDetector.shared.thereAreBreakingChanges = true
                     return
                 }
                 /// Breaking change!
                 if label != oldNode?.label {
                     print("oldLabel: \(String(describing: oldNode?.label)), newLabel: \(label)")
+                    BreakingChangeDetector.shared.thereAreBreakingChanges = true
                     return //TODO: trigger tree redraw
                 }
                 if !Configuration.shared.isMemoryAddressDiffingEnabled && MemoryAddress.hasDiffInMemoryAddress(lhs: value, rhs: oldNode?.value ?? "") {
@@ -137,6 +139,12 @@ final class TreeNode: Sendable {
             self.value = to
         }
     }
+}
+
+@MainActor
+final class BreakingChangeDetector {
+    static let shared = BreakingChangeDetector()
+    var thereAreBreakingChanges = false
 }
 
 extension TreeNode {

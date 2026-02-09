@@ -30,6 +30,11 @@ final class TreeNodeRegistry {
     func removeNodeFromAllChangedNodes(serialNumberOfNodeToRemove: Int) {
         allChangedNodes.removeAll { $0.serialNumber == serialNumberOfNodeToRemove }
     }
+
+    func reset() {
+        registry = [:]
+        allChangedNodes = []
+    }
 }
 
 extension TreeNodeRegistry {

@@ -61,6 +61,18 @@ final class TreeWindowViewModel {
                         )
                     }
                 case .treeComputed(let computedUIState): //TODO: enhanced logic implemented here?
+                    if BreakingChangeDetector.shared.thereAreBreakingChanges { //TODO: ehh this logic is ehh
+                        self.uiState = .treeComputed(
+                            .init(
+                                treeBreakDownOfOriginalContent: newTree
+                            )
+                        )
+                        /// reset everything and then trigger a redraw
+                        BreakingChangeDetector.shared.thereAreBreakingChanges = false
+                        TreeNodeRegistry.shared.reset()
+                        TreeWindowScreenID.shared.value = UUID()
+                        return
+                    }
                     for changedValue in TreeNodeRegistry.shared.allChangedNodes {
                         computedUIState.treeBreakDownOfOriginalContent[changedValue.serialNumber]?.setValueWithAnimation(
                             to: changedValue.value

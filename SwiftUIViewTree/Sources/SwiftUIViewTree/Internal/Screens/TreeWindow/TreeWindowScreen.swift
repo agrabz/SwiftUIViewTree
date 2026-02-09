@@ -83,8 +83,15 @@ private extension TreeWindowScreen {
                     factor: UIConstants.ScreenRatio.of(.viewTree, on: axis),
                     axis: axis
                 ) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
+                .id(TreeWindowScreenID.shared.value)
 //        }
     }
+}
+
+@MainActor
+final class TreeWindowScreenID {
+    static let shared = TreeWindowScreenID()
+    var value = UUID()
 }
 
 extension View {
