@@ -106,13 +106,13 @@ final class TreeNode: Sendable {
             try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, node: self)
         } catch {
             if value != oldNode?.value {
-                /// Breaking change!
+                /// Breaking change!... Actually not necessarily? If only the type changed then its not breaking. If type + descendant count - but we do not yet know the descendant count at this point. maybe this is really not the right time and place for this? it was always stinky here anyway
                 if type != oldNode?.type {
                     print("oldType: \(String(describing: oldNode?.type)), newType: \(type)")
                     BreakingChangeDetector.shared.thereAreBreakingChanges = true
                     return
                 }
-                /// Breaking change!
+                /// Breaking change as above!
                 if label != oldNode?.label {
                     print("oldLabel: \(String(describing: oldNode?.label)), newLabel: \(label)")
                     BreakingChangeDetector.shared.thereAreBreakingChanges = true

@@ -54,6 +54,7 @@ final class ViewModel {
 
     enum UIModel {
         case loading
+        case loading2
         case loaded([MyBigType])
         case what(Int)
     }
@@ -66,6 +67,8 @@ struct ContentView: View {
         Button {
             switch viewModel.uiModel {
                 case .loading:
+                    viewModel.uiModel = .loading2
+                case .loading2:
                     viewModel.uiModel = .loaded([MyBigType()])
                 case .loaded(let array):
                     viewModel.uiModel = .what(array.count)
@@ -76,6 +79,8 @@ struct ContentView: View {
             switch viewModel.uiModel {
                 case .loading:
                     Text("Loading")
+                case .loading2:
+                    Text("Loading2")
                 case .loaded(let array):
                     Text("Loaded")
                 case .what(let int):
