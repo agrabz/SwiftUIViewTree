@@ -3,24 +3,24 @@
 final class TreeNodeRegistry {
     @TaskLocal static var shared = TreeNodeRegistry()
 
-    private(set) var registry: [Int: String] = [:]
+    private(set) var registry: [Int: TreeNode] = [:]
     private(set) var allChangedNodes = [TreeNode]()
 
-    func registerNode(serialNumber: Int, value: String) throws {
+    func registerNode(serialNumber: Int, node: TreeNode) throws {
         if registry[serialNumber] == nil {
-            registry[serialNumber] = value
+            registry[serialNumber] = node
         } else {
             throw TreeNodeRegistry.Error.nodeIsAlreadyRegistered
         }
     }
 
-    func getRegisteredValueOfNodeWith(serialNumber: Int) -> String? {
+    func getRegisteredNodeWith(serialNumber: Int) -> TreeNode? {
         registry[serialNumber]
     }
 
     func registerChangedNode(_ node: TreeNode) {
         allChangedNodes.append(node)
-        registry[node.serialNumber] = node.value
+        registry[node.serialNumber] = node
     }
 
     func isNodeChanged(serialNumber: Int) -> Bool {

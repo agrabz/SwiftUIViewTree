@@ -73,7 +73,15 @@ struct ContentView: View {
                     viewModel.uiModel = .what(int)
             }
         } label: {
-            Text("Change")
+            switch viewModel.uiModel {
+                case .loading:
+                    Text("Loading")
+                case .loaded(let array):
+                    Text("Loaded")
+                case .what(let int):
+                    Text("What, \(int)?")
+
+            }
         }
         .renderViewTree(of: self)
 //        .renderViewTree(of: self, settings: .default)

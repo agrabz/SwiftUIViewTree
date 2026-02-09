@@ -63,11 +63,13 @@ final class TreeNode: Sendable {
     private var availableColors = LinkedColorList()
 
     @ObservationIgnored
-    private var oldValue: String {
-        TreeNodeRegistry.shared.getRegisteredValueOfNodeWith(serialNumber: serialNumber) ?? ""
+    private var oldNode: TreeNode? {
+        TreeNodeRegistry.shared.getRegisteredNodeWith(serialNumber: serialNumber)
     }
+
     @ObservationIgnored
     private var oldBackgroundColor = UIConstants.Color.initialNodeBackground
+
     var backgroundColor: Color {
         if CollapsedNodesStore.shared.isCollapsed(nodeID: id) {
             return UIConstants.Color.collapsedNodeBackground
@@ -101,16 +103,26 @@ final class TreeNode: Sendable {
         }
 
         do {
-            try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, value: value)
+            try TreeNodeRegistry.shared.registerNode(serialNumber: serialNumber, node: self)
         } catch {
-            if value != oldValue {
-                if !Configuration.shared.isMemoryAddressDiffingEnabled && MemoryAddress.hasDiffInMemoryAddress(lhs: value, rhs: oldValue) {
+            if value != oldNode?.value {
+                /// Breaking change!
+                if type != oldNode?.type {
+                    print("oldType: \(String(describing: oldNode?.type)), newType: \(type)")
+                    return
+                }
+                /// Breaking change!
+                if label != oldNode?.label {
+                    print("oldLabel: \(String(describing: oldNode?.label)), newLabel: \(label)")
+                    return //TODO: trigger tree redraw
+                }
+                if !Configuration.shared.isMemoryAddressDiffingEnabled && MemoryAddress.hasDiffInMemoryAddress(lhs: value, rhs: oldNode?.value ?? "") {
                     return
                 }
 
                 ViewTreeLogger.shared.logChangesOf(
                     node: self,
-                    previousNodeValue: oldValue
+                    previousNodeValue: oldNode?.value ?? ""
                 )
 
                 TreeNodeRegistry.shared.registerChangedNode(self)

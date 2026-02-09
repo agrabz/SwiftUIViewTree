@@ -60,7 +60,7 @@ final class TreeWindowViewModel {
                             )
                         )
                     }
-                case .treeComputed(let computedUIState):
+                case .treeComputed(let computedUIState): //TODO: enhanced logic implemented here?
                     for changedValue in TreeNodeRegistry.shared.allChangedNodes {
                         computedUIState.treeBreakDownOfOriginalContent[changedValue.serialNumber]?.setValueWithAnimation(
                             to: changedValue.value

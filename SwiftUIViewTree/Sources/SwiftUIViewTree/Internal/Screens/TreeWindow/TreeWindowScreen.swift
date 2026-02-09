@@ -68,21 +68,21 @@ private extension TreeWindowScreen {
 
     @ViewBuilder
     func windowContent(for axis: Axis, proxy: GeometryProxy) -> some View {
-//        originalContent
-//            .framePer(
-//                condition: showTree,
-//                proxy: proxy,
-//                factor: UIConstants.ScreenRatio.of(.originalContent, on: axis),
-//                axis: axis
-//            )
+        originalContent
+            .framePer(
+                condition: showTree,
+                proxy: proxy,
+                factor: UIConstants.ScreenRatio.of(.originalContent, on: axis),
+                axis: axis
+            )
 //
 //        if showTree {
             viewFor(uiState: treeWindowViewModel.uiState)
-//                .framePer(
-//                    proxy: proxy,
-//                    factor: UIConstants.ScreenRatio.of(.viewTree, on: axis),
-//                    axis: axis
-//                ) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
+                .framePer(
+                    proxy: proxy,
+                    factor: UIConstants.ScreenRatio.of(.viewTree, on: axis),
+                    axis: axis
+                ) //TODO: this should always be the 3/4 of the screen even if we use it on a subview
 //        }
     }
 }
