@@ -93,6 +93,8 @@ private extension TreeBuilder {
 
         tree.parentNode.descendantCount = self.getDescendantCount(of: tree)
 
+        //TODO: change handling here instead of the treenode.init?
+
         return tree
     }
 
